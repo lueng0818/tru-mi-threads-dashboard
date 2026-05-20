@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tru-Mi × Threads 婚戒輿情儀表板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F1EA;
+    --dark: #1F4A43;
+    --gold: #C59A52;
+    --gold-light: #D4B06A;
+    --cream: #EDE8DC;
+    --text: #333333;
+    --text-muted: #6B7B6E;
+    --card-bg: #FDFAF5;
+    --border: rgba(197,154,82,0.28);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Serif TC', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--dark);
+    padding: 28px 40px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-left h1 {
+    font-size: 1.55rem; font-weight: 700; color: var(--gold);
+    letter-spacing: .06em;
+  }
+  .header-left p {
+    font-size: .82rem; color: rgba(245,240,230,.55);
+    margin-top: 4px; font-family: 'Noto Sans TC', sans-serif;
+  }
+  .header-right {
+    text-align: right;
+  }
+  .update-badge {
+    background: var(--gold); color: var(--dark);
+    font-size: .75rem; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px;
+    font-family: 'Noto Sans TC', sans-serif;
+    letter-spacing: .04em;
+  }
+  .last-update {
+    font-size: .72rem; color: rgba(245,240,230,.4);
+    margin-top: 5px; font-family: 'Noto Sans TC', sans-serif;
+  }
+
+  /* ── Summary Bar ── */
+  .summary-bar {
+    background: var(--dark);
+    padding: 0 40px 24px;
+    display: flex; gap: 24px;
+  }
+  .stat-pill {
+    background: rgba(230,180,34,.12);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .stat-pill .num {
+    font-size: 1.5rem; font-weight: 700; color: var(--gold);
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .stat-pill .lbl {
+    font-size: .7rem; color: rgba(245,240,230,.5);
+    font-family: 'Noto Sans TC', sans-serif; margin-top: 1px;
+  }
+
+  /* ── Category Tabs ── */
+  .tabs {
+    display: flex; border-bottom: 2px solid var(--border);
+    background: var(--cream); padding: 0 40px;
+    gap: 2px; overflow-x: auto;
+  }
+  .tab {
+    padding: 14px 22px 12px;
+    font-size: .88rem; font-weight: 600;
+    color: var(--text-muted); cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px; white-space: nowrap;
+    transition: all .2s;
+    font-family: 'Noto Serif TC', serif;
+    letter-spacing: .02em;
+  }
+  .tab:hover { color: var(--dark); }
+  .tab.active {
+    color: var(--dark);
+    border-bottom-color: var(--gold);
+  }
+  .tab .count {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--gold); color: var(--dark);
+    font-size: .65rem; font-weight: 700;
+    width: 18px; height: 18px; border-radius: 50%;
+    margin-left: 6px; font-family: 'Noto Sans TC', sans-serif;
+  }
+
+  /* ── Main Content ── */
+  .main { padding: 32px 40px; max-width: 1300px; }
+
+  .category-panel { display: none; }
+  .category-panel.active { display: block; }
+
+  /* ── Analysis Block ── */
+  .analysis-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+    margin-bottom: 32px;
+  }
+  .analysis-card {
+    background: var(--dark);
+    border-radius: 12px; padding: 22px 20px;
+    border-left: 4px solid var(--gold);
+    position: relative; overflow: hidden;
+  }
+  .analysis-card::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(230,180,34,.1), transparent 70%);
+    border-radius: 50%;
+  }
+  .analysis-card .icon {
+    font-size: 1.5rem; margin-bottom: 10px; display: block;
+  }
+  .analysis-card .label {
+    font-size: .7rem; color: var(--gold);
+    letter-spacing: .12em; text-transform: uppercase;
+    font-family: 'Noto Sans TC', sans-serif; font-weight: 700;
+    margin-bottom: 8px; display: block;
+  }
+  .analysis-card .content {
+    font-size: .88rem; color: rgba(245,240,230,.88);
+    line-height: 1.7; font-weight: 400;
+  }
+  .analysis-card .content strong {
+    color: var(--gold-light);
+  }
+
+  /* ── Category Header ── */
+  .cat-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 24px;
+  }
+  .cat-emoji { font-size: 2rem; }
+  .cat-title {
+    font-size: 1.3rem; font-weight: 700; color: var(--dark);
+    letter-spacing: .04em;
+  }
+  .cat-subtitle {
+    font-size: .82rem; color: var(--text-muted);
+    font-family: 'Noto Sans TC', sans-serif; margin-top: 2px;
+  }
+  .cat-line {
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin-left: 8px;
+  }
+
+  /* ── Post Cards ── */
+  .posts-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 18px;
+  }
+  .post-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+    cursor: pointer;
+    transition: all .25s;
+    position: relative; overflow: hidden;
+  }
+  .post-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 4px 20px rgba(230,180,34,.12);
+    transform: translateY(-2px);
+  }
+  .post-card.expanded {
+    border-color: var(--gold);
+    box-shadow: 0 4px 24px rgba(230,180,34,.18);
+  }
+  .post-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .post-author {
+    font-size: .82rem; font-weight: 700;
+    color: var(--dark); font-family: 'Noto Sans TC', sans-serif;
+  }
+  .post-date {
+    font-size: .72rem; color: var(--text-muted);
+    font-family: 'Noto Sans TC', sans-serif; margin-top: 2px;
+  }
+  .post-likes {
+    background: rgba(230,180,34,.15);
+    color: var(--dark); font-size: .78rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px;
+    font-family: 'Noto Sans TC', sans-serif;
+    display: flex; align-items: center; gap: 4px;
+    white-space: nowrap;
+  }
+  .post-likes.viral {
+    background: var(--gold); color: var(--dark);
+  }
+  .post-content {
+    font-size: .88rem; color: var(--text);
+    line-height: 1.65; margin-bottom: 14px;
+    display: -webkit-box; -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .post-card.expanded .post-content {
+    -webkit-line-clamp: unset; overflow: visible;
+  }
+  .post-stats {
+    display: flex; gap: 14px;
+    font-size: .75rem; color: var(--text-muted);
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .post-stats span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── Comments ── */
+  .comments-section {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .post-card.expanded .comments-section { display: block; }
+  .comments-title {
+    font-size: .72rem; font-weight: 700; color: var(--gold);
+    letter-spacing: .1em; text-transform: uppercase;
+    font-family: 'Noto Sans TC', sans-serif;
+    margin-bottom: 10px;
+  }
+  .comment {
+    background: rgba(59,46,38,.04);
+    border-left: 2px solid var(--border);
+    padding: 10px 14px; margin-bottom: 8px; border-radius: 0 6px 6px 0;
+  }
+  .comment.top-comment { border-left-color: var(--gold); }
+  .comment-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 5px;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .comment-author { font-size: .72rem; font-weight: 700; color: var(--dark); }
+  .comment-likes {
+    font-size: .68rem; color: var(--text-muted);
+    display: flex; align-items: center; gap: 3px;
+  }
+  .comment-text {
+    font-size: .82rem; color: var(--text); line-height: 1.55;
+  }
+
+  .post-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: .72rem; color: var(--gold);
+    text-decoration: none; margin-top: 12px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 600;
+  }
+  .post-link:hover { text-decoration: underline; }
+
+  .expand-hint {
+    font-size: .72rem; color: var(--text-muted);
+    font-family: 'Noto Sans TC', sans-serif;
+    text-align: right; margin-top: 6px;
+  }
+
+  /* ── Gold Divider ── */
+  .gold-line {
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 36px 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    background: var(--dark);
+    padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(230,180,34,.2);
+  }
+  .footer p {
+    font-size: .72rem; color: rgba(245,240,230,.35);
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .footer-logo {
+    font-size: .88rem; font-weight: 700; color: var(--gold);
+    letter-spacing: .08em;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .header { padding: 20px 20px 16px; }
+    .summary-bar { padding: 0 20px 18px; gap: 12px; flex-wrap: wrap; }
+    .tabs { padding: 0 20px; }
+    .main { padding: 20px; }
+    .analysis-grid { grid-template-columns: 1fr; }
+    .posts-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <h1>✦ Tru-Mi × Threads 婚戒輿情儀表板</h1>
+    <p>即時監測婚戒話題脈動 · 洞察消費者真實心理</p>
+  </div>
+  <div class="header-right">
+    <div class="update-badge">🔄 每日 09:00 自動更新</div>
+    <div class="last-update" id="lastUpdate">最後更新：2026-05-21</div>
+  </div>
+</div>
+
+<!-- Summary Bar -->
+<div class="summary-bar">
+  <div class="stat-pill">
+    <div class="num">18</div>
+    <div class="lbl">蒐集貼文數</div>
+  </div>
+  <div class="stat-pill">
+    <div class="num">3.6萬+</div>
+    <div class="lbl">最高單篇讚數</div>
+  </div>
+  <div class="stat-pill">
+    <div class="num">3,600+</div>
+    <div class="lbl">總留言數</div>
+  </div>
+  <div class="stat-pill">
+    <div class="num">4</div>
+    <div class="lbl">核心討論主題</div>
+  </div>
+  <div class="stat-pill">
+    <div class="num">婚戒審美</div>
+    <div class="lbl">本週最熱關鍵字</div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('regret', this)">
+    😭 遺憾與翻車 <span class="count">3</span>
+  </div>
+  <div class="tab" onclick="switchTab('inheritance', this)">
+    💛 傳承與重塑 <span class="count">2</span>
+  </div>
+  <div class="tab" onclick="switchTab('commitment', this)">
+    💬 承諾的重量 <span class="count">7</span>
+  </div>
+  <div class="tab" onclick="switchTab('daily', this)">
+    🫠 生活日常將就 <span class="count">6</span>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- ══════════ 遺憾與翻車 ══════════ -->
+  <div class="category-panel active" id="panel-regret">
+    <div class="cat-header">
+      <div class="cat-emoji">😭</div>
+      <div>
+        <div class="cat-title">遺憾與翻車</div>
+        <div class="cat-subtitle">買到後悔的婚戒 · 客製化溝通失敗的悲慘經驗</div>
+      </div>
+      <div class="cat-line"></div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <span class="icon">🔥</span>
+        <span class="label">核心爭論點</span>
+        <div class="content">
+          這些女性正在焦慮：<strong>婚戒品牌的服務品質天差地別，卻完全無法事先預測。</strong>同一品牌在不同門市、不同店員，體驗天壤之別——有人遇到熱情推薦，有人被冷眼相待。核心痛點是：花大錢買的不只是戒指，更是服務儀式感，但這份「儀式感」卻碎在了銷售流程裡。
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="icon">✨</span>
+        <span class="label">最受認同的溫暖觀念</span>
+        <div class="content">
+          <strong>「不是買不起，是你有沒有本事讓我買。」</strong>（enjoyyy.1998）。這句話接住了最多焦慮——提醒女性不需要忍受差勁的服務，消費者有選擇的主權。另一則熱讚留言：<strong>「散發自信，對方就不敢隨便對待。」</strong>讓被冷待的女性重拾了尊嚴。
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="icon">⚠️</span>
+        <span class="label">潛在的反方或雜音</span>
+        <div class="content">
+          現實拉扯在於：<strong>即便服務很差，戒指本身的質感讓人糾結</strong>（「鉑金很純很亮，就是服務對不起質感」）。且部分網友指出，同一品牌在不同門市體驗迥異，無法一概而論——讓避雷訊息的參考價值打折扣。預算不足時，選擇空間更窄，只能吞下委屈。
+        </div>
+      </div>
+    </div>
+
+    <div class="posts-grid">
+      <!-- Post 1 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@yjyg169</div>
+            <div class="post-date">2026-04-27 · 32萬次瀏覽</div>
+          </div>
+          <div class="post-likes viral">❤️ 684</div>
+        </div>
+        <div class="post-content">我自行宣布，第一屆《服務最差的婚戒品牌》大賽正式開始！選手如下，求幫避雷⋯⋯ 我先來一個：iprimo 櫃姐態度差，第一次去說沒預約不能看，第二次預約完全沒介紹，每10分鐘問一次選好了嗎，最後聽到我們要去別家看就瘋狂批評說不要去。</div>
+        <div class="post-stats">
+          <span>💬 225則留言</span>
+          <span>↗ 979次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊查看前5則熱門留言</div>
+        <div class="comments-section">
+          <div class="comments-title">🏆 熱門留言 Top 5</div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@kiki___622</span>
+              <span class="comment-likes">❤️ 233</span>
+            </div>
+            <div class="comment-text">台中大遠百iprimo 副理態度極差。坐下來他說「下次付錢的人來再看」——超級看不起人。因為當天我素顏沒有打扮，可能想說我買不起吧🥲</div>
+          </div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@cindy__tsai__</span>
+              <span class="comment-likes">❤️ 121</span>
+            </div>
+            <div class="comment-text">101的Cartier 服務態度非常差，走進去表示要看婚戒不介紹叫我們自己逛，詢問價格只回覆「官網都有標價」然後遞名片把我們請出去🙄 反而 Harry Winston 服務超好，超推薦101 HW的Cyndi，情緒價值給滿！</div>
+          </div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@yi_hsuanw</span>
+              <span class="comment-likes">❤️ 87</span>
+            </div>
+            <div class="comment-text">I primo！絕對不再踏進去，除了瘋狂推銷還一直貶低別的品牌⋯⋯超傻眼</div>
+          </div>
+          <div class="comment">
+            <div class="comment-meta">
+              <span class="comment-author">@yc_ma_315ant</span>
+              <span class="comment-likes">❤️ 68</span>
+            </div>
+            <div class="comment-text">我去了iprimo 兩次，一次在台北、一次在台中，兩次的服務態度都很好耶（反方聲音）</div>
+          </div>
+          <div class="comment">
+            <div class="comment-meta">
+              <span class="comment-author">@enjoyyy.1998</span>
+              <span class="comment-likes">❤️ 18</span>
+            </div>
+            <div class="comment-text">我覺得氣場也會影響櫃姐態度。告訴自己「不是買不起，是你有沒有本事讓我買」——散發自信，對方就不敢隨便對待！</div>
+          </div>
+          <a class="post-link" href="https://www.threads.com/@yjyg169/post/DXoUfPJj33T" target="_blank">🔗 查看原始貼文</a>
+        </div>
+      </div>
+
+      <!-- Post 2 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@uni.corn7402</div>
+            <div class="post-date">2026-03-24</div>
+          </div>
+          <div class="post-likes">❤️ 214</div>
+        </div>
+        <div class="post-content">去iprimo試戴，結果櫃姐一直在說別家不好，都不會覺得這樣人家也不會選你嗎。服務的方式也蠻隨便，叫我們看檯面上的，每隔5分鐘就走出來問一下選好了嗎，很急的感覺。說想多看別的款式，問了後才要拿平板——總之體驗真的很不好，實際體驗才知道網路上那些評價都是騙人的。</div>
+        <div class="post-stats">
+          <span>💬 103則留言</span>
+          <span>↗ 202次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 貼文重點</div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">核心觀點</span>
+            </div>
+            <div class="comment-text">網路正評與實際體驗落差大，品牌形象管理與第一線服務執行嚴重脫節。「戒指是有份量感的鉑金很純很亮，就是服務完全對不起他們的質感」——產品與體驗的撕裂感是購買後悔的根源。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 3 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@annieliiee</div>
+            <div class="post-date">2025-10-31</div>
+          </div>
+          <div class="post-likes viral">❤️ 2,560</div>
+        </div>
+        <div class="post-content">我自行宣布，第一屆《threads史上最爛的求婚》大賽正式開始——最爛的會置頂（我想看鬼故事）。熱門回應：前男友在談分手時求婚，婚戒看起來是在路邊金飾店花車買的過氣款，證書是A4黑白影印折爛塞進戒盒⋯⋯</div>
+        <div class="post-stats">
+          <span>💬 281則留言</span>
+          <span>↗ 1,832次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 貼文重點</div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">核心觀點</span>
+            </div>
+            <div class="comment-text">求婚戒的「儀式感」承載了女性對承諾的全部期待。當戒指本身的品質或用心程度不達標，傷的不只是審美，更是對這段感情嚴肅程度的懷疑。這類「翻車故事」的高傳播力，反映女性對儀式感的強烈渴求。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 傳承與重塑 ══════════ -->
+  <div class="category-panel" id="panel-inheritance">
+    <div class="cat-header">
+      <div class="cat-emoji">💛</div>
+      <div>
+        <div class="cat-title">傳承與重塑</div>
+        <div class="cat-subtitle">外婆、媽媽傳下來的舊首飾 · 放不下卻戴不上的糾結</div>
+      </div>
+      <div class="cat-line"></div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <span class="icon">🔥</span>
+        <span class="label">核心爭論點</span>
+        <div class="content">
+          這些女性正在焦慮：<strong>情感的重量與現實的佩戴性之間的衝突。</strong> 長輩留下的首飾款式老舊、戒圍不合、材質過時，放在盒子裡捨不得丟，拿出來戴又格格不入日常穿搭。最深的糾結是：「改了，對不對得起她的心意？不改，是不是辜負了這份傳承？」
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="icon">✨</span>
+        <span class="label">最受認同的溫暖觀念</span>
+        <div class="content">
+          <strong>「彌補遺憾的心意，比物質本身更重要。」</strong> omo0425 為媽媽補買真鑽的故事（1,417讚）感動無數人，因為它說的不是「買了什麼」，而是「為什麼買」。最受讚賞的觀點是：<strong>重塑不是背叛傳承，而是讓愛延續下去的方式。</strong>
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="icon">⚠️</span>
+        <span class="label">潛在的反方或雜音</span>
+        <div class="content">
+          現實拉扯：<strong>珠寶的情感價值無法被計算</strong>，改造或替換傳家首飾往往引發家族意見分歧。部分人認為改掉原款是「抹去記憶」，寧願讓它沉睡在抽屜。另一個沉重的反方是syyau00.0的故事——傳家珠寶一旦遺失，那份遺憾是真實且無法彌補的。
+        </div>
+      </div>
+    </div>
+
+    <div class="posts-grid">
+      <!-- Post 傳承1 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@omo0425</div>
+            <div class="post-date">2025-12-17</div>
+          </div>
+          <div class="post-likes viral">❤️ 1,417</div>
+        </div>
+        <div class="post-content">媽媽結婚的時候，爸爸還是窮小子，沒有為她準備婚戒。小時候我不懂，買了一盒塑膠戒指當禮物送她，還天真的說「等我長大再買真的給妳！」現在我終於長大了，也有能力了。今天牽著她的手，走進亞立詩，換上一只閃閃發亮到過曝的真鑽戒——媽媽的手指閃亮亮的，眼睛也閃亮亮的。好像彌補了年輕時的那個小小遺憾。</div>
+        <div class="post-stats">
+          <span>💬 32則留言</span>
+          <span>❤️ 1,417讚</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 情感洞察</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">Tru-Mi 品牌機會</span></div>
+            <div class="comment-text">這則貼文的病毒傳播力來自「補償性消費的情感需求」——不是買給自己，而是為了修復一個多年前的缺憾。Tru-Mi 可在這個情感頻道上共鳴：強調「為媽媽訂製第一只真鑽」或「重新設計傳家金飾」的服務敘事。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 傳承2 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@syyau00.0</div>
+            <div class="post-date">2026-03-24</div>
+          </div>
+          <div class="post-likes viral">❤️ 1,531</div>
+        </div>
+        <div class="post-content">求助！！朋友家昨天被盜竊，爸爸留下的遺物黃金項鍊（粗的黃金加上玉配件）、玉戒指、外婆給的嫁妝（金戒指）都不翼而飛。朋友的媽媽自責到快要想不開，想請屏東的朋友幫幫忙，如果家中有經營金飾店⋯⋯</div>
+        <div class="post-stats">
+          <span>💬 180則留言</span>
+          <span>↗ 313次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 情感洞察</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">核心觀點</span></div>
+            <div class="comment-text">這則傳承失去的故事高達1,531讚，說明傳家珠寶的情感重量遠超金錢價值。外婆的金嫁妝「不只是黃金」，它是家族連結與記憶的物質化身。一旦遺失，傷的不只是財產，更是那條與上一輩的情感紐帶。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 承諾的重量 ══════════ -->
+  <div class="category-panel" id="panel-commitment">
+    <div class="cat-header">
+      <div class="cat-emoji">💬</div>
+      <div>
+        <div class="cat-title">承諾的重量</div>
+        <div class="cat-subtitle">男女雙方對婚戒價值、審美不一的爭論或故事</div>
+      </div>
+      <div class="cat-line"></div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <span class="icon">🔥</span>
+        <span class="label">核心爭論點</span>
+        <div class="content">
+          <strong>「婚戒是誰的決定？」</strong> 這是此分類最核心的焦慮。婚戒的選擇權正在三方拉扯：新娘自主（我要戴一輩子）、伴侶的驚喜邏輯（我怕買錯款式）、長輩的金錢話語權（誰出錢誰決定）。深層的爭論是：婚戒究竟是愛的承諾象徵，還是一筆可以計算性價比的家庭投資？
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="icon">✨</span>
+        <span class="label">最受認同的溫暖觀念</span>
+        <div class="content">
+          <strong>「服從性測驗已經開始——你妥協退讓，等同默許公婆參與未來小家庭中大小事。」</strong>（kiki740213，67讚）這句話接住了最多委屈。另一個高讚觀點：<strong>「不是出錢就可以買他人的開心願意」</strong>——幫助deer姐確立了「老公才是繫鈴人」的溝通主軸。
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="icon">⚠️</span>
+        <span class="label">潛在的反方或雜音</span>
+        <div class="content">
+          反方現實很務實：<strong>預算才是最大的限制</strong>，「小資族捏一下預算才上得了兩牌」是大多數人的真實處境。部分人認為傳統銀樓訂製才是「保值」正解——鑽石根本不保值，別被大品牌行銷費用騙了。長輩的觀點也不是無理：保值、大氣、有面子，在他們的邏輯裡也是為子女好。
+        </div>
+      </div>
+    </div>
+
+    <div class="posts-grid">
+      <!-- Post 承諾1: deer -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@deer.6652385</div>
+            <div class="post-date">2026-01-28 · 5.1萬次瀏覽</div>
+          </div>
+          <div class="post-likes viral">❤️ 302</div>
+        </div>
+        <div class="post-content">最近在為婚戒的事有點卡關⋯⋯婆婆的想法是婚戒去銀樓買比較大氣，有面子也比較保值。後來老公覺得既然婆婆都願意花錢，我們就退一步不要讓她不開心。可是婚戒是要戴一輩子的，難道不該選自己真正喜歡的款式嗎？這件事好像變成誰出錢誰決定，講太多好像是我不懂事，不講又覺得很委屈😭</div>
+        <div class="post-stats">
+          <span>💬 422則留言</span>
+          <span>↗ 72次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊查看前5則熱門留言</div>
+        <div class="comments-section">
+          <div class="comments-title">🏆 熱門留言 Top 5</div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@casualmove</span>
+              <span class="comment-likes">❤️ 491</span>
+            </div>
+            <div class="comment-text">從這，我看到以後沒完沒了的婆媳問題在排隊要發生了😂</div>
+          </div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@syue35</span>
+              <span class="comment-likes">❤️ 184</span>
+            </div>
+            <div class="comment-text">很多事情都是誰出錢誰決定，這種事妳就無力發文的話——相信我，未來會有發不完的文。還沒結婚就希望你退一步，未來你會退到粉身碎骨。</div>
+          </div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@amiln.5</span>
+              <span class="comment-likes">❤️ 135</span>
+            </div>
+            <div class="comment-text">我們是各買各的🤣 婆婆幫我買金戒指當婚戒（超級重），但我老公還是買了我喜歡的款式，婚禮當天戴的是我老公買的那款。婆婆給的就跟她說因為太貴重了就鎖在保險箱🥹</div>
+          </div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@aitaiforever</span>
+              <span class="comment-likes">❤️ 97</span>
+            </div>
+            <div class="comment-text">不是出錢就可以買他人的開心願意，這價值觀差異你要跟你老公溝通好。你婆婆只要說要出錢你們全都要聽她的嗎？</div>
+          </div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@kiki740213</span>
+              <span class="comment-likes">❤️ 67</span>
+            </div>
+            <div class="comment-text">請注意，服從性測驗已經開始⋯⋯ 你妥協、退讓之後，等同默許公婆參與未來小家庭中大小事。</div>
+          </div>
+          <a class="post-link" href="https://www.threads.com/@deer.6652385/post/DUC-bIqk_fm" target="_blank">🔗 查看原始貼文</a>
+        </div>
+      </div>
+
+      <!-- Post 承諾2: c_f_c_1_1 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@c_f_c_1_1</div>
+            <div class="post-date">2024-09-04 · 20萬次瀏覽</div>
+          </div>
+          <div class="post-likes viral">❤️ 2,478</div>
+        </div>
+        <div class="post-content">為什麼是先去看婚戒，在求婚。驚喜在哪🤯🤯🤯🤯 求解——不是應該先求婚，再一起去挑婚戒嗎？隊友說：我怕買錯款式。（後記：隊友看到這篇文了，他說好開心大部分的人都站在他這邊🤣）</div>
+        <div class="post-stats">
+          <span>💬 167則留言</span>
+          <span>↗ 224次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊查看前5則熱門留言</div>
+        <div class="comments-section">
+          <div class="comments-title">🏆 熱門留言 Top 5</div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@gogo760428</span>
+              <span class="comment-likes">❤️ 507</span>
+            </div>
+            <div class="comment-text">先確定你有結婚意願，而且挑你喜歡的款式，再求婚，我覺得很棒呀！總比那種大庭廣眾搞得像逼婚的，還有送的那個醜的可能也不是戒指，因為求婚而有了特別意義，變成不知道該不該丟的東西好超多。</div>
+          </div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@chengmeow_eateat</span>
+              <span class="comment-likes">❤️ 273</span>
+            </div>
+            <div class="comment-text">我和老公求婚時謊騙一起無聊看戒指，和業務串通騙他戒圍，最後截止在我家躺了快半年，成功偷渡到歐洲求婚😆 我對於我老公的遲鈍，很滿意。</div>
+          </div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@beagle_sister</span>
+              <span class="comment-likes">❤️ 126</span>
+            </div>
+            <div class="comment-text">還有婚戒去傳統銀樓買，別被那些大廠牌的行銷跟廣告費騙了，尤其是鑽石根本不保值。</div>
+          </div>
+          <div class="comment top-comment">
+            <div class="comment-meta">
+              <span class="comment-author">@nnahan_o5o8</span>
+              <span class="comment-likes">❤️ 105</span>
+            </div>
+            <div class="comment-text">我們也是先看婚戒在求婚～但我覺得這樣很好，起碼可以保證這個婚戒是我喜歡的。從挑選鑽石到戒台設計到製作我們都有一起參與討論，最後成品先生去拿，到求婚那天看到的時候，也是有驚喜的。</div>
+          </div>
+          <div class="comment">
+            <div class="comment-meta">
+              <span class="comment-author">@tc.36e</span>
+              <span class="comment-likes">❤️ 8</span>
+            </div>
+            <div class="comment-text">會嗎？不是每個女生都喜歡驚喜欸🙄</div>
+          </div>
+          <a class="post-link" href="https://www.threads.com/@c_f_c_1_1/post/C_eQoYVz17W" target="_blank">🔗 查看原始貼文</a>
+        </div>
+      </div>
+
+      <!-- Post 承諾3: nonametw000 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@nonametw000</div>
+            <div class="post-date">2025-12-09</div>
+          </div>
+          <div class="post-likes viral">❤️ 762</div>
+        </div>
+        <div class="post-content">年薪和婚戒價格有個合理的比例嗎？當初求婚時婚戒的價格大概30000，我想買貴一點的婚戒，這次想換我跟老公求婚！現在在看婚戒20幾萬真的好貴喔，是不是我的薪水還沒有到這個程度，覺得2-3萬比較符合薪資程度。是不是男生求婚的時候也是有這種煩惱？</div>
+        <div class="post-stats">
+          <span>💬 329則留言</span>
+          <span>↗ 201次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 貼文重點</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">核心洞察</span></div>
+            <div class="comment-text">「婚戒值多少錢才代表我夠愛你？」是隱藏在預算問題下的真正焦慮。高達329則留言，說明這個金錢與承諾的換算問題觸動了極多人。有趣的是發文者是女方主動要幫老公買戒求婚，打破了傳統「男性購買婚戒」的敘事。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 承諾4: ashllleyy_xx -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@ashllleyy_xx</div>
+            <div class="post-date">2026-05-08</div>
+          </div>
+          <div class="post-likes">❤️ 259</div>
+        </div>
+        <div class="post-content">11月底結婚，現在才開始研究婚戒⋯⋯來得及嗎😭 做了一輪功課：I-Primo（口碑好但怕撞戒）、亞立詩（划算但一樣怕撞款）、Tiffany／Cartier（狂推但小資族要捏預算）、銀座白石／De Beers（聽說有半客製）、CH尋光珠寶（朋友推薦全客製）。請問婚戒從下訂到拿到要抓多久才安心？有沒有工期短的高客製品牌推薦🙏</div>
+        <div class="post-stats">
+          <span>💬 112則留言</span>
+          <span>↗ 317次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 貼文重點</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">核心洞察</span></div>
+            <div class="comment-text">「怕撞款」是當代婚戒選擇的新焦慮——不只要好看，還要有獨特性。對大品牌的矛盾心理（狂推但有顧慮）反映消費者已形成品牌意識，但個性化需求也在崛起。全客製化婚戒的口耳相傳效果優於廣告。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 承諾5: linghan2643 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@linghan2643</div>
+            <div class="post-date">2026-04-28</div>
+          </div>
+          <div class="post-likes">❤️ 224</div>
+        </div>
+        <div class="post-content">最近在看婚對戒，但看得好亂⋯⋯預算 5～8 萬內有機會嗎？不想買太誇張的款式，就是日常也能戴、素雅有線條設計的那種。求大家分享你們怎麼選的！品牌、款式、價位都想知道😊</div>
+        <div class="post-stats">
+          <span>💬 89則留言</span>
+          <span>↗ 175次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 品牌機會</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">Tru-Mi 關聯</span></div>
+            <div class="comment-text">5-8萬的預算區間是Tru-Mi 客製婚戒的甜蜜點。「日常也能戴、素雅有線條設計」精準描繪了目標客群的審美需求——功能性美學，不是奢華炫耀。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 承諾6: chuyun -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@chuyun_0213</div>
+            <div class="post-date">2026-01-18</div>
+          </div>
+          <div class="post-likes">❤️ 263</div>
+        </div>
+        <div class="post-content">想詢問大家結婚對戒，已預約 K.UNO、I-PRIMO、ALUXE，開始做功課後發現好像都大同小異，沒有特別喜歡的⋯⋯蠻想試試看銀樓訂製，想問問各位有沒有推薦的銀樓？太苦惱了，大數據幫我推薦給銀樓拜託！</div>
+        <div class="post-stats">
+          <span>💬 161則留言</span>
+          <span>↗ 188次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 市場洞察</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">核心洞察</span></div>
+            <div class="comment-text">主流婚戒品牌在消費者眼中「大同小異」，創造了獨立訂製工坊的市場機會。這正是 Tru-Mi 全客製化的差異化入口。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 承諾7: star621823 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@star621823</div>
+            <div class="post-date">2026-05-06</div>
+          </div>
+          <div class="post-likes">❤️ 166</div>
+        </div>
+        <div class="post-content">精挑細選了最後兩間婚戒——Cartier 跟 I PRIMO。最喜歡的款式大概是這幾個，好猶豫要選哪個，放上來問問大家的意見🙏</div>
+        <div class="post-stats">
+          <span>💬 77則留言</span>
+          <span>↗ 104次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 選購心理洞察</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">核心觀點</span></div>
+            <div class="comment-text">在Cartier（品牌溢價）vs I-PRIMO（平價親民）之間猶豫，折射出消費者心中「品牌價值 vs 性價比」的天平。這77則留言大多是「支持哪邊」的情感投票，而非理性分析。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 生活日常將就 ══════════ -->
+  <div class="category-panel" id="panel-daily">
+    <div class="cat-header">
+      <div class="cat-emoji">🫠</div>
+      <div>
+        <div class="cat-title">生活日常將就</div>
+        <div class="cat-subtitle">婚戒勾衣服、不舒服、洗澡要拔掉的日常焦慮</div>
+      </div>
+      <div class="cat-line"></div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <span class="icon">🔥</span>
+        <span class="label">核心爭論點</span>
+        <div class="content">
+          <strong>「婚戒的象徵意義 vs 實際佩戴的麻煩程度」</strong> 正在拉扯已婚女性的日常。手術不能戴、職業不能戴、換手才知道規則——婚戒的「儀式感」一旦回到日常，就開始與現實摩擦。最深的問題不是「戒指好不好看」，而是「不戴，代表感情有問題嗎？」
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="icon">✨</span>
+        <span class="label">最受認同的溫暖觀念</span>
+        <div class="content">
+          <strong>「不戴婚戒不代表感情不好」</strong> ——這個聲音接住了最多已婚女性的日常焦慮。eye065hook_kr 把婚戒忘在那霸機場的故事（3.1萬讚）之所以瘋傳，是因為它說出了一個真實：<strong>婚戒在日常生活中是被「管理」的，而不是永遠佩戴的。</strong>
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="icon">⚠️</span>
+        <span class="label">潛在的反方或雜音</span>
+        <div class="content">
+          現實拉扯來自伴侶和社會眼光：<strong>「不戴婚戒，對方（和外人）會不會多想？」</strong> daisychihs 的反向案例（老公突然開始戴婚戒，讓她更懷疑）說明已婚者對婚戒行為的解讀是高度敏感的。懷孕導致戒圍改變（_lin917）則是另一個讓女性既委屈又無奈的現實困境。
+        </div>
+      </div>
+    </div>
+
+    <div class="posts-grid">
+      <!-- Post 日常1: eye065 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@eye065hook_kr</div>
+            <div class="post-date">2026-05-16（近期）</div>
+          </div>
+          <div class="post-likes viral">❤️ 3.1萬</div>
+        </div>
+        <div class="post-content">急急急！！！！ 請問有人現在在那霸機場可以幫我個忙嗎😭 婚戒忘在43A登機口前的女廁，最後一間親子廁所的衛生紙架上面了⋯ 帶小孩上廁所時發現她手上拿著爸爸的戒指，怕掉進馬桶叫她先放在衛生紙架上面就忘記拿了⋯飛機都在助跑起飛了才熊熊想到⋯瘋掉🥲🥲</div>
+        <div class="post-stats">
+          <span>💬 1,193則留言</span>
+          <span>↗ 564次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 病毒傳播分析</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">為何3.1萬讚？</span></div>
+            <div class="comment-text">這則貼文把婚戒的「神聖承諾」打回了最接地氣的日常現場：帶娃、趕飛機、忘東西。讀者的共鳴是「太真實了！婚戒在生活裡就是這樣存在的。」1,193則留言多為溫暖打氣，台灣網友的正能量在此淋漓展現——有人真的去機場找了。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 日常2: s___i___x____ -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@s___i___x____</div>
+            <div class="post-date">2026-04-18</div>
+          </div>
+          <div class="post-likes viral">❤️ 491</div>
+        </div>
+        <div class="post-content">想問已婚的大家，你們還有戴婚戒嗎？我跟老公結婚後就沒帶過婚戒了，當初花8000多打了兩個戒指，結果只有拍照跟婚禮當天帶過而已😆</div>
+        <div class="post-stats">
+          <span>💬 256則留言</span>
+          <span>↗ 102次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 品牌洞察</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">核心洞察</span></div>
+            <div class="comment-text">花了8,000元，只戴兩次——這是許多婚戒的命運。這則貼文高讚的原因是：引發了大批已婚者的共鳴與自我揭露。對Tru-Mi而言，「設計出真的會每天想戴的婚戒」是比「選一只看起來好看的婚戒」更有力的銷售主張。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 日常3: hrz_0909_ -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@hrz_0909_</div>
+            <div class="post-date">2026-04-19</div>
+          </div>
+          <div class="post-likes viral">❤️ 504</div>
+        </div>
+        <div class="post-content">我跟我先生的職業都不適合帶婚戒（我先生軍人、我在醫院上班），加上我們真的沒有很喜歡在手上戴飾品，所以就這樣唄。Ps：離婚的話就改圖就好了🤣🤣</div>
+        <div class="post-stats">
+          <span>💬 5則留言</span>
+          <span>↗ 440次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 留言最後一句話</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">核心洞察</span></div>
+            <div class="comment-text">「離婚的話就改圖就好了」這句反差幽默讓這則貼文獲得440次轉發（相對留言數極高的轉發率），說明婚戒不再是承諾的必要載體，這一代人對婚姻象徵有更輕盈的詮釋方式。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 日常4: anita_0972 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@anita_0972</div>
+            <div class="post-date">2024-09-14</div>
+          </div>
+          <div class="post-likes">❤️ 112</div>
+        </div>
+        <div class="post-content">結婚4年後第二次戴婚戒🤣，想說盒子都放到發霉了⋯⋯該出來透透氣😅，想問有認真在戴婚戒的人嗎？</div>
+        <div class="post-stats">
+          <span>💬 147則留言</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 洞察</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">品牌機會</span></div>
+            <div class="comment-text">「盒子放到發霉」是婚戒佩戴率最真實也最令人哭笑不得的描述。高留言數說明此問引發廣泛討論——已婚者在這裡互相坦白不戴婚戒的各種理由，形成一個隱性的「不戴互助會」。設計日常舒適度高的婚戒，是一個尚未被充分挖掘的差異化賽道。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 日常5: _lin917 -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@_lin917</div>
+            <div class="post-date">2025-03-19</div>
+          </div>
+          <div class="post-likes">❤️ 44</div>
+        </div>
+        <div class="post-content">結婚快8年了一直捨不得帶婚戒，最近想帶發現戒圍大了好多，可能是因為懷孕後期買的尺寸抓不準😭，請問卡地亞婚戒能改戒圍嗎？不懂就問脆。</div>
+        <div class="post-stats">
+          <span>💬 29則留言</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 洞察</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">品牌機會</span></div>
+            <div class="comment-text">懷孕導致戒圍改變是一個被長期忽略的售後服務需求。8年後才想到要戴婚戒，說明「時機」對婚戒佩戴的影響遠超過「設計」。Tru-Mi 若能提供完善的改圍服務，可作為長期客戶關係的維繫點。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 日常6: juju__junjun -->
+      <div class="post-card" onclick="toggleCard(this)">
+        <div class="post-top">
+          <div>
+            <div class="post-author">@juju__junjun</div>
+            <div class="post-date">2025-03-10</div>
+          </div>
+          <div class="post-likes">❤️ 164</div>
+        </div>
+        <div class="post-content">結婚快一年，近期被朋友提醒婚戒戴錯手！才發現原來不論男女婚戒都是左手呀╭(°A°`)╮</div>
+        <div class="post-stats">
+          <span>💬 18則留言</span>
+          <span>↗ 33次轉發</span>
+        </div>
+        <div class="expand-hint">▼ 點擊展開</div>
+        <div class="comments-section">
+          <div class="comments-title">💡 洞察</div>
+          <div class="comment top-comment">
+            <div class="comment-meta"><span class="comment-author">有趣觀察</span></div>
+            <div class="comment-text">戴了快一年才發現戴錯手——這個可愛的失誤背後，是婚戒「對的戴法」在台灣並未有強烈文化共識。這也說明婚戒的佩戴規則對許多人而言仍是模糊的，品牌在「婚戒知識教育」上有內容創作機會。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-line"></div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>資料來源：Threads 公開貼文 · 每日 09:00 自動更新 · 僅供品牌內部研究使用</p>
+  <div class="footer-logo">✦ TRU-MI</div>
+</div>
+
+<script>
+  function switchTab(id, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.category-panel').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleCard(card) {
+    card.classList.toggle('expanded');
+    const hint = card.querySelector('.expand-hint');
+    if (hint) {
+      hint.textContent = card.classList.contains('expanded') ? '▲ 收起' : '▼ 點擊展開';
+    }
+  }
+
+  // Set last update time
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+  const h = String(now.getHours()).padStart(2,'0');
+  const min = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('lastUpdate').textContent = `最後更新：${y}-${m}-${d} ${h}:${min}`;
+</script>
+</body>
+</html>
