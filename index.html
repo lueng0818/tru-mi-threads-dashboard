@@ -91,6 +91,20 @@
   .comment-author { font-size: .72rem; font-weight: 700; color: var(--dark); }
   .comment-likes { font-size: .68rem; color: var(--text-muted); display: flex; align-items: center; gap: 3px; }
   .comment-text { font-size: .82rem; color: var(--text); line-height: 1.55; }
+
+  /* Jessica 靈感 */
+  .jessica-insight { margin-top: 12px; background: linear-gradient(135deg, rgba(31,74,67,.12), rgba(197,154,82,.08)); border: 1px solid rgba(197,154,82,.3); border-left: 3px solid var(--gold); border-radius: 8px; padding: 11px 14px; }
+  .jessica-drawer { display: inline-block; font-size: .65rem; font-weight: 700; color: var(--gold); letter-spacing: .08em; text-transform: uppercase; font-family: 'Noto Sans TC', sans-serif; margin-bottom: 5px; }
+  .jessica-text { font-size: .8rem; line-height: 1.7; color: var(--text); }
+  /* 今日草稿 */
+  .draft-card { background: var(--card-bg); border: 1.5px solid var(--gold); border-radius: 14px; padding: 26px 28px; margin-bottom: 30px; position: relative; }
+  .draft-badge { position: absolute; top: -11px; left: 20px; background: var(--gold); color: #fff; font-size: .68rem; font-weight: 700; padding: 3px 12px; border-radius: 99px; letter-spacing: .1em; font-family: 'Noto Sans TC', sans-serif; }
+  .draft-meta { font-size: .72rem; color: var(--text-muted); margin-bottom: 16px; }
+  .draft-body { font-size: .92rem; line-height: 2.1; color: var(--text); white-space: pre-wrap; font-family: 'Noto Sans TC', sans-serif; }
+  .drawer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  .drawer-card { background: var(--card-bg); border: 1px solid var(--border); border-top: 3px solid var(--gold); border-radius: 10px; padding: 16px 18px; }
+  .drawer-card-title { font-size: .75rem; font-weight: 700; color: var(--gold); letter-spacing: .08em; margin-bottom: 8px; font-family: 'Noto Sans TC', sans-serif; }
+  .drawer-tag { display: inline-block; font-size: .7rem; background: rgba(197,154,82,.15); color: var(--gold); border-radius: 4px; padding: 2px 7px; margin: 2px 3px 2px 0; }
   .post-link { display: inline-flex; align-items: center; gap: 5px; font-size: .72rem; color: var(--gold); text-decoration: none; margin-top: 12px; font-family: 'Noto Sans TC', sans-serif; font-weight: 600; }
   .post-link:hover { text-decoration: underline; }
   .expand-hint { font-size: .72rem; color: var(--text-muted); font-family: 'Noto Sans TC', sans-serif; text-align: right; margin-top: 6px; }
@@ -124,35 +138,30 @@
 </div>
 
 <div class="summary-bar">
-  <div class="stat-pill"><div class="num">18</div><div class="lbl">蒐集貼文數</div></div>
-  <div class="stat-pill"><div class="num">3.6萬+</div><div class="lbl">最高單篇讚數</div></div>
-  <div class="stat-pill"><div class="num">3,600+</div><div class="lbl">總留言數</div></div>
-  <div class="stat-pill"><div class="num">7</div><div class="lbl">分析維度</div></div>
-  <div class="stat-pill"><div class="num">婚戒審美</div><div class="lbl">本週最熱關鍵字</div></div>
+  <div class="stat-pill"><div class="num">19</div><div class="lbl">蒐集貼文數</div></div>
+  <div class="stat-pill"><div class="num">3.1萬</div><div class="lbl">最高單篇讚數</div></div>
+  <div class="stat-pill"><div class="num">4,800+</div><div class="lbl">總留言數</div></div>
+  <div class="stat-pill"><div class="num">217.8萬</div><div class="lbl">本週最高瀏覽</div></div>
+  <div class="stat-pill"><div class="num">忘在那霸</div><div class="lbl">本週最熱話題</div></div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="switchTab('regret', this)">😭 遺憾與翻車 <span class="count">3</span></div>
-  <div class="tab" onclick="switchTab('inheritance', this)">💛 傳承與重塑 <span class="count">2</span></div>
-  <div class="tab" onclick="switchTab('commitment', this)">💬 承諾的重量 <span class="count">7</span></div>
-  <div class="tab" onclick="switchTab('daily', this)">🫠 生活日常將就 <span class="count">6</span></div>
-  <div class="tab-divider"></div>
-  <div class="tab" onclick="switchTab('aesthetic', this)">🎨 美感轉譯與翻車恐懼 <span class="count">4</span></div>
-  <div class="tab" onclick="switchTab('structure', this)">💎 結構設計與寶石鑲嵌 <span class="count">4</span></div>
-  <div class="tab" onclick="switchTab('wearexp', this)">🤝 動態佩戴與日常相處 <span class="count">5</span></div>
-  <div class="tab-divider"></div>
+  <div class="tab active" onclick="switchTab('comms', this)">🚨 溝通與翻車焦慮 <span class="count">4</span></div>
+  <div class="tab" onclick="switchTab('daily', this)">🌿 日常佩戴與體感 <span class="count">7</span></div>
+  <div class="tab" onclick="switchTab('budget', this)">💸 預算與審美拉扯 <span class="count">5</span></div>
+  <div class="tab" onclick="switchTab('heritage', this)">💛 傳承與情感重塑 <span class="count">2</span></div>
   <div class="tab" onclick="switchTab('strategy', this)">🚀 品牌策略室</div>
 </div>
 
 <div class="main">
 
-<!-- ══ 遺憾與翻車 ══ -->
-<div class="category-panel active" id="panel-regret">
+<!-- ══ 溝通與翻車焦慮 ══ -->
+<div class="category-panel active" id="panel-comms">
   <div class="cat-header">
-    <div class="cat-emoji">😭</div>
+    <div class="cat-emoji">🚨</div>
     <div>
-      <div class="cat-title">遺憾與翻車</div>
-      <div class="cat-subtitle">買到後悔的婚戒 · 客製化溝通失敗的悲慘經驗</div>
+      <div class="cat-title">溝通與翻車焦慮</div>
+      <div class="cat-subtitle">服務冷暴力 · 設計師不聽話 · 實品落差恐懼</div>
     </div>
     <div class="cat-line"></div>
   </div>
@@ -187,6 +196,7 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@yc_ma_315ant</span><span class="comment-likes">❤️ 68</span></div><div class="comment-text">我去了iprimo 兩次，一次在台北、一次在台中，兩次的服務態度都很好耶（反方聲音）</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@enjoyyy.1998</span><span class="comment-likes">❤️ 18</span></div><div class="comment-text">我覺得氣場也會影響櫃姐態度。告訴自己「不是買不起，是你有沒有本事讓我買」——散發自信，對方就不敢隨便對待！</div></div>
         <a class="post-link" href="https://www.threads.com/@yjyg169/post/DXoUfPJj33T" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 溝通與翻車焦慮</div><div class="jessica-text">💡 Jessica 靈感｜那句「下次付錢的人再來」記很久。Tru-Mi 初次諮詢沒有專櫃、沒有交班——量圍、蠟模、成品，同一位師傅從頭跟到尾。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -205,6 +215,7 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@fire_tofu</span><span class="comment-likes">❤️ 9</span></div><div class="comment-text">我在台中新光買的，洗戒指很常都去大遠百，每次服務都蠻好的耶，當初買的時候也沒有聽到任何貶低其他品牌的行為。</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@baofulo</span><span class="comment-likes">❤️ 8</span></div><div class="comment-text">我在台北看過兩家iprimo沒遇到會說別家不好的櫃姐，其中一位還建議可以多比較，應該是那天遇到比較雷的櫃姐。</div></div>
         <a class="post-link" href="https://www.threads.com/@uni.corn7402/post/DWQQEk7oIav" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 溝通與翻車焦慮</div><div class="jessica-text">💡 Jessica 靈感｜那個「要預約喔」轉身走掉的瞬間，是很多人放棄一個品牌的原因。Tru-Mi 沒有門市，初次諮詢就是設計師本人接待——不用預約才能被認真對待。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -223,18 +234,37 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@coffeerainy</span><span class="comment-likes">❤️ 359</span></div><div class="comment-text">前同事曾經喜孜孜分享他幫好友求婚的影片，求婚地點是7-11停車場，說「在這裡讓你買東西的地方求婚超浪漫的」。</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@niiina.94</span><span class="comment-likes">❤️ 170</span></div><div class="comment-text">前男友在談分手的時候求婚，婚戒拿出來ㄌㄤ到不行，說「如果妳願意結婚我就跟妳在一起」，感覺婚戒是威脅工具。</div></div>
         <a class="post-link" href="https://www.threads.com/@annieliiee/post/DQcN5urgQpp" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 溝通與翻車焦慮</div><div class="jessica-text">💡 Jessica 靈感｜留言裡的每個故事，都是一個戒圍不對、或根本不是她要的。蠟模試戴的意義就是——你說好之前，先讓手來說話。</div></div>
+      </div>
+    </div>
+    <div class="post-card" onclick="toggleCard(this)">
+      <div class="post-top">
+        <div><div class="post-author">@chuyun_0213</div><div class="post-date">2026-01-18</div></div>
+        <div class="post-likes">❤️ 263</div>
+      </div>
+      <div class="post-content">想詢問大家結婚對戒，已預約 K.UNO、I-PRIMO、ALUXE，開始做功課後發現好像都大同小異，沒有特別喜歡的⋯⋯蠻想試試看銀樓訂製，想問問各位有沒有推薦的銀樓？太苦惱了。</div>
+      <div class="post-stats"><span>💬 161則留言</span><span>↗ 188次轉發</span></div>
+      <div class="expand-hint">▼ 點擊展開</div>
+      <div class="comments-section">
+        <div class="comments-title">🏆 熱門留言 Top 5</div>
+        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@kiki_li0124</span><span class="comment-likes">❤️ 759</span></div><div class="comment-text">可以考慮一下純手工的雕金對戒唷～</div></div>
+        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@petit.madam.acc</span><span class="comment-likes">❤️ 12</span></div><div class="comment-text">不得不來自我推薦💕可以半訂製也能做全訂製款的對戒，歡迎到我的 IG 看更多作品～</div></div>
+        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@lazydun945</span><span class="comment-likes">❤️ 10</span></div><div class="comment-text">推薦K.UNO，服務人員很親切，可以給你想要的元素，會請設計師出幾版給你參考，出圖不用付費。</div></div>
+        <div class="comment"><div class="comment-meta"><span class="comment-author">@tsao.abby</span><span class="comment-likes">❤️ 7</span></div><div class="comment-text">推薦恆溫故事～ 我自己是在這裡找到對戒的❤️</div></div>
+        <div class="comment"><div class="comment-meta"><span class="comment-author">@85_09_26</span><span class="comment-likes">❤️ 7</span></div><div class="comment-text">這家是鑽石工廠直營的，有證書、可保證價格回收，價格是I-primo的一半，要預約。</div></div>
+        <a class="post-link" href="https://www.threads.com/@chuyun_0213/post/DTp3j_JEpgR" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 溝通與翻車焦慮</div><div class="jessica-text">💡 Jessica 靈感｜想要「純手工」，心裡問的是：這枚戒指有沒有被認真對待？Tru-Mi 每一枚先雕蠟，摸過蠟的都知道答案了。</div></div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- ══ 傳承與重塑 ══ -->
-<div class="category-panel" id="panel-inheritance">
+<!-- ══ 傳承與情感重塑 ══ -->
+<div class="category-panel" id="panel-heritage">
   <div class="cat-header">
     <div class="cat-emoji">💛</div>
     <div>
-      <div class="cat-title">傳承與重塑</div>
-      <div class="cat-subtitle">外婆、媽媽傳下來的舊首飾 · 放不下卻戴不上的糾結</div>
+      <div class="cat-title">傳承與情感重塑</div>
+      <div class="cat-subtitle">舊金改造 · 補買遺憾 · 長輩遺物重生</div>
     </div>
     <div class="cat-line"></div>
   </div>
@@ -269,6 +299,7 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@lovetrueworld</span><span class="comment-likes">❤️ 7</span></div><div class="comment-text">我跟你相反，我買給女兒～幫她收集亞立詩的迪士尼公主系列💍</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@yanfang8956</span><span class="comment-likes">❤️ 7</span></div><div class="comment-text">可以買黃金給媽媽真的比較保值</div></div>
         <a class="post-link" href="https://www.threads.com/@omo0425/post/DSXO9qKCVNS" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 傳承與情感重塑</div><div class="jessica-text">💡 Jessica 靈感｜她一直知道那是人造鑽，但從沒說過。重新量圍、1:1 蠟模——讓她知道，這次有人認真把她的決定當回事了。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -283,18 +314,18 @@
         <div class="comments-title">💡 情感洞察</div>
         <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">核心觀點</span></div><div class="comment-text">傳家珠寶的情感重量遠超金錢價值。外婆的金嫁妝「不只是黃金」，它是家族連結與記憶的物質化身。一旦遺失，傷的不只是財產，更是那條與上一輩的情感紐帶。</div></div>
         <a class="post-link" href="https://www.threads.com/@syyau00.0" target="_blank">🔗 查看原始帳號</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 傳承與情感重塑</div><div class="jessica-text">💡 Jessica 靈感｜傳家珠寶重量不在克數，在那些年。舊金改造原料是你帶來的，蠟模確認每個細節——沒有一克金流失。</div></div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- ══ 承諾的重量 ══ -->
-<div class="category-panel" id="panel-commitment">
+<!-- ══ 預算與審美拉扯 ══ -->
+<div class="category-panel" id="panel-budget">
   <div class="cat-header">
-    <div class="cat-emoji">💬</div>
+    <div class="cat-emoji">💸</div>
     <div>
-      <div class="cat-title">承諾的重量</div>
-      <div class="cat-subtitle">男女雙方對婚戒價值、審美不一的爭論或故事</div>
+      <div class="cat-title">預算與審美拉扯</div>
+      <div class="cat-subtitle">長輩介入 · 品牌廣告費迷霧 · 男女審美衝突</div>
     </div>
     <div class="cat-line"></div>
   </div>
@@ -329,6 +360,7 @@
         <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@aitaiforever</span><span class="comment-likes">❤️ 97</span></div><div class="comment-text">不是出錢就可以買他人的開心願意，這價值觀差異你要跟你老公溝通好。你婆婆只要說要出錢你們全都要聽她的嗎？</div></div>
         <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@kiki740213</span><span class="comment-likes">❤️ 67</span></div><div class="comment-text">請注意，服從性測驗已經開始⋯⋯ 你妥協、退讓之後，等同默許公婆參與未來小家庭中大小事。</div></div>
         <a class="post-link" href="https://www.threads.com/@deer.6652385/post/DUC-bIqk_fm" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜婚戒是第一個服從性測試。Tru-Mi 蠟模試戴只有你跟另一半——那個說好的，是你自己的手，不是別人的預算。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -347,6 +379,7 @@
         <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@nnahan_o5o8</span><span class="comment-likes">❤️ 105</span></div><div class="comment-text">我們也是先看婚戒在求婚～但我覺得這樣很好，起碼可以保證這個婚戒是我喜歡的。從挑選鑽石到戒台設計到製作我們都有一起參與討論，最後成品先生去拿，到求婚那天看到的時候，也是有驚喜的。</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@tc.36e</span><span class="comment-likes">❤️ 8</span></div><div class="comment-text">會嗎？不是每個女生都喜歡驚喜欸🙄</div></div>
         <a class="post-link" href="https://www.threads.com/@c_f_c_1_1/post/C_eQoYVz17W" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜「驚喜」跟「對的」不是對立的。Tru-Mi 蠟模可以只有一個人先來確認形狀，求婚那天成品出來才是真的驚喜。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -361,6 +394,7 @@
         <div class="comments-title">💡 貼文重點</div>
         <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">核心洞察</span></div><div class="comment-text">「婚戒值多少錢才代表我夠愛你？」是隱藏在預算問題下的真正焦慮。發文者是女方主動要幫老公買戒求婚，打破了傳統「男性購買婚戒」的敘事。</div></div>
         <a class="post-link" href="https://www.threads.com/@nonametw000" target="_blank">🔗 查看原始帳號</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜存了一百張圖卻說不清楚共同點。Tru-Mi 諮詢時問的不是你要什麼，而是那些圖讓你有什麼感覺。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -379,42 +413,7 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@xingli_jewelry</span><span class="comment-likes">❤️ 9</span></div><div class="comment-text">你好！我是幸李，我們有公版可以試戴，也可以依照喜好客製化調整，歡迎私訊！</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@jennifer080_</span><span class="comment-likes">❤️ 8</span></div><div class="comment-text">推薦銀座白石！服務很好，可以依照手形推薦適合的款式。</div></div>
         <a class="post-link" href="https://www.threads.com/@ashllleyy_xx/post/DYEBb1zj8xn" target="_blank">🔗 查看原始貼文</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@linghan2643</div><div class="post-date">2026-04-28</div></div>
-        <div class="post-likes">❤️ 224</div>
-      </div>
-      <div class="post-content">最近在看婚對戒，但看得好亂⋯⋯預算 5～8 萬內有機會嗎？不想買太誇張的款式，就是日常也能戴、素雅有線條設計的那種。求大家分享你們怎麼選的！品牌、款式、價位都想知道😊</div>
-      <div class="post-stats"><span>💬 89則留言</span><span>↗ 175次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🏆 熱門留言 Top 5</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@kiki_li0124</span><span class="comment-likes">❤️ 90</span></div><div class="comment-text">義大利傳統雕金工藝🇮🇹純手工製作，當婚戒會很特別喔！可以參考一下～</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@chjewelry.official</span><span class="comment-likes">❤️ 67</span></div><div class="comment-text">竟然海巡到我們客人回覆🥹謝謝分享，參考的是這兩款</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@bloommmming.q</span><span class="comment-likes">❤️ 33</span></div><div class="comment-text">不可能不分享我最近去試戴的婚戒！我在台灣品牌訂製的，你可以搜尋CH尋光珠寶看看，預算應該符合你的需求，一對八萬以內。</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@bunny_is_moving</span><span class="comment-likes">❤️ 25</span></div><div class="comment-text">之前看了一些品牌的心得有整理～歡迎看看ㄚ</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@paris_0812</span><span class="comment-likes">❤️ 17</span></div><div class="comment-text">Cartier!!!💍 因為本人很粗魯但又想要鑽，一看到就決定是1895了🥹 對戒也符合妳的預算八萬有找🫶🏻</div></div>
-        <a class="post-link" href="https://www.threads.com/@linghan2643/post/DXqvjCViYsb" target="_blank">🔗 查看原始貼文</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@chuyun_0213</div><div class="post-date">2026-01-18</div></div>
-        <div class="post-likes">❤️ 263</div>
-      </div>
-      <div class="post-content">想詢問大家結婚對戒，已預約 K.UNO、I-PRIMO、ALUXE，開始做功課後發現好像都大同小異，沒有特別喜歡的⋯⋯蠻想試試看銀樓訂製，想問問各位有沒有推薦的銀樓？太苦惱了。</div>
-      <div class="post-stats"><span>💬 161則留言</span><span>↗ 188次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🏆 熱門留言 Top 5</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@kiki_li0124</span><span class="comment-likes">❤️ 759</span></div><div class="comment-text">可以考慮一下純手工的雕金對戒唷～</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@petit.madam.acc</span><span class="comment-likes">❤️ 12</span></div><div class="comment-text">不得不來自我推薦💕可以半訂製也能做全訂製款的對戒，歡迎到我的 IG 看更多作品～</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@lazydun945</span><span class="comment-likes">❤️ 10</span></div><div class="comment-text">推薦K.UNO，服務人員很親切，可以給你想要的元素，會請設計師出幾版給你參考，出圖不用付費。</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@tsao.abby</span><span class="comment-likes">❤️ 7</span></div><div class="comment-text">推薦恆溫故事～ 我自己是在這裡找到對戒的❤️</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@85_09_26</span><span class="comment-likes">❤️ 7</span></div><div class="comment-text">這家是鑽石工廠直營的，有證書、可保證價格回收，價格是I-primo的一半，要預約。</div></div>
-        <a class="post-link" href="https://www.threads.com/@chuyun_0213/post/DTp3j_JEpgR" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜比較品牌時，往往在比廣告費。Tru-Mi 沒有公版，從你手感出發——1.8mm 厚度底線，不為好看犧牲配戴舒適度。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -433,18 +432,18 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@tinkerbellmoyi</span><span class="comment-likes">❤️ 14</span></div><div class="comment-text">我們是買Iprimo！因為買的時候是懷孕中，手腫很嚴重，Iprimo可以免費改兩次戒圍，這個售後服務打動我了。</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@blairsssl</span><span class="comment-likes">❤️ 10</span></div><div class="comment-text">手指短就唔好戴卡地亞好啲</div></div>
         <a class="post-link" href="https://www.threads.com/@star621823/post/DX_wR4NkZGL" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜戒圍會變，手形不會騙人。Tru-Mi 蠟模時師傅看的不只是數字——是這個形狀戴在你手上，有沒有「對」的感覺。</div></div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- ══ 生活日常將就 ══ -->
+<!-- ══ 日常佩戴與體感 ══ -->
 <div class="category-panel" id="panel-daily">
   <div class="cat-header">
-    <div class="cat-emoji">🫠</div>
+    <div class="cat-emoji">🌿</div>
     <div>
-      <div class="cat-title">生活日常將就</div>
-      <div class="cat-subtitle">婚戒勾衣服、不舒服、洗澡要拔掉的日常焦慮</div>
+      <div class="cat-title">日常佩戴與體感</div>
+      <div class="cat-subtitle">懷孕改圍 · 職業限制 · 戒圍鬆了 · 放盒子多年</div>
     </div>
     <div class="cat-line"></div>
   </div>
@@ -465,7 +464,7 @@
   <div class="posts-grid">
     <div class="post-card" onclick="toggleCard(this)">
       <div class="post-top">
-        <div><div class="post-author">@eye065hook_kr</div><div class="post-date">2026-05-16（近期）</div></div>
+        <div><div class="post-author">@eye065hook_kr</div><div class="post-date">2026-05-19 · 217.8萬次瀏覽</div></div>
         <div class="post-likes viral">❤️ 3.1萬</div>
       </div>
       <div class="post-content">急急急！！！！ 請問有人現在在那霸機場可以幫我個忙嗎😭 婚戒忘在43A登機口前的女廁，最後一間親子廁所的衛生紙架上面了⋯ 帶小孩上廁所時發現她手上拿著爸爸的戒指，怕掉進馬桶叫她先放在衛生紙架上面就忘記拿了⋯飛機都在助跑起飛了才熊熊想到⋯</div>
@@ -479,6 +478,7 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@floria4120</span><span class="comment-likes">❤️ 3,080</span></div><div class="comment-text">剛剛幫你看了 沒有QQ</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@inslove520</span><span class="comment-likes">❤️ 1,969</span></div><div class="comment-text">我有個朋友在Cartier買的婚戒，去峇里島度蜜月時不小心掉進馬桶，那個眼神我一輩子忘不了⋯⋯</div></div>
         <a class="post-link" href="https://www.threads.com/@eye065hook_kr/post/DYgwfB8kkRc" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜機場廁所衛生紙架不是藏婚戒的地方。Tru-Mi 諮詢時問「你在什麼場合會摘下它」——不是多餘，是讓這件事別發生。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -497,15 +497,16 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@nyanako_0129</span><span class="comment-likes">❤️ 13</span></div><div class="comment-text">我們兩個已婚，都是理工宅，一致認為那個東西浪費錢。於是我帶他配了一副新眼鏡，鏡片功能選好選滿，這樣他就會天天戴，又實用。</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@chenzhuzhu537</span><span class="comment-likes">❤️ 9</span></div><div class="comment-text">工作會戴，表示非單身。超過10萬的不會戴，只有偶爾聚餐、約會才戴，平時戴簡單的。</div></div>
         <a class="post-link" href="https://www.threads.com/@s___i___x____/post/DXRgX6Smuvl" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜不能戴的時候，戒指放哪？Tru-Mi 有幾對醫護、消防員客人：他們說要的是「知道它在」的感覺，不是每天戴的那種。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
       <div class="post-top">
         <div><div class="post-author">@hrz_0909_</div><div class="post-date">2026-04-19</div></div>
-        <div class="post-likes viral">❤️ 504</div>
+        <div class="post-likes">❤️ 12</div>
       </div>
-      <div class="post-content">我跟我先生的職業都不適合帶婚戒（我先生軍人、我在醫院上班），加上我們真的沒有很喜歡在手上戴飾品，所以就這樣唄。Ps：離婚的話就改圖就好了🤣🤣</div>
-      <div class="post-stats"><span>💬 5則留言</span><span>↗ 440次轉發</span></div>
+      <div class="post-content">消防員，上班不能戴任何飾品，婚戒也不例外。跟另一半討論後決定刺青——沿著無名指刻上兩個人的圖案。脫不掉，也不會忘記。</div>
+      <div class="post-stats"><span>💬 留言</span></div>
       <div class="expand-hint">▼ 點擊展開</div>
       <div class="comments-section">
         <div class="comments-title">🏆 熱門留言 Top 5</div>
@@ -515,6 +516,7 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@greedy3388</span><span class="comment-likes">❤️ 1</span></div><div class="comment-text">很不錯耶</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@wbeauty2024</span><span class="comment-likes">❤️ 1</span></div><div class="comment-text">沿著線切除🤪 開玩笑，祝你們幸福美滿</div></div>
         <a class="post-link" href="https://www.threads.com/@hrz_0909_/post/DXS8ww6k3Of" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜刺青婚戒，確定到雷射都刪不掉。Tru-Mi 也遇過：不需要很貴，需要每次看到都記得當天說的話——那也是訂製。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -533,6 +535,7 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@peggy1026</span><span class="comment-likes">❤️ 3</span></div><div class="comment-text">我天天戴耶！因為買的是喜歡的品牌又適合平常戴的款式，所以天天戴超ok</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@tina_liu_2011</span><span class="comment-likes">❤️ 3</span></div><div class="comment-text">我得找找，我的婚戒💍跑去哪裡了？🤭 混血兒媽媽20年，婚戒應該沒戴過超過3個月吧！？</div></div>
         <a class="post-link" href="https://www.threads.com/@anita_0972/post/C_5tk28PNkx" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜放四年再拿出來，刮痕變肌理——有人說她認識那些刮痕。Tru-Mi 做戒時問「你多久後還是想戴它」，不是套路。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -551,6 +554,7 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@loveucatherine</span><span class="comment-likes">❤️ 2</span></div><div class="comment-text">可以改，但他是加墊片在內圈，外觀會不太好看⋯</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@jacob_cat_family</span><span class="comment-likes">❤️ 1</span></div><div class="comment-text">Trinity因為三圈改不到，你那隻應該有機會改到，直接去專櫃，師傅看過可改的話，可免費改一次</div></div>
         <a class="post-link" href="https://www.threads.com/@_lin917/post/DHYrD_wSbGx" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜戒圍改了，卻說感覺不一樣了。Tru-Mi 改圍前先問：是手瘦了，還是你對它的感覺變了？兩種答案，處理方式不同。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -569,197 +573,7 @@
         <div class="comment"><div class="comment-meta"><span class="comment-author">@ssoo52030</span><span class="comment-likes">❤️ 5</span></div><div class="comment-text">我是被提醒女生戴右手🥹因為我的婚戒自己做，製作時量左手，網路上查都是左手🤣搞的我好亂</div></div>
         <div class="comment"><div class="comment-meta"><span class="comment-author">@risoc061830</span><span class="comment-likes">❤️ 5</span></div><div class="comment-text">以前的人認為左手無名指的血管通到心臟，所以才都戴左手無名指，我也問過女生是不是要戴右手這樣牽手時戒指能碰觸——超浪漫不是嗎😆</div></div>
         <a class="post-link" href="https://www.threads.com/@juju__junjun/post/DHAC0FJhw5P" target="_blank">🔗 查看原始貼文</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ 美感轉譯與翻車恐懼 ══ -->
-<div class="category-panel" id="panel-aesthetic">
-  <div class="cat-header">
-    <div class="cat-emoji">🎨</div>
-    <div>
-      <div class="cat-title">美感轉譯與翻車恐懼</div>
-      <div class="cat-subtitle">全訂製核心焦慮 ① · 害怕「我說的奢華跟設計師想的不一樣」</div>
-    </div>
-    <div class="cat-line"></div>
-  </div>
-
-  <div class="analysis-grid">
-    <div class="analysis-card">
-      <span class="icon">😰</span><span class="label">準新人的隱形焦慮</span>
-      <div class="content">最害怕那個「無法挽回的具體細節」，是拿到成品的那一秒：明明3D圖很美，但實品戒台比例偏厚、鑽石看起來比選石時小一號、表面紋路太工業感。最深的恐懼是：<strong>她說不出哪裡不對，但直覺告訴她「不是我要的那個」</strong>——而此時戒指已經做好了，退路已關閉。</div>
-    </div>
-    <div class="analysis-card">
-      <span class="icon">🛡️</span><span class="label">最被認同的職人解法</span>
-      <div class="content"><strong>1:1 蠟模試戴</strong>是目前最被認可的安全閥——在金屬澆鑄前先「摸到感覺」。另一個受信任的做法：設計師能把模糊的形容詞（「輕盈感」「低調的存在感」）翻譯成<strong>可量測的規格（戒身寬度 3.2mm / 拋光面積 70%）</strong>，讓溝通從「我感覺」變成「我確認」。</div>
-    </div>
-    <div class="analysis-card">
-      <span class="icon">⚔️</span><span class="label">伴侶間的拉扯</span>
-      <div class="content">女方希望設計師能「讀懂我的美學語言」，男方認為「不用這麼複雜，好看就好」。最常卡住的點：<strong>女方帶著 IG 存圖說「我想要這種感覺」，男方在旁邊沉默</strong>——設計師必須同時安撫兩種需求，又不能讓任何一方感到被忽視。</div>
-    </div>
-  </div>
-
-  <div class="draft-section">
-    <div class="draft-header">
-      <div class="draft-badge">📱 Tru-Mi Threads 碎碎念草稿</div>
-      <div class="draft-subtitle">品牌語調參考稿 · 口語＋工藝規格 · 不推銷、不放連結</div>
-    </div>
-    <div class="draft-card">
-      <p>今天下午確認蠟模，新娘突然問我「這個感覺跟上次我傳給你的那張照片一樣嗎？」</p>
-      <p>我停下來，把她手機裡存的那張圖打開，放在蠟模旁邊。</p>
-      <div class="draft-sep">— — —</div>
-      <p>兩個都看了三秒。</p>
-      <p>「有點像，但又不完全是。」她說。</p>
-      <p>「對，因為那張圖是 18K 黃金拋光，妳選的是鉑金拉砂。相同的弧度、不同的光感。」</p>
-      <div class="draft-sep">— — —</div>
-      <p>我把蠟模放在她左手無名指上，陽光從窗口打進來。</p>
-      <p>她安靜了一下。</p>
-      <p>「這個感覺對了。」</p>
-      <div class="draft-sep">— — —</div>
-      <p>美感翻譯這件事，從來不是「我說什麼，你做什麼」。</p>
-      <p>是一起找到那個對的瞬間。</p>
-    </div>
-  </div>
-
-  <div class="section-title">📌 相關貼文分析</div>
-  <div class="posts-grid">
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@ashllleyy_xx</div><div class="post-date">2026-05-08</div></div>
-        <div class="post-likes">❤️ 259</div>
-      </div>
-      <div class="post-content">11月底結婚，現在才開始研究婚戒⋯⋯做了一輪功課：I-Primo（口碑好但怕撞戒）、亞立詩（划算但一樣怕撞款）、Tiffany／Cartier（狂推但小資族要捏預算）、CH尋光珠寶（朋友推薦全客製）。請問婚戒從下訂到拿到要抓多久才安心？</div>
-      <div class="post-stats"><span>💬 112則留言</span><span>↗ 317次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🏆 熱門留言 Top 5</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@chjewelry.official</span><span class="comment-likes">❤️ 80</span></div><div class="comment-text">尋光編來回覆了！已經收到您的預約了💕</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@harper_817590</span><span class="comment-likes">❤️ 24</span></div><div class="comment-text">Cartier的這3顆我都很推，一個4萬初上下</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@morning_hiii</span><span class="comment-likes">❤️ 9</span></div><div class="comment-text">我們去了銀座白石和iprimo，後來選了銀座白石，服務很好，款式也比較有設計感。</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@xingli_jewelry</span><span class="comment-likes">❤️ 9</span></div><div class="comment-text">你好！我是幸李，我們有公版可以試戴，也可以依照喜好客製化調整，歡迎私訊！</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@jennifer080_</span><span class="comment-likes">❤️ 8</span></div><div class="comment-text">推薦銀座白石！服務很好，可以依照手形推薦適合的款式。</div></div>
-        <a class="post-link" href="https://www.threads.com/@ashllleyy_xx/post/DYEBb1zj8xn" target="_blank">🔗 查看原始貼文</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@chuyun_0213</div><div class="post-date">2026-01-18</div></div>
-        <div class="post-likes">❤️ 263</div>
-      </div>
-      <div class="post-content">想詢問大家結婚對戒，已預約 K.UNO、I-PRIMO、ALUXE，開始做功課後發現好像都大同小異，沒有特別喜歡的⋯⋯蠻想試試看銀樓訂製，太苦惱了，大數據幫我推薦給銀樓拜託！</div>
-      <div class="post-stats"><span>💬 161則留言</span><span>↗ 188次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🏆 熱門留言 Top 5</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@kiki_li0124</span><span class="comment-likes">❤️ 759</span></div><div class="comment-text">可以考慮一下純手工的雕金對戒唷～</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@petit.madam.acc</span><span class="comment-likes">❤️ 12</span></div><div class="comment-text">不得不來自我推薦💕可以半訂製也能做全訂製款的對戒，歡迎到我的 IG 看更多作品～</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@lazydun945</span><span class="comment-likes">❤️ 10</span></div><div class="comment-text">推薦K.UNO，服務人員很親切，可以給你想要的元素，會請設計師出幾版給你參考，出圖不用付費。</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@tsao.abby</span><span class="comment-likes">❤️ 7</span></div><div class="comment-text">推薦恆溫故事～ 我自己是在這裡找到對戒的❤️</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@85_09_26</span><span class="comment-likes">❤️ 7</span></div><div class="comment-text">這家是鑽石工廠直營的，有證書、可保證價格回收，價格是I-primo的一半，要預約。</div></div>
-        <a class="post-link" href="https://www.threads.com/@chuyun_0213/post/DTp3j_JEpgR" target="_blank">🔗 查看原始貼文</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@uni.corn7402</div><div class="post-date">2026-03-24</div></div>
-        <div class="post-likes">❤️ 214</div>
-      </div>
-      <div class="post-content">去iprimo試戴，結果櫃姐一直在說別家不好。服務的方式也蠻隨便，叫我們看檯面上的，每隔5分鐘就走出來問一下選好了嗎，很急的感覺。總之體驗真的很不好。</div>
-      <div class="post-stats"><span>💬 103則留言</span><span>↗ 202次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🏆 熱門留言 Top 5</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@fruselect</span><span class="comment-likes">❤️ 25</span></div><div class="comment-text">真的也不喜歡會一直批評別的店家的推銷方式🙁</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@_gobbydobby_</span><span class="comment-likes">❤️ 13</span></div><div class="comment-text">上次臨時靠櫃巨城iprimo，櫃姐態度超冷～：「要預約喔。」（轉身走掉）旁邊的亞立詩跟銀座白石態度都很好，那次之後完全不考慮iprimo。</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@joygirl_017</span><span class="comment-likes">❤️ 12</span></div><div class="comment-text">可是我婚戒是在板橋大遠百Iprimo買的！體驗最不好的應該是金生XX跟點X品吧？這一間我第一次看也沒有預約，但都很細心介紹款式和價格。</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@fire_tofu</span><span class="comment-likes">❤️ 9</span></div><div class="comment-text">我在台中新光買的，洗戒指很常都去大遠百，每次服務都蠻好的耶，I-primo質感真的蠻好的。</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@baofulo</span><span class="comment-likes">❤️ 8</span></div><div class="comment-text">我在台北看過兩家iprimo沒遇到會說別家不好的櫃姐，其中一位還建議可以多比較，應該是那天遇到比較雷的櫃姐。</div></div>
-        <a class="post-link" href="https://www.threads.com/@uni.corn7402/post/DWQQEk7oIav" target="_blank">🔗 查看原始貼文</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@star621823</div><div class="post-date">2026-05-06</div></div>
-        <div class="post-likes">❤️ 166</div>
-      </div>
-      <div class="post-content">精挑細選了最後兩間婚戒——Cartier 跟 I PRIMO。最喜歡的款式大概是這幾個，好猶豫要選哪個，放上來問問大家的意見🙏</div>
-      <div class="post-stats"><span>💬 77則留言</span><span>↗ 104次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🏆 熱門留言 Top 5</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@yuwu.studio</span><span class="comment-likes">❤️ 68</span></div><div class="comment-text">我覺得你的手戴I-PRIMO更漂亮💍 更修長～更顯白</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@min___huang</span><span class="comment-likes">❤️ 36</span></div><div class="comment-text">不要選品牌，要選你戴著好好看的，戒指跟婚姻一樣要戴一輩子</div></div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@instangramcc</span><span class="comment-likes">❤️ 20</span></div><div class="comment-text">卡地亞！</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@tinkerbellmoyi</span><span class="comment-likes">❤️ 14</span></div><div class="comment-text">我們是買Iprimo！因為買的時候是懷孕中，手腫很嚴重，Iprimo可以免費改兩次戒圍，這個售後服務打動我了。</div></div>
-        <div class="comment"><div class="comment-meta"><span class="comment-author">@blairsssl</span><span class="comment-likes">❤️ 10</span></div><div class="comment-text">手指短就唔好戴卡地亞好啲</div></div>
-        <a class="post-link" href="https://www.threads.com/@star621823/post/DX_wR4NkZGL" target="_blank">🔗 查看原始貼文</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ 結構設計與寶石鑲嵌 ══ -->
-<div class="category-panel" id="panel-structure">
-  <div class="cat-header">
-    <div class="cat-emoji">💎</div>
-    <div>
-      <div class="cat-title">結構設計與寶石鑲嵌（鑑定師視角）</div>
-      <div class="cat-subtitle">全訂製核心焦慮 ② · 爪位配置・耐用性・男女審美差異的設計解套</div>
-    </div>
-    <div class="cat-line"></div>
-  </div>
-
-  <div class="analysis-grid">
-    <div class="analysis-card">
-      <span class="icon">😰</span><span class="label">準新人的隱形焦慮</span>
-      <div class="content">最怕的具體細節是：<strong>鑽石爪位鬆脫</strong>——三年後帶出去吃飯，低頭發現主石不見了。這個恐懼不是誇張，是她在網路上真的看過的故事。其次是「爪位老氣感」——六爪太傳統、四爪太普通，<strong>想要有設計感又不知道怎麼跟設計師說清楚。</strong></div>
-    </div>
-    <div class="analysis-card">
-      <span class="icon">🛡️</span><span class="label">最被認同的職人解法</span>
-      <div class="content"><strong>清楚說明每一個設計決定的工藝理由。</strong>例如：「這款使用隱爪包鑲，主石側面被金屬完整包覆，爪位鉤到纖維的機率降到最低，適合你說的重訓日常。」把「設計選擇」和「工藝承諾」綁在一起解釋，讓她從「我喜歡這樣」升級到<strong>「我理解為什麼選這樣」</strong>。</div>
-    </div>
-    <div class="analysis-card">
-      <span class="icon">⚔️</span><span class="label">伴侶間的拉扯</span>
-      <div class="content">女方想要<strong>「有存在感的主石，能讓人注意到」</strong>，男方偏好「低調不誇張，一般指環就好」。設計師的解法：側面視角看起來低調（戒身俐落），正面視角主石有光感——<strong>同時滿足兩人「看角度不同的審美」</strong>。</div>
-    </div>
-  </div>
-
-  <div class="draft-section">
-    <div class="draft-header">
-      <div class="draft-badge">📱 Tru-Mi Threads 碎碎念草稿</div>
-      <div class="draft-subtitle">品牌語調參考稿 · 口語＋工藝規格 · 不推銷、不放連結</div>
-    </div>
-    <div class="draft-card">
-      <p>今天一對新人來確認鑲嵌方式，新郎一進門就問：「爪位多的設計，是不是比較容易勾衣服？」</p>
-      <p>新娘在旁邊沒說話，但表情告訴我她也想知道。</p>
-      <div class="draft-sep">— — —</div>
-      <p>我拿出兩個樣品：一個四爪主石，一個包鑲主石。</p>
-      <p>「四爪的爪高約 1.2mm，日常勾到細線的機率確實存在。包鑲的主石被金屬側圍固定，但光感會少一點——主石會稍微暗一點。」</p>
-      <div class="draft-sep">— — —</div>
-      <p>新娘看了看包鑲款：「這個感覺太壓，我喜歡有光的。」</p>
-      <p>新郎看了看四爪款：「那就選這個？但爪位會不會老氣？」</p>
-      <p>「不會，我們可以把爪設計成細錐形，收尖的弧度現代很多。妳手指纖細，這個比例看起來會很俐落。」</p>
-      <div class="draft-sep">— — —</div>
-      <p>其實每一個爪，都是一個決定。</p>
-      <p>決定的當下，才是訂製真正開始的地方。</p>
-    </div>
-  </div>
-
-  <div class="section-title">📌 相關貼文分析</div>
-  <div class="posts-grid">
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@c_f_c_1_1</div><div class="post-date">2024-09-04 · 20萬次瀏覽</div></div>
-        <div class="post-likes viral">❤️ 2,478</div>
-      </div>
-      <div class="post-content">為什麼是先去看婚戒，在求婚。驚喜在哪🤯 求解——不是應該先求婚，再一起去挑婚戒嗎？隊友說：我怕買錯款式。</div>
-      <div class="post-stats"><span>💬 167則留言</span><span>↗ 224次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">💎 結構設計視角</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">焦慮解讀</span></div><div class="comment-text">「我怕買錯款式」的底層，是男方對結構設計完全沒有話語能力——他不知道什麼叫做「好的爪位」「適合她手型的戒身寬度」。讓兩個人一起看蠟模、一起確認規格，才能真正解決這個「怕選錯」的結構性問題。</div></div>
-        <a class="post-link" href="https://www.threads.com/@c_f_c_1_1/post/C_eQoYVz17W" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜左右手，決定的是你願不願意每天戴它。Tru-Mi 量圍時問「你習慣戴哪一手」——讓它長在你身上最自然的那一手。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
@@ -767,170 +581,37 @@
         <div><div class="post-author">@linghan2643</div><div class="post-date">2026-04-28</div></div>
         <div class="post-likes">❤️ 224</div>
       </div>
-      <div class="post-content">最近在看婚對戒，但看得好亂⋯⋯預算 5～8 萬內有機會嗎？不想買太誇張的款式，就是日常也能戴、素雅有線條設計的那種。求大家分享你們怎麼選的！</div>
+      <div class="post-content">最近在看婚對戒，但看得好亂⋯⋯預算 5～8 萬內有機會嗎？不想買太誇張的款式，就是日常也能戴、素雅有線條設計的那種。求大家分享你們怎麼選的！品牌、款式、價位都想知道😊</div>
       <div class="post-stats"><span>💬 89則留言</span><span>↗ 175次轉發</span></div>
       <div class="expand-hint">▼ 點擊展開</div>
       <div class="comments-section">
-        <div class="comments-title">💎 結構設計視角</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">焦慮解讀</span></div><div class="comment-text">「素雅有線條設計」其實是一個精準的結構描述——她要的是戒身俐落（低戒台）、線條感勝於石頭存在感。這個審美需求完全可以用規格語言翻譯：戒身寬 3mm、戒台高度 4mm 以下、側面切面有稜線。</div></div>
-        <a class="post-link" href="https://www.threads.com/@linghan2643" target="_blank">🔗 查看原始帳號</a>
+        <div class="comments-title">🏆 熱門留言 Top 5</div>
+        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@kiki_li0124</span><span class="comment-likes">❤️ 90</span></div><div class="comment-text">義大利傳統雕金工藝🇮🇹純手工製作，當婚戒會很特別喔！可以參考一下～</div></div>
+        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@chjewelry.official</span><span class="comment-likes">❤️ 67</span></div><div class="comment-text">竟然海巡到我們客人回覆🥹謝謝分享，參考的是這兩款</div></div>
+        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@bloommmming.q</span><span class="comment-likes">❤️ 33</span></div><div class="comment-text">不可能不分享我最近去試戴的婚戒！我在台灣品牌訂製的，你可以搜尋CH尋光珠寶看看，預算應該符合你的需求，一對八萬以內。</div></div>
+        <div class="comment"><div class="comment-meta"><span class="comment-author">@bunny_is_moving</span><span class="comment-likes">❤️ 25</span></div><div class="comment-text">之前看了一些品牌的心得有整理～歡迎看看ㄚ</div></div>
+        <div class="comment"><div class="comment-meta"><span class="comment-author">@paris_0812</span><span class="comment-likes">❤️ 17</span></div><div class="comment-text">Cartier!!!💍 因為本人很粗魯但又想要鑽，一看到就決定是1895了🥹 對戒也符合妳的預算八萬有找🫶🏻</div></div>
+        <a class="post-link" href="https://www.threads.com/@linghan2643/post/DXqvjCViYsb" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜摘下來的理由清單越長，說明設計時沒想過你要去做這些事。Tru-Mi 內弧設計，讓那個清單短一點。</div></div>
       </div>
     </div>
     <div class="post-card" onclick="toggleCard(this)">
       <div class="post-top">
-        <div><div class="post-author">@deer.6652385</div><div class="post-date">2026-01-28 · 5.1萬次瀏覽</div></div>
-        <div class="post-likes viral">❤️ 302</div>
+        <div><div class="post-author">@ryuuine</div><div class="post-date">2025-12-17</div></div>
+        <div class="post-likes viral">❤️ 1萬</div>
       </div>
-      <div class="post-content">婆婆的想法是婚戒去銀樓買比較大氣，有面子也比較保值。後來老公覺得既然婆婆都願意花錢，我們就退一步不要讓她不開心。可是婚戒是要戴一輩子的，難道不該選自己真正喜歡的款式嗎？</div>
-      <div class="post-stats"><span>💬 422則留言</span><span>↗ 72次轉發</span></div>
+      <div class="post-content">我真的好愛男生戴婚戒這種東西。因為男生的手上幾乎很少帶飾品，唯一戴的是與你的承諾。戴婚戒的男人有人懂嗎😫😫😫 我要暈死了</div>
+      <div class="post-stats"><span>↗ 557次轉發</span><span>🔖 2,070次收藏</span></div>
       <div class="expand-hint">▼ 點擊展開</div>
       <div class="comments-section">
-        <div class="comments-title">💎 結構設計視角</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">焦慮解讀</span></div><div class="comment-text">婆婆偏好「大氣、保值」——在珠寶語言裡就是厚重的黃金戒身、顯眼的石頭尺寸。新娘可能想要的是完全相反的結構：輕薄、現代切面、小主石。爭的不只是選擇權，而是兩套完全不同的結構美學。</div></div>
-        <a class="post-link" href="https://www.threads.com/@deer.6652385/post/DUC-bIqk_fm" target="_blank">🔗 查看原始貼文</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@nonametw000</div><div class="post-date">2025-12-09</div></div>
-        <div class="post-likes viral">❤️ 762</div>
-      </div>
-      <div class="post-content">年薪和婚戒價格有個合理的比例嗎？現在在看婚戒20幾萬真的好貴喔，是不是我的薪水還沒有到這個程度，覺得2-3萬比較符合薪資程度。</div>
-      <div class="post-stats"><span>💬 329則留言</span><span>↗ 201次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">💎 結構設計視角</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">焦慮解讀</span></div><div class="comment-text">預算焦慮的背後是：她不知道「2萬跟20萬的婚戒，差在哪裡的結構」。如果設計師能拆解成本構成（金重 vs 工藝費 vs 主石），她的決策就從「我買不起」變成「我決定把錢花在哪」——主動感完全不同。</div></div>
-        <a class="post-link" href="https://www.threads.com/@nonametw000" target="_blank">🔗 查看原始帳號</a>
+        <div class="comments-title">💡 情感洞察</div>
+        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">核心觀點</span></div><div class="comment-text">1萬讚的共鳴點不在婚戒本身，在「唯一戴的是與你的承諾」。男性手上飾品稀少，婚戒的存在感格外突出，成為承諾被看見的物質化象徵。2,070次收藏說明大量女性把它存起來傳給伴侶看——這是一種靜默的告白。</div></div>
+        <a class="post-link" href="https://www.threads.com/@ryuuine" target="_blank">🔗 查看原始帳號</a>
+        <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜男生的婚戒被看見，首先要「能一直戴著」。Tru-Mi 內弧圓角讓 1.8mm 戒身服貼掌骨——不妨礙握手、打字、開車，讓承諾在手上，不在盒子裡。</div></div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- ══ 動態佩戴體感與日常相處 ══ -->
-<div class="category-panel" id="panel-wearexp">
-  <div class="cat-header">
-    <div class="cat-emoji">🤝</div>
-    <div>
-      <div class="cat-title">動態佩戴體感與日常相處</div>
-      <div class="cat-subtitle">全訂製核心焦慮 ③ · 內弧切面・關節磨合・戒身厚薄度的舒適承諾</div>
-    </div>
-    <div class="cat-line"></div>
-  </div>
-
-  <div class="analysis-grid">
-    <div class="analysis-card">
-      <span class="icon">😰</span><span class="label">準新人的隱形焦慮</span>
-      <div class="content">「買了一枚很美的戒指，最後只戴兩次」——這不是假設，是Threads上真實發生的故事。最害怕的具體細節：<strong>打字時異物感、重訓時掛到器材、戒身太薄幾年後變形</strong>。這些細節在看3D圖時感受不到，要到第一週日常才會現身。</div>
-    </div>
-    <div class="analysis-card">
-      <span class="icon">🛡️</span><span class="label">最被認同的職人解法</span>
-      <div class="content"><strong>內弧圓角設計（comfort fit）</strong>是最受認可的舒適解——戒指內側做出微弓形，配合手指關節自然的弧度。設計師如果主動說<strong>「這款戒身 1.8mm 厚度是我的底線，再薄三年後會有輕微形變」</strong>，這句話比任何廣告詞都更讓人安心。</div>
-    </div>
-    <div class="analysis-card">
-      <span class="icon">⚔️</span><span class="label">伴侶間的拉扯</span>
-      <div class="content">男方「舒服比好看重要，越簡單越好」，女方「也要好看才值得每天戴」。卡點不在審美，而在<strong>「這枚戒指我到底會不會戴？」</strong>——如果舒適度過不了關，再美也是擺飾。解法是在設計階段就納入日常場景：打字、睡覺、運動，各模擬一輪再下單。</div>
-    </div>
-  </div>
-
-  <div class="draft-section">
-    <div class="draft-header">
-      <div class="draft-badge">📱 Tru-Mi Threads 碎碎念草稿</div>
-      <div class="draft-subtitle">品牌語調參考稿 · 口語＋工藝規格 · 不推銷、不放連結</div>
-    </div>
-    <div class="draft-card">
-      <p>新娘說她很怕買了之後戒指最後只在婚禮當天出現。</p>
-      <p>「妳現在每天都戴什麼？」我問。</p>
-      <p>「就一個細細的銀環，沒什麼感覺那種。」</p>
-      <div class="draft-sep">— — —</div>
-      <p>「那我們就從那個『沒什麼感覺』開始設計。」</p>
-      <p>戒身內側做成 comfort fit，把接觸手指那一面磨成微弓形——不是為了設計感，是為了讓妳打三個小時的字，手指不會感覺到它的存在。</p>
-      <div class="draft-sep">— — —</div>
-      <p>「厚度我們抓 1.8mm，這是我不會再往下的底線。」</p>
-      <p>「再薄，幾年後妳把它拿出來戴，戒身可能已經輕微扭轉了。」</p>
-      <p>她沉默了一下。「有設計師跟我說過這件事。」</p>
-      <p>「然後妳選了什麼？」「選了薄的。」</p>
-      <div class="draft-sep">— — —</div>
-      <p>這次我們不要再選薄的了。</p>
-    </div>
-  </div>
-
-  <div class="section-title">📌 相關貼文分析</div>
-  <div class="posts-grid">
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@s___i___x____</div><div class="post-date">2026-04-18</div></div>
-        <div class="post-likes viral">❤️ 491</div>
-      </div>
-      <div class="post-content">想問已婚的大家，你們還有戴婚戒嗎？我跟老公結婚後就沒帶過婚戒了，當初花8000多打了兩個戒指，結果只有拍照跟婚禮當天帶過而已😆</div>
-      <div class="post-stats"><span>💬 256則留言</span><span>↗ 102次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🤝 佩戴體感視角</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">焦慮解讀</span></div><div class="comment-text">花8,000元只戴兩次，很可能是當初沒有做佩戴舒適度的評估——只確認了「好不好看」，沒確認「好不好戴」。如果設計前有做過「打字測試」「睡覺異物感模擬」，結果可能不同。</div></div>
-        <a class="post-link" href="https://www.threads.com/@s___i___x____" target="_blank">🔗 查看原始帳號</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@hrz_0909_</div><div class="post-date">2026-04-19</div></div>
-        <div class="post-likes viral">❤️ 504</div>
-      </div>
-      <div class="post-content">我跟我先生的職業都不適合帶婚戒（我先生軍人、我在醫院上班），加上我們真的沒有很喜歡在手上戴飾品，所以就這樣唄。Ps：離婚的話就改圖就好了🤣🤣</div>
-      <div class="post-stats"><span>💬 5則留言</span><span>↗ 440次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🤝 佩戴體感視角</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">焦慮解讀</span></div><div class="comment-text">「職業不適合戴婚戒」點出了一個被忽略的設計需求：醫護、軍警、廚師這些族群，需要的是戒身夠低（不超過指節高度）、表面夠光滑（不勾乳膠手套）的特殊工藝規格，而不是普通婚戒。這是一個尚未被品牌認真對待的使用場景。</div></div>
-        <a class="post-link" href="https://www.threads.com/@hrz_0909_" target="_blank">🔗 查看原始帳號</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@anita_0972</div><div class="post-date">2024-09-14</div></div>
-        <div class="post-likes">❤️ 112</div>
-      </div>
-      <div class="post-content">結婚4年後第二次戴婚戒🤣，想說盒子都放到發霉了⋯⋯該出來透透氣😅，想問有認真在戴婚戒的人嗎？</div>
-      <div class="post-stats"><span>💬 147則留言</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🤝 佩戴體感視角</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">焦慮解讀</span></div><div class="comment-text">4年只戴兩次，「盒子放到發霉」——這個描述說明當初設計根本沒有把「日常佩戴舒適度」列入考量。戒指太厚？戒台太高？戒身邊緣沒有倒角？任何一個細節，都可能讓這枚戒指從「日常戒」變成「盒子戒」。</div></div>
-        <a class="post-link" href="https://www.threads.com/@anita_0972" target="_blank">🔗 查看原始帳號</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@_lin917</div><div class="post-date">2025-03-19</div></div>
-        <div class="post-likes">❤️ 44</div>
-      </div>
-      <div class="post-content">結婚快8年了一直捨不得帶婚戒，最近想帶發現戒圍大了好多，可能是因為懷孕後期買的尺寸抓不準😭，請問卡地亞婚戒能改戒圍嗎？</div>
-      <div class="post-stats"><span>💬 29則留言</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🤝 佩戴體感視角</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">焦慮解讀</span></div><div class="comment-text">懷孕期間手指浮腫、抓不準戒圍是非常普遍的情況，但幾乎沒有品牌在銷售時主動提醒。一個真正考慮「動態體感」的設計師，應該在量圍時就詢問：「目前有懷孕計畫嗎？是否考慮預留一個戒圍的空間？」這句話就是長期服務的起點。</div></div>
-        <a class="post-link" href="https://www.threads.com/@_lin917" target="_blank">🔗 查看原始帳號</a>
-      </div>
-    </div>
-    <div class="post-card" onclick="toggleCard(this)">
-      <div class="post-top">
-        <div><div class="post-author">@eye065hook_kr</div><div class="post-date">2026-05-16（近期）</div></div>
-        <div class="post-likes viral">❤️ 3.1萬</div>
-      </div>
-      <div class="post-content">急急急！！！！ 請問有人現在在那霸機場可以幫我個忙嗎😭 婚戒忘在43A登機口前的女廁，最後一間親子廁所的衛生紙架上面了⋯ 帶小孩上廁所時發現她手上拿著爸爸的戒指，怕掉進馬桶叫她先放在衛生紙架上面就忘記拿了⋯</div>
-      <div class="post-stats"><span>💬 1,193則留言</span><span>↗ 564次轉發</span></div>
-      <div class="expand-hint">▼ 點擊展開</div>
-      <div class="comments-section">
-        <div class="comments-title">🤝 佩戴體感視角</div>
-        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">焦慮解讀</span></div><div class="comment-text">帶娃如廁→婚戒被小孩拿走→急忙放上衛生紙架→忘記拿走。整個過程折射出：婚戒在帶小孩的場景中，是一個「需要隨時摘下管理」的異物，而不是「完全融入生活」的存在。設計一枚在帶孩子、做家事時也能安心不摘的戒指，是未被品牌認真對待的需求。</div></div>
-        <a class="post-link" href="https://www.threads.com/@eye065hook_kr" target="_blank">🔗 查看原始帳號</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="gold-line"></div>
 
 <!-- ══ 品牌策略室 ══ -->
 <div class="category-panel" id="panel-strategy">
@@ -941,6 +622,71 @@
       <div class="cat-subtitle">爆款解析 · 受眾痛點地圖 · Tru-Mi Threads 內容策略</div>
     </div>
     <div class="cat-line"></div>
+  </div>
+
+  <!-- 今日 Jessica 發文草稿 -->
+  <div style="margin-bottom:36px">
+    <div class="section-title">✍️ 今日 Jessica 發文草稿推薦</div>
+    <div class="draft-card">
+      <div class="draft-badge">📂 日常佩戴與體感｜@eye065hook_kr · 2026-05-22 更新</div>
+      <div class="draft-meta">本週最強爆款 · 3.1萬讚 · 217.8萬瀏覽 · 1,197則留言 · 「婚戒忘在那霸機場」→ 承諾的重量</div>
+      <div class="draft-body">那霸機場，一個媽媽帶孩子進廁所。
+
+孩子手上拿著爸爸的婚戒——
+怕掉進馬桶，先放在衛生紙架上。
+
+飛機助跑起飛了，才想起來。
+
+—
+
+Threads 上三萬人陪她找那枚戒指。
+有人在那霸機場、有人打電話給失物招領、
+有人查到機場的地址說「找到寄給我」。
+
+留言裡有人說：
+「戒指不見再買就好，感情要緊。」
+
+她回：
+「沒事的，老天爺要他換新戒指了🤣」
+
+—
+
+我在想那個衛生紙架的瞬間——
+
+1.8mm 的戒身、內弧貼掌，
+設計戒指時問的那句「你會在什麼場合摘下它」，
+不是多餘的問題。
+
+是讓那個衛生紙架，
+少一個它出現的理由。
+
+你的婚戒，有沒有讓你曾經猶豫要不要摘的時刻？</div>
+    </div>
+
+    <!-- 4大戰略抽屜分類 -->
+    <div class="section-title" style="margin-top:8px">📂 四大戰略抽屜分類</div>
+    <div class="drawer-grid">
+      <div class="drawer-card">
+        <div class="drawer-card-title">① 溝通與翻車焦慮</div>
+        <span class="drawer-tag">@yjyg169</span><span class="drawer-tag">@juju__junjun</span><span class="drawer-tag">@annieliiee</span><span class="drawer-tag">@chuyun_0213</span>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;line-height:1.6">害怕實品有落差 · 專櫃冷暴力 · 設計師不聽話<br>Tru-Mi 接招：同一師傅全程跟進 + 1:1蠟模先讓手說話</div>
+      </div>
+      <div class="drawer-card">
+        <div class="drawer-card-title">② 日常佩戴與體感</div>
+        <span class="drawer-tag">@eye065hook_kr</span><span class="drawer-tag">@ryuuine</span><span class="drawer-tag">@s___i___x____</span><span class="drawer-tag">@hrz_0909_</span><span class="drawer-tag">@anita_0972</span><span class="drawer-tag">@_lin917</span><span class="drawer-tag">@juju__junjun</span><span class="drawer-tag">@linghan2643</span>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;line-height:1.6">勾衣服 · 職業不能戴 · 懷孕改圍 · 放盒子發霉<br>Tru-Mi 接招：內弧圓角 · 厚度 1.8mm 底線 · 免費改圍</div>
+      </div>
+      <div class="drawer-card">
+        <div class="drawer-card-title">③ 預算與審美拉扯</div>
+        <span class="drawer-tag">@deer.6652385</span><span class="drawer-tag">@c_f_c_1_1</span><span class="drawer-tag">@ashllleyy_xx</span><span class="drawer-tag">@chuyun_0213</span><span class="drawer-tag">@star621823</span><span class="drawer-tag">@nonametw000</span>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;line-height:1.6">長輩介入 · 男女審美衝突 · 品牌廣告費迷霧<br>Tru-Mi 接招：沒有公版 · 成色誠實告知 · 決定權在戴的那手</div>
+      </div>
+      <div class="drawer-card">
+        <div class="drawer-card-title">④ 傳承與情感重塑</div>
+        <span class="drawer-tag">@omo0425</span><span class="drawer-tag">@syyau00.0</span>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;line-height:1.6">舊金改造 · 補買沒有的遺憾 · 長輩遺物重生<br>Tru-Mi 接招：舊金不流失 · 蠟模讓情感被認真對待</div>
+      </div>
+    </div>
   </div>
 
   <!-- 爆款原因解析 -->
@@ -1269,3 +1015,4 @@
 </script>
 </body>
 </html>
+                                                                                                                                                                                                            
