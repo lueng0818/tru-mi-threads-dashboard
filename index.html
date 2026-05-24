@@ -78,7 +78,7 @@
   .post-likes { background: rgba(230,180,34,.15); color: var(--dark); font-size: .78rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; font-family: 'Noto Sans TC', sans-serif; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
   .post-likes.viral { background: var(--gold); color: var(--dark); }
   .post-content { font-size: .88rem; color: var(--text); line-height: 1.65; margin-bottom: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  .post-card.expanded .post-content { -webkit-line-clamp: unset; overflow: visible; }
+  .post-card.expanded .post-content { display: block; -webkit-line-clamp: unset; overflow: visible; }
   .post-stats { display: flex; gap: 14px; font-size: .75rem; color: var(--text-muted); font-family: 'Noto Sans TC', sans-serif; }
   .post-stats span { display: flex; align-items: center; gap: 4px; }
 
@@ -180,7 +180,7 @@
     </div>
   </div>
   <div class="posts-grid">
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@lazyann_studio</div><div class="post-date">2026-04-24</div></div>
         <div class="post-likes">❤️ 41</div>
@@ -195,7 +195,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 溝通與翻車焦慮</div><div class="jessica-text">💡 Jessica 靈感｜第一次看到「設計師說自己焦慮」——lazyann_studio 坦白每次訂製都帶著「做不出你要的怎麼辦」的恐懼。這正是溝通焦慮的另一面：婚戒師也在怕。Tru-Mi 的蠟模試戴正是要讓這份雙向焦慮在交件前就歸零。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@yjyg169</div><div class="post-date">2026-04-27 · 32萬次瀏覽</div></div>
         <div class="post-likes viral">❤️ 684</div>
@@ -214,7 +214,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 溝通與翻車焦慮</div><div class="jessica-text">💡 Jessica 靈感｜那句「下次付錢的人再來」記很久。Tru-Mi 初次諮詢沒有專櫃、沒有交班——量圍、蠟模、成品，同一位師傅從頭跟到尾。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@uni.corn7402</div><div class="post-date">2026-03-24</div></div>
         <div class="post-likes">❤️ 214</div>
@@ -233,7 +233,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 溝通與翻車焦慮</div><div class="jessica-text">💡 Jessica 靈感｜那個「要預約喔」轉身走掉的瞬間，是很多人放棄一個品牌的原因。Tru-Mi 沒有門市，初次諮詢就是設計師本人接待——不用預約才能被認真對待。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@annieliiee</div><div class="post-date">2025-10-31</div></div>
         <div class="post-likes viral">❤️ 2,560</div>
@@ -252,7 +252,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 溝通與翻車焦慮</div><div class="jessica-text">💡 Jessica 靈感｜留言裡的每個故事，都是一個戒圍不對、或根本不是她要的。蠟模試戴的意義就是——你說好之前，先讓手來說話。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@chuyun_0213</div><div class="post-date">2026-01-18</div></div>
         <div class="post-likes">❤️ 263</div>
@@ -298,7 +298,7 @@
     </div>
   </div>
   <div class="posts-grid">
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@omo0425</div><div class="post-date">2025-12-17</div></div>
         <div class="post-likes viral">❤️ 1,417</div>
@@ -317,7 +317,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 傳承與情感重塑</div><div class="jessica-text">💡 Jessica 靈感｜她一直知道那是人造鑽，但從沒說過。重新量圍、1:1 蠟模——讓她知道，這次有人認真把她的決定當回事了。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@syyau00.0</div><div class="post-date">2026-03-24</div></div>
         <div class="post-likes viral">❤️ 1,531</div>
@@ -359,7 +359,7 @@
     </div>
   </div>
   <div class="posts-grid">
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@huangjopei</div><div class="post-date">2026-05-15</div></div>
         <div class="post-likes">❤️ 67</div>
@@ -374,7 +374,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜這則貼文背後的核心情緒是「選擇癱瘓」——不是不想買，是沒有一個選項讓她說「就是這個」。白金是好起點，但 Tru-Mi 的蠟模讓形狀先說話，比材質更決定「你日常想不想戴它」。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@deer.6652385</div><div class="post-date">2026-01-28 · 5.1萬次瀏覽</div></div>
         <div class="post-likes viral">❤️ 302</div>
@@ -393,7 +393,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜婚戒是第一個服從性測試。Tru-Mi 蠟模試戴只有你跟另一半——那個說好的，是你自己的手，不是別人的預算。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@c_f_c_1_1</div><div class="post-date">2024-09-04 · 20萬次瀏覽</div></div>
         <div class="post-likes viral">❤️ 2,478</div>
@@ -412,7 +412,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜「驚喜」跟「對的」不是對立的。Tru-Mi 蠟模可以只有一個人先來確認形狀，求婚那天成品出來才是真的驚喜。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@nonametw000</div><div class="post-date">2025-12-09</div></div>
         <div class="post-likes viral">❤️ 762</div>
@@ -427,7 +427,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜存了一百張圖卻說不清楚共同點。Tru-Mi 諮詢時問的不是你要什麼，而是那些圖讓你有什麼感覺。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@ashllleyy_xx</div><div class="post-date">2026-05-08</div></div>
         <div class="post-likes">❤️ 259</div>
@@ -446,7 +446,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 預算與審美拉扯</div><div class="jessica-text">💡 Jessica 靈感｜比較品牌時，往往在比廣告費。Tru-Mi 沒有公版，從你手感出發——1.8mm 厚度底線，不為好看犧牲配戴舒適度。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@star621823</div><div class="post-date">2026-05-06</div></div>
         <div class="post-likes">❤️ 166</div>
@@ -492,7 +492,7 @@
     </div>
   </div>
   <div class="posts-grid">
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@x_adam_kuo_x</div><div class="post-date">2026-05-11</div></div>
         <div class="post-likes">❤️ 8</div>
@@ -509,7 +509,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜這則貼文的核心詞是「合手」——準新郎最在意的不是外形，是「她戴不戴得住」。金工互敲讓戒指完美貼合手指，才是日常戴得住的底層邏輯。Tru-Mi 的蠟模試戴也在回應同一件事：讓形狀先說話，讓她戴了就捨不得拿下來。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@yvonne.peace.insideout</div><div class="post-date">2026-05-06</div></div>
         <div class="post-likes viral">❤️ 熱門</div>
@@ -524,7 +524,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜這則貼文背後的核心情緒是「突然的失落」——婚戒不見了才意識到原來它一直在那裡。Tru-Mi 內弧設計讓佩戴更舒適，愈舒適就愈願意天天戴著，常戴的戒指才不會某天突然找不到。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@eye065hook_kr</div><div class="post-date">2026-05-16（近期）</div></div>
         <div class="post-likes viral">❤️ 3.1萬</div>
@@ -543,7 +543,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜機場廁所衛生紙架不是藏婚戒的地方。Tru-Mi 諮詢時問「你在什麼場合會摘下它」——不是多餘，是讓這件事別發生。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@s___i___x____</div><div class="post-date">2026-04-18</div></div>
         <div class="post-likes viral">❤️ 491</div>
@@ -562,7 +562,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜不能戴的時候，戒指放哪？Tru-Mi 有幾對醫護、消防員客人：他們說要的是「知道它在」的感覺，不是每天戴的那種。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@hrz_0909_</div><div class="post-date">2026-04-19</div></div>
         <div class="post-likes">❤️ 12</div>
@@ -581,7 +581,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜刺青婚戒，確定到雷射都刪不掉。Tru-Mi 也遇過：不需要很貴，需要每次看到都記得當天說的話——那也是訂製。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@anita_0972</div><div class="post-date">2024-09-14</div></div>
         <div class="post-likes">❤️ 112</div>
@@ -600,7 +600,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜放四年再拿出來，刮痕變肌理——有人說她認識那些刮痕。Tru-Mi 做戒時問「你多久後還是想戴它」，不是套路。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@_lin917</div><div class="post-date">2025-03-19</div></div>
         <div class="post-likes">❤️ 44</div>
@@ -619,7 +619,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜戒圍改了，卻說感覺不一樣了。Tru-Mi 改圍前先問：是手瘦了，還是你對它的感覺變了？兩種答案，處理方式不同。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@juju__junjun</div><div class="post-date">2025-03-10</div></div>
         <div class="post-likes">❤️ 164</div>
@@ -638,7 +638,7 @@
         <div class="jessica-insight"><div class="jessica-drawer">📂 日常佩戴與體感</div><div class="jessica-text">💡 Jessica 靈感｜左右手，決定的是你願不願意每天戴它。Tru-Mi 量圍時問「你習慣戴哪一手」——讓它長在你身上最自然的那一手。</div></div>
       </div>
     </div>
-    <div class="post-card" onclick="toggleCard(this)">
+    <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
         <div><div class="post-author">@linghan2643</div><div class="post-date">2026-04-28</div></div>
         <div class="post-likes">❤️ 224</div>
@@ -974,4 +974,4 @@
           </div>
           <div style="background:rgba(230,180,34,.08);border-left:3px solid var(--gold);border-radius:6px;padding:14px 16px;margin:10px 0">
             <div style="font-size:.75rem;color:var(--gold);font-weight:700;margin-bottom:8px">💡 爆款靈感 → @linghan2643「摘婚戒清單」（❤️ 90）</div>
-            <div style="font-size:.8rem;color:var(--text-
+            <div style="font-size:.8rem;c
