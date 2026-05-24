@@ -972,6 +972,30 @@
               「有個女兒來找我們，說她想幫媽媽補訂一枚婚戒。不是因為原本的壞掉了——是因為當年是人造鑽，她說媽媽一直知道，但從來沒說過。她問我：要不要跟媽媽說為什麼訂？我說：那要看你想給她什麼感覺。她說：就是⋯⋯那個她值得的感覺。」
             </div>
           </div>
-          <div style="background:rgba(230,180,34,.08);border-left:3px solid var(--gold);border-radius:6px;padding:14px 16px;margin:10px 0">
-            <div style="font-size:.75rem;color:var(--gold);font-weight:700;margin-bottom:8px">💡 爆款靈感 → @linghan2643「摘婚戒清單」（❤️ 90）</div>
-            <div style="font-size:.8rem;c
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+  function switchTab(id, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.category-panel').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  function toggleCard(card, evt) {
+    if (evt && evt.target && (evt.target.tagName === 'A' || evt.target.closest('a'))) return;
+    card.classList.toggle('expanded');
+    const hint = card.querySelector('.expand-hint');
+    if (hint) hint.textContent = card.classList.contains('expanded') ? '▲ 收起' : '▼ 點擊展開';
+  }
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('lastUpdate').textContent = '最後更新：' + now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+</script>
+</body>
+</html>
