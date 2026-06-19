@@ -150,7 +150,7 @@
 <div class="tabs">
   <div class="tab active" onclick="switchTab('comms', this)">🚨 溝通與翻車焦慮 <span class="count">13</span></div>
   <div class="tab" onclick="switchTab('daily', this)">🌿 日常佩戴與體感 <span class="count">13</span></div>
-  <div class="tab" onclick="switchTab('budget', this)">💸 預算與審美拉扯 <span class="count">13</span></div>
+  <div class="tab" onclick="switchTab('budget', this)">💸 預算與審美拉扯 <span class="count">14</span></div>
   <div class="tab" onclick="switchTab('heritage', this)">💛 傳承與情感重塑 <span class="count">7</span></div>
   <div class="tab" onclick="switchTab('strategy', this)">🚀 品牌策略室</div>
 </div>
@@ -643,6 +643,29 @@
     </div>
   </div>
   <div class="posts-grid">
+
+    <div class="post-card" onclick="toggleCard(this, event)">
+      <div class="post-top">
+        <div><div class="post-author"><a href="https://www.threads.net/@h.e.a.r.t_voice" target="_blank">@h.e.a.r.t_voice</a></div><div class="post-date">2026-06-18</div></div>
+        <div class="post-likes">❤️ 101 · 178 互動</div>
+      </div>
+      <div class="post-content">跟另一半開啟挑婚戒的闖關遊戲，看到最後我們一致同意選iprimo，但事情哪有這麼順利！在挑款式的時候問題浮出水面：我喜歡左邊那款的女戒，碎鑽面積很大，戴起來一定是超閃；但老公喜歡右邊這種不是流線型的男戒，平常戴比較低調，上面雕刻不會讓款式太單調。我們兩個都各持己見，決定發Threads請求意見，真的不行就要猜拳決定了，我不想輸啊😭</div>
+      <div class="post-stats"><span>💬 59則留言</span><span>↗ 18次轉發</span></div>
+      <div class="expand-hint">▼ 點擊展開</div>
+      <div class="comments-section">
+        <div class="comments-title">🏆 熱門留言 Top 5</div>
+        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@jia_yi_1019</span><span class="comment-likes">❤️ 1,033</span></div><div class="comment-text">不能兩款男女戒混搭就好嗎🤔</div></div>
+        <div class="comment top-comment"><div class="comment-meta"><span class="comment-author">@jia_syuan.ig</span><span class="comment-likes">❤️ 201</span></div><div class="comment-text">分開買各自喜歡的就好了啊，我跟我老公一個是鑽戒一個是純黃金。婚戒不應該被定義，而是兩個人美好的約定。</div></div>
+        <div class="comment"><div class="comment-meta"><span class="comment-author">@cc_kcs</span><span class="comment-likes">❤️ 58</span></div><div class="comment-text">可以混搭ㄚ？我買的時候男女戒也不是買同一組的，挑各自喜歡的</div></div>
+        <div class="comment"><div class="comment-meta"><span class="comment-author">@unawu168</span><span class="comment-likes">❤️ 39</span></div><div class="comment-text">要先確認碎鑽掉了怎麼修、多少錢，這玩意每天戴蠻容易掉；手指水腫程度夏季和傍晚差很多，試戴時間點要選對；兩款外型輪廓差不多，只有自己知道不是「同一組」，外人看不出來；超閃的關鍵其實是身材比例和切割技術，不只是碎鑽大小。</div></div>
+        <div class="comment"><div class="comment-meta"><span class="comment-author">@svottzhu</span><span class="comment-likes">❤️ 29</span></div><div class="comment-text">很棒的選擇👍 千萬別買這兩家～兩間根本同一個老闆，戒台都是一樣灌模的台子，修一個戒台只給師傅幾百塊，卻跟客人收手工費收到好幾千甚至上萬，聽到當下感覺很差，不老實👎</div></div>
+        <a class="post-link" href="https://www.threads.com/@h.e.a.r.t_voice/post/DZtp9Rhkoni" target="_blank">🔗 查看原始貼文</a>
+        <div class="jessica-insight">
+          <span class="jessica-drawer">🧠 Jessica靈感</span>
+          <div class="jessica-text">這則貼文背後的核心情緒是⋯⋯怕「將就」，怕婚戒成為一輩子隱性的遺憾，而不是浪漫的開始。兩個人審美不同，不代表要有人讓步——Tru-Mi 的 1:1 蠟模試戴，讓你們各自先用手感受弧度與閃度，內弧圓角不磨手、1.8mm厚度底線耐戴不變形、成色誠實不修圖，看到的就是會陪你們一輩子的樣子，不需要靠猜拳決定。</div>
+        </div>
+      </div>
+    </div>
 
     <div class="post-card" onclick="toggleCard(this, event)">
       <div class="post-top">
@@ -1203,26 +1226,9 @@
   <div style="margin-bottom:36px">
     <div class="section-title">✍️ 今日 Jessica 發文草稿推薦</div>
     <div class="draft-card">
-      <div class="draft-badge">🚨 溝通與翻車焦慮｜@susidyjewellery</div>
-      <div class="draft-meta">📅 2026年06月10日 今日草稿 · 靈感來源：@susidyjewellery · 互動 3,027</div>
-      <div class="draft-body">珠寶業待了二十年的師傅說過一句話，我一直沒忘——
-
-他說，他見過無數個男人在選戒指的時候，比選手機殼還隨便。
-
-不是不愛。是沒有人告訴他，選婚戒可以有一個方法。
-
-其實女生也一樣。翻了半年的圖、走了四五間門市、被業務催了又催，最後還是帶著「大概就這樣吧」的心情付了款。
-
-Tru-Mi 想做的，是讓你在說「好」之前，先真的確認過。
-
-1:1 蠟模試戴——先用白蠟把你要的形狀做出來，戴在手上，轉一轉，感受它的重量和弧度。覺得對了，再用金屬做成真正的那一枚。
-
-婚戒不是選的，是確認的。
-你的手知道答案，只是需要一個機會說出來。
-
-——
-
-你選婚戒的時候，是「大概就這樣吧」，還是「就是這個」？</div>
+      <div class="draft-badge">💸 預算與審美拉扯｜@h.e.a.r.t_voice</div>
+      <div class="draft-meta">📅 2026年06月19日 今日草稿 · 靈感來源：@h.e.a.r.t_voice · 互動 178</div>
+      <div class="draft-body">挑婚戒最怕的不是選不出來，而是「將就」之後，一輩子提醒自己當初沒選喜歡的那款。一個想要碎鑽閃亮，一個想要低調雕刻——這不是誰要讓步，而是該找到讓兩個人都能誠實面對自己喜好的方式。Tru-Mi 從1:1蠟模試戴開始，讓你們各自感受弧度與重量，內弧圓角不磨手，1.8mm厚度底線耐戴不變形，成色誠實不修圖，看到的就是會陪你一輩子的樣子。比起猜拳決定，你們會想各自選喜歡的款式，還是找到能同時妥協的設計呢？</div>
     </div>
 
     <!-- 4大戰略抽屜分類 -->
@@ -1240,7 +1246,7 @@ Tru-Mi 想做的，是讓你在說「好」之前，先真的確認過。
       </div>
       <div class="drawer-card">
         <div class="drawer-card-title">③ 預算與審美拉扯</div>
-        <span class="drawer-tag">@fangrenp</span><span class="drawer-tag">@nbkdyg84615</span><span class="drawer-tag">@deer.6652385</span><span class="drawer-tag">@c_f_c_1_1</span><span class="drawer-tag">@ashllleyy_xx</span><span class="drawer-tag">@chuyun_0213</span><span class="drawer-tag">@star621823</span><span class="drawer-tag">@nonametw000</span>
+        <span class="drawer-tag">@h.e.a.r.t_voice</span><span class="drawer-tag">@fangrenp</span><span class="drawer-tag">@nbkdyg84615</span><span class="drawer-tag">@deer.6652385</span><span class="drawer-tag">@c_f_c_1_1</span><span class="drawer-tag">@ashllleyy_xx</span><span class="drawer-tag">@chuyun_0213</span><span class="drawer-tag">@star621823</span><span class="drawer-tag">@nonametw000</span>
         <div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;line-height:1.6">長輩介入 · 男女審美衝突 · 品牌廣告費迷霧<br>Tru-Mi 接招：沒有公版 · 成色誠實告知 · 決定權在戴的那手</div>
       </div>
       <div class="drawer-card">
