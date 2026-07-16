@@ -46,7 +46,7 @@
 - 必須同時檢查:
   - repo `main`
   - `raw.githubusercontent.com`
-  - GitHub Pages live URL
+  - GitHub Pages live URL（若工具疑似快取，改用瀏覽器強制重新整理確認）
 
 ## 單一來源原則
 
@@ -79,6 +79,11 @@
    - `https://lueng0818.github.io/tru-mi-threads-dashboard/`
 8. 只有在 live 頁面也驗證成功後，才能回報「已更新完成」
 
+補充:
+- 若同一個 fetch 工具對 live URL 連續回傳完全相同內容，懷疑有快取時，不要把這個結果當成最終 live 驗證。
+- repo 驗證優先以 `git clone` / 本地 clone 的最新 `origin/main` 為準。
+- live 驗證優先改用瀏覽器強制重新整理確認。
+
 ## 驗證標準
 
 ### 本地檢查
@@ -103,13 +108,18 @@
 - live 頁面包含 `複製回覆`
 - live 頁面不是舊版 archive 結構
 
+若工具快取可疑:
+- 不以單一 HTTP fetch 結果作為最終依據
+- 改用瀏覽器強制重新整理檢查畫面或 DOM
+
 ## 如果 Pages 沒更新
 
 若 raw 已更新、live 仍未更新:
 
 1. 等待數分鐘再查一次
-2. 若仍未更新，可再推一次極小變更觸發 Pages redeploy
-3. 若還是不變，回報:
+2. 若 fetch 結果疑似快取，改用瀏覽器強制重新整理驗證
+3. 若確認 live 仍未更新，可再推一次極小變更觸發 Pages redeploy
+4. 若還是不變，回報:
    - repo `main` 已更新
    - live Pages 仍 stale
    - 不能宣稱已完全完成
@@ -118,6 +128,7 @@
 
 - ChatGPT Work 若只是提出內容草稿，不要直接把不完整 HTML 當完成版
 - Claude 推送前，要先確認本地 `index.html` 沒被其他流程覆寫成舊版
+- Claude 看到 ChatGPT Work 那邊已改過的內容時，不直接覆蓋；先比對差異再合併
 - 若遠端 `main` 被其他版本覆蓋，先比對本地 source-of-truth 再重推
 - 若要重建 automation，需同步更新 prompt 裡的 repo 驗證規則
 
