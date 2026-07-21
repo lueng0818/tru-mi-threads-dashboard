@@ -125,6 +125,30 @@
     .analysis-grid { grid-template-columns: 1fr; }
     .posts-grid { grid-template-columns: 1fr; }
   }
+
+  .level-bar { background: var(--cream); border-bottom: 2px solid var(--border); padding: 12px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .level-summary { display:flex; gap:10px; flex-wrap:wrap; }
+  .level-chip { display:flex; align-items:center; gap:6px; font-size:.75rem; font-weight:700; padding:5px 12px; border-radius:20px; font-family:'Noto Sans TC',sans-serif; color:#fff; }
+  .level-chip b { font-size:.85rem; }
+  .level-chip.chip-A { background:#c0392b; }
+  .level-chip.chip-B { background:#d9822b; }
+  .level-chip.chip-C { background:#2d6ca6; }
+  .level-chip.chip-D { background:#8d8d82; }
+  .level-chip.chip-RISK { background:#2c2c2c; color:#f0ca4a; }
+  .level-filter { display:flex; gap:6px; flex-wrap:wrap; }
+  .level-filter-btn { font-size:.72rem; font-weight:600; padding:5px 12px; border-radius:20px; border:1px solid var(--border); background:var(--card-bg); color:var(--text-muted); cursor:pointer; font-family:'Noto Sans TC',sans-serif; transition:all .15s; }
+  .level-filter-btn:hover { border-color:var(--gold); color:var(--dark); }
+  .level-filter-btn.active { background:var(--gold); border-color:var(--gold); color:var(--dark); }
+  .post-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+  .level-tag { font-size:.64rem; font-weight:700; padding:2px 9px; border-radius:10px; font-family:'Noto Sans TC',sans-serif; white-space:nowrap; color:#fff; }
+  .level-tag.level-A { background:#c0392b; }
+  .level-tag.level-B { background:#d9822b; }
+  .level-tag.level-C { background:#2d6ca6; }
+  .level-tag.level-D { background:#8d8d82; }
+  .level-tag.level-RISK { background:#2c2c2c; color:#f0ca4a; }
+  @media (max-width: 900px) {
+    .level-bar { padding: 12px 20px; }
+  }
 </style>
 </head>
 <body>
@@ -151,6 +175,23 @@
 <div class="tab" onclick="switchTab('budget', this)">💸 預算與審美拉扯 <span class="count">33</span></div>
 <div class="tab" onclick="switchTab('heritage', this)">💛 傳承與情感重塑 <span class="count">18</span></div>
 <div class="tab" onclick="switchTab('strategy', this)">🚀 品牌策略室</div>
+</div>
+<div class="level-bar">
+<div class="level-summary">
+<span class="level-chip chip-A">🔴 A 高意圖 <b id="levelCountA">0</b></span>
+<span class="level-chip chip-B">🟠 B 問題意圖 <b id="levelCountB">0</b></span>
+<span class="level-chip chip-C">🔵 C 情緒共鳴 <b id="levelCountC">0</b></span>
+<span class="level-chip chip-D">⚪ D 低對頻 <b id="levelCountD">0</b></span>
+<span class="level-chip chip-RISK">⚫ 風險 <b id="levelCountRISK">0</b></span>
+</div>
+<div class="level-filter">
+<button class="level-filter-btn active" onclick="filterLevel('ALL', this)">全部</button>
+<button class="level-filter-btn" onclick="filterLevel('A', this)">🔴 A</button>
+<button class="level-filter-btn" onclick="filterLevel('B', this)">🟠 B</button>
+<button class="level-filter-btn" onclick="filterLevel('C', this)">🔵 C</button>
+<button class="level-filter-btn" onclick="filterLevel('D', this)">⚪ D</button>
+<button class="level-filter-btn" onclick="filterLevel('RISK', this)">⚫ 風險</button>
+</div>
 </div>
 <div class="main">
 <!-- ══ 溝通與翻車焦慮 ══ -->
@@ -179,10 +220,10 @@
 </div>
 </div>
 <div class="posts-grid">
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@ginachunghy" target="_blank">@ginachunghy</a></div><div class="post-date">2025-12-10</div></div>
-<div class="post-likes">❤️ 1,854</div>
+<div class="post-right"><div class="post-likes">❤️ 1,854</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">去年男友買了Harry Winston的戒指，並偷偷計劃著求婚驚喜。今年初被男友求婚後，我開始戴這枚戒指，有一天感覺手刺刺的，才發現掉鑽了🥲 我們拿回專櫃詢問維修費用，Sales說需要寄回紐約才能知道。前幾天收到Sales通知，維修費用要$18,400元。男友是打算直接原廠維修但被我阻止，我覺得這個戒指要價20幾萬，且在正常使用、配戴不滿一年的情況下掉鑽，或許是產品本身也有問題？還是我真的太暴力🫠 想請問大家會送原廠維修嗎</div>
 <div class="post-stats"><span>💬 118則留言</span><span>↗ 1,100次轉發</span></div>
@@ -198,10 +239,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>配戴不到一年的精品戒指掉鑽，原廠報價維修費18,400元，猶豫要不要送修<br><strong>深層焦慮：</strong>花大錢買的戒指在正常配戴下損壞，質疑是自己不小心還是產品本身有問題，對品牌信任產生動搖；也擔心維修費不透明、來回時間長<br><strong>預算／時程：</strong>戒指原價20幾萬，額外維修費1.8萬多，屬於售後階段的焦慮，非購買期</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望（售後維修信任議題）｜<strong>等級：</strong>B</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">鑽石鑲嵌久了本來就會有自然鬆動，尤其是爪鑲的細爪，稍微撞到或勾到都可能鬆脫，不一定是妳不小心。送回原廠維修雖然貴，但至少能確保鑲工跟鑽石品質一致，這筆錢通常值得，之後也可以固定安排每年檢查一次爪子有沒有鬆動，能提早發現、避免真的掉鑽。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">很多人以為鑽戒鑲得越牢就越安心，其實爪鑲久了本來就會自然鬆動，不是誰不小心。我們家戒指會建議客人固定回來檢查鑲嵌，抓半年到一年一次，小問題提早處理，才不會有一天突然掉鑽的驚嚇。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「鑽石掉了不是妳的錯」——鑲嵌保養知識圖卡<br><strong>Reels：</strong>公式B（迷思破解）「鑽戒鑲越緊越安全？其實你該定期做這件事」<br><strong>限動：</strong>問答箱：你會多久回門市檢查一次戒指鑲嵌？<br><strong>LINE／官網：</strong>FAQ補充「建議多久回檢一次戒指」與「Tru-Mi維修保固說明」</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在商品頁／FAQ增加「鑲嵌保養與定期回檢建議」說明段落，凸顯Tru-Mi免費維修的差異化</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫（鑲嵌保養與維修保固）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@youryou1230" target="_blank">@youryou1230</a></div><div class="post-date">2026-06-21</div></div>
-<div class="post-likes">❤️ 119</div>
+<div class="post-right"><div class="post-likes">❤️ 119</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">我跟男友婚期訂在八月，原本覺得婚戒應該是婚禮準備相對簡單的一項，想說場地、婚紗先處理完，戒指之後找一天去門市挑一挑就好。目前喜宴場地、婚紗、新秘、攝影已經敲定了，前幾天跟朋友聊到，她聽到我還沒看婚戒很驚訝，才有點緊張，後來就預約了朋友推薦的AMC，原本只是想先看看款式，當天有看到一組戒指細節跟戴起來的質感都滿不錯的鉑金對戒，我們都很喜歡，但店員跟我們說戒圍需要調整跟刻字，都要預留一點製作時間，不一定是今天下訂、很快就能拿到。如果要下定的話他可以幫我們問問可不可以趕一下，真的以為戒指是那種決定好之後可以隔幾週就可以買到的東西，沒想到居然要等一下下。雖然我現在也還沒有下定，有點慶幸朋友有提醒我，不然我可能真的會拖到7月才看，到時候應該會更焦慮😂 想問大家 婚戒大概都是婚禮前多久開始看？下訂婚戒到實際拿到戒指，大概都會等多久？</div>
 <div class="post-stats"><span>💬 18則留言</span><span>↗ 4次轉發</span></div>
@@ -212,10 +253,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>以為婚戒是婚禮籌備中最簡單的一項，門市挑一挑就好，結果發現需要調整戒圍與刻字，得預留製作時間<br><strong>深層焦慮：</strong>擔心自己太晚開始準備會來不及，是一種「時間管理」焦慮，而不是對產品本身的疑慮<br><strong>預算／時程：</strong>婚期在八月，目前尚未下定，已開始詢問工期</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>5 時程焦慮｜<strong>等級：</strong>A</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">戒圍調整跟刻字真的需要留時間，一般抓兩到三週會比較保險，接近旺季或有客製需求的話建議再抓寬鬆一點。現在問都還來得及，別自己嚇自己。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">很多人以為婚戒是婚禮籌備裡最簡單的一項，最後才發現需要留時間調整戒圍、刻字。我自己一般抓15到18個工作天，如果碰上旺季會建議更早開始。婚戒不用是最後才處理的事，越早開始看，越有餘裕挑到真正喜歡的款式。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒到底該提前多久準備？」用時間軸圖卡說明流程<br><strong>Reels：</strong>公式B（迷思破解）「婚戒不是婚禮前最後才處理的小事」<br><strong>限動：</strong>問答箱：你的婚戒是提前多久開始看的？<br><strong>LINE／官網：</strong>FAQ補充「建議婚禮前多久開始洽詢婚戒」的時程說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在商品頁或FAQ增加「建議提前準備時間」說明，並標示一般工期15-18個工作天</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看該篇是否有更多討論或被官方帳號回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@kofala.75036" target="_blank">@kofala.75036</a></div><div class="post-date">2026-06-12</div></div>
-<div class="post-likes">❤️ 136</div>
+<div class="post-right"><div class="post-likes">❤️ 136</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">預約去IPRIMO鑑賞婚戒前有先爬文 看見有人說IP都是中國製的 不是很相信就還是預約去鑑賞 鑑賞有當面詢問過店員 戒指是都在日本製作的嗎 她說要看戒指的款式 也有在越南製作的 不過都是日本流程做把關 聽完覺得還蠻生氣也有點不解的 日系品牌戒指不都應該是日本原廠製作嗎？ 標榜是日本品牌 但卻只有掛牌 一對戒指花了十萬 難道不值得品牌好好對待嗎？？ 問完當下就趕快看一看走了 感覺買了還是很沒保障 即便能夠終身免費維修 但也不想買會一直壞掉的戒指</div>
 <div class="post-stats"><span>💬 41則留言</span><span>↗ 323次轉發</span></div>
@@ -231,10 +272,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>日系品牌宣稱日本製，但實際部分款式在越南代工，感覺被行銷語言誤導<br><strong>深層焦慮：</strong>花了十萬卻覺得資訊不透明，擔心售後沒保障；但貼文引發社群兩極反應，多數留言認為是原po誤解「品牌＝製造地」的概念<br><strong>預算／時程：</strong>一對約十萬的品牌婚戒，非低價位</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望（爭議性貼文，非單純避雷）｜<strong>等級：</strong>B</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（不留言，不自薦／留言區已涉及品牌爭議與同業評價，避免涉入）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常有人問我們家戒指是哪裡做的——我都直接說，從畫圖、開模到最後拋光，都在我自己手上完成，沒有經過工廠代工這一關。不是說代工不好，而是我覺得，你花的每一分錢，都應該知道它去了哪裡。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「一只戒指從我手上完成的意義」——談透明度與信任<br><strong>Reels：</strong>公式C（價值觀陳述）「為什麼我們堅持自己做完每一只戒指」<br><strong>限動：</strong>問答箱：你在意婚戒是不是原廠親手製作嗎？<br><strong>LINE／官網：</strong>FAQ可補充「Tru-Mi從設計到交件都由同一位師傅完成」的說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在商品頁／FAQ增加「製作流程透明度」說明段落</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫（產地與製作透明度）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@____ran1027" target="_blank">@____ran1027</a></div><div class="post-date">2024-10-17</div></div>
-<div class="post-likes">❤️ 12</div>
+<div class="post-right"><div class="post-likes">❤️ 12</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">想詢問有推薦的婚戒嗎💍 好奇大家都是買哪個品牌⋯ 目前偏喜好日本品牌風格🥹 1.銀座白石 2.I-primo 3K.UNO 4.IR 5.AMC鑽石婚戒 Ps:原本靠櫃看過ALUXE覺得還不錯 但最近爬文發現蠻多負評…..🥲</div>
 <div class="post-stats"><span>💬 7則留言</span><span>↗ 5次轉發</span></div>
@@ -249,10 +290,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>偏好日系品牌，列出5個候選，但因爬文看到負評而對其中一個品牌卻步<br><strong>深層焦慮：</strong>資訊焦慮，不確定網路負評可信度，怕選到有問題的品牌<br><strong>預算／時程：</strong>未提供具體預算，日系品牌路線，備婚日記系列</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望（間接：因負評卻步）｜<strong>等級：</strong>B</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">負評每個品牌都會有，比較準的方法是問清楚「問題發生時品牌怎麼處理」，而不是有沒有負評本身。試戴時也可以直接問保固、改圍、維修的流程，親自感受服務態度，會比爬文更準。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常有人問我怎麼判斷一個品牌可不可靠。老實說，看評價只能參考一半，更準的方法是問問題——問工期、問維修流程、問改圍怎麼收費，聽對方怎麼回答，比看100則評論更快知道這個品牌值不值得託付。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「怎麼判斷婚戒品牌可不可靠」三個提問法<br><strong>Reels：</strong>公式A（開場提問）「選婚戒品牌前，你該問的3個問題」<br><strong>限動：</strong>問答箱：挑婚戒品牌時，你最在意什麼？<br><strong>LINE／官網：</strong>FAQ可補充「售後保固與改圍政策」說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議新增「售後保固與改圍政策」FAQ說明區塊</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="RISK" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@chweygummy" target="_blank">@chweygummy</a></div><div class="post-date">2026-07-12</div></div>
-<div class="post-likes">❤️ 新</div>
+<div class="post-right"><div class="post-likes">❤️ 新</div><span class="level-tag level-RISK">⚫ 風險</span></div>
 </div>
 <div class="post-content">中環 Harry Winston 女sales. 一入到嚟淨係sell d好貴嘅鑽石對戒。同佢講話想睇啲簡約少少，有鑽石同埋無鑽石都想睇一睇。佢就話吓我哋呢個牌子就係出名鑽石同埋啲鑽石係獨一無二，冇人會喺我哋揀冇鑽石嗰d ga wor😒</div>
 <div class="post-stats"><span>💬 尚無留言</span><span>↗ 回覆於 @yjyg169 避雷串</span></div>
@@ -264,10 +305,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>想看簡約／無鑽對戒，卻被強力推銷最貴鑽石對戒<br/><strong>深層焦慮：</strong>需求被無視，暗示「沒鑽的配不上我們品牌」的價值判斷讓人不舒服<br/><strong>預算／時程：</strong>未提及，屬服務體驗抱怨非明確購買期</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望（服務／溝通類）｜<strong>等級：</strong>風險（避雷串回覆）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（風險貼文，不留言不自薦，僅觀察）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常聽到客人說「我只是想看簡約款，卻被說沒人會這樣選」。其實預算和審美從來不該由品牌代答，你想看什麼、想比較什麼，都是合理的需求。好的訂製過程應該是先聽你說完，再一起找方向——不是先決定你該喜歡什麼。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「被店員說沒人選這款」——破除愈貴愈對的迷思<br/><strong>Reels：</strong>簡約款 vs 主石鑽石款對比（公式C：正反對照剪接）<br/><strong>限動：</strong>投票：你的婚戒比較想要簡約俐落／閃亮主石？<br/><strong>LINE／官網：</strong>檢查FAQ是否有「可以做無鑽／簡約款嗎」的明確回覆</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充 FAQ「我們不主推固定鑽石規格，先談需求」</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">風險貼文，不留言不追蹤，僅記錄作為「傾聽優先」內容素材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@lucio.y.c.wu" target="_blank">@lucio.y.c.wu</a></div><div class="post-date">2026-07-02</div></div>
-<div class="post-likes">❤️ 44 · 60 互動</div>
+<div class="post-right"><div class="post-likes">❤️ 44 · 60 互動</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">想說消費過了台北幾家國際精品珠寶品牌，就寫寫它們給我的感覺，跟我個人主觀的評價。第一篇就從我的婚戒Graff寫起吧。我是在Sogo BR4買的，但Bellavita也有進去過。兩家都有保全，認真有高級珠寶店的感覺⋯戒指盒是皮革質感，手感很好，SA服務態度也很好。只可惜唯一不高級的地方，就是從倉庫櫃子拿出來戒指的時候，被我看到是放在厚的塑膠夾鏈袋內。我是可以理解這樣方便保存跟省空間，但畢竟這樣真的不太高級，不應該被消費者看到，這大概是唯一的缺點（其實很多家都有被我看到這個部分）。但我對該品牌還是推薦度很高，還是會給到五星。</div>
 <div class="post-stats"><span>💬 8則留言</span><span>↗ 8次轉發</span></div>
@@ -280,10 +321,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>整體五星，但戒指從倉庫用塑膠夾鏈袋取出，讓人覺得不夠高級<br/><strong>深層焦慮：</strong>花大錢買的不只是戒指，是每個環節都該「配得上」價格的儀式感，一個細節出戲就打破整體印象<br/><strong>預算／時程：</strong>精品等級消費，已完成購買</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望（細節體驗）｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">這種「一秒出戲」的瞬間最可惜，明明整體都很到位，卻因為一個包裝環節被看穿。其實每個交件細節都該跟價格一樣講究，這是最容易被忽略卻最影響感受的地方。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常有人問我們交件那天會怎麼包裝。老實說，那個瞬間我們很在意——因為那是整個訂製旅程的最後一格畫面，如果細節掉了鏈，前面所有用心都會被一秒抵銷。所以從蠟模、金工到最後裝盒，每個環節都用同一個標準對待。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「交件那天，包裝也是儀式的一部分」——從蠟模到交件盒的完整體驗<br/><strong>Reels：</strong>交件開箱過程（公式B：慢動作細節）<br/><strong>限動：</strong>問答：你最在意婚戒交件時的哪個細節？<br/><strong>LINE／官網：</strong>檢查交件包裝說明頁是否完整呈現</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充「交件流程與包裝說明」頁面區塊</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「交件細節」品牌故事素材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@he7shh" target="_blank">@he7shh</a></div><div class="post-date">2026-06-05</div></div>
-<div class="post-likes">❤️ 50 · 94 互動</div>
+<div class="post-right"><div class="post-likes">❤️ 50 · 94 互動</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">第一次試戴婚戒，沒想到品牌故事比戒指本人還精緻🙂 特別挑了網路上評價比較好的日系品牌，沒想到實體看起來那麼差 價格又很貴... 想問有看過更好的婚戒嗎? 我看的是IPRIMO跟ITH</div>
 <div class="post-stats"><span>💬 19則留言</span><span>↗ 18次轉發</span></div>
@@ -299,10 +340,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>精挑評價高的日系品牌，實體落差大又貴，詢問是否有更好選擇<br/><strong>深層焦慮：</strong>花時間做功課卻還是踩雷的無力感，對「網路評價」失去信任<br/><strong>預算／時程：</strong>未提供具體數字，處於品牌比較初期</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦 ／ 4 品牌實品失望｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">網路評價跟實際上手常常是兩回事，尤其婚戒是要天天戴的東西。建議下一步直接找工作室看3D圖或蠟模，先確認實品跟想像的落差再決定，會比再多看幾個品牌的照片準很多。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">很多人來找我們之前，都已經被「照片很美、實品普通」傷過一次心。這也是為什麼我們堅持先做蠟模再開金工——不是行銷話術，是讓你在真正下訂之前，先讓手摸過答案，而不是等交件那天才發現不對。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒實品跟照片差多少？」檢查清單輪播<br/><strong>Reels：</strong>蠟模對照實品（公式A：開箱式對比）<br/><strong>限動：</strong>問答箱：你踩過婚戒的雷是什麼？<br/><strong>LINE／官網：</strong>確認官網有蠟模試戴介紹頁</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無（蠟模試戴頁面已存在）</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看留言是否有回應或追問</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@loverrt1314" target="_blank">@loverrt1314</a></div><div class="post-date">2026-06-02</div></div>
-<div class="post-likes viral">❤️ 2,253 · 🔥 3,097 互動</div>
+<div class="post-right"><div class="post-likes viral">❤️ 2,253 · 🔥 3,097 互動</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">最近隱約感覺另一半在準備求婚了，原本超期待，結果前幾天不小心看到他電腦畫面沒關掉，想幫他關機的時候不小心滑到⋯偏偏是之前滑到一些網友討論裡印象不大好的品牌，現在很糾結到底要不要跟他說，但又怕他其實已經付錢了🥲 已經焦慮好幾天，決定上來求救，大家如果是我會怎麼做？急，在線等，先跪謝大家了🙏</div>
 <div class="post-stats"><span>💬 490則留言</span><span>↗ 351次轉發</span></div>
@@ -318,10 +359,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>求婚在即，卻發現對方在瀏覽評價不好的品牌，糾結該不該說<br/><strong>深層焦慮：</strong>怕戳破驚喜，也怕帶著遺憾走入婚姻——焦慮的不是款式，而是「該不該介入」<br/><strong>預算／時程：</strong>求婚時程緊迫，未提及具體預算</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>7 求婚驚喜兩難｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">講吧，比起完美的驚喜，你更需要的是一輩子都喜歡戴著的戒指。訂金退換都還有轉圜餘地，晚一點知道比婚後才發現划算多了。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">求婚最怕的不是選錯驚喜方式，是選錯了要戴一輩子的戒指。與其獨自承擔選擇壓力，不如兩個人一起面對——這也是為什麼我們提供免費鑽戒租借，讓男生可以先完成求婚儀式，再一起把戒指做成真正屬於你們的樣子。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「先求婚、再一起挑」圖文說明<br/><strong>Reels：</strong>租借鑽戒→求婚→共同訂製（公式C）<br/><strong>限動：</strong>投票：你會希望求婚是驚喜還是一起挑？<br/><strong>LINE／官網：</strong>確認免費鑽戒租借服務頁與「求婚」關鍵字自動回覆</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">需檢查LINE自動回覆是否涵蓋「求婚」關鍵字</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內轉限動投票延伸</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@jkliunb9" target="_blank">@jkliunb9</a></div><div class="post-date">2026-05-29</div></div>
-<div class="post-likes">❤️ 1</div>
+<div class="post-right"><div class="post-likes">❤️ 1</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">以前一直覺得挑婚戒應該是件很有壓力的事，尤其最怕那種一直推銷讓人沒辦法好好思考的店，但 @ir_iremember 的 IR戒指讓我有點改觀，整個空間很舒服，服務人員也很有距離感的溫柔，不會刻意干擾，卻又能在需要時給剛好的介紹，能和另一半慢慢欣賞、慢慢選擇，這種過程反而比戒指本身更讓人記得。</div>
 <div class="post-stats"><span>💬 1則留言</span><span>#婚禮籌備</span></div>
@@ -334,10 +375,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>分享正面體驗，空間舒適、不被推銷干擾<br/><strong>深層焦慮：</strong>消費者真正要的是「被尊重的自主選擇權」，而不是熱情推銷<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望的正面對照｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">「有距離感的溫柔」這句話說到重點，好的服務不是隨時黏在旁邊介紹，而是在你需要的時候剛好出現。這種被尊重的感覺，往往比戒指本身更讓人記得。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">我們沒有門市、沒有業績壓力，諮詢到交件都是同一位設計師陪著走。不是要展現多熱情，而是想讓你知道：每個決定都是你自己做的，沒有人在旁邊急著幫你拍板。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「不推銷的服務長什麼樣子」訪談式貼文<br/><strong>Reels：</strong>無壓力諮詢日常（公式B）<br/><strong>限動：</strong>問答：你希望店員怎麼服務你？<br/><strong>LINE／官網：</strong>無需更新（已符合品牌調性）</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為品牌故事／FAQ「我們的諮詢方式」</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="RISK" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@svottzhu" target="_blank">@svottzhu</a></div><div class="post-date">2026-05-29</div></div>
-<div class="post-likes">❤️ 1</div>
+<div class="post-right"><div class="post-likes">❤️ 1</div><span class="level-tag level-RISK">⚫ 風險</span></div>
 </div>
 <div class="post-content">婚戒千萬別買這兩家～跑了大亞鑽石跟宏記鑽石兩間，才聽到同事的妹妹以前在宏記鑽石當過店員，這兩間根本就同一個老闆，戒台都是一樣灌模的台子，修一個戒台只給師傅幾百塊，卻跟客人收手工費好幾千甚至上萬，聽到當下感覺很差，不老實👎 而且老闆有錢買豪宅跑車，工廠卻沒登記證，也沒幫師傅保勞健保，這種黑心商家不支持👎👎</div>
 <div class="post-stats"><span>💬 1則留言</span></div>
@@ -349,10 +390,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>揭露兩間銀樓實為同一老闆、灌模台收取高額手工費、剝削師傅<br/><strong>深層焦慮：</strong>對「資訊不對稱下被當冤大頭」的憤怒與不信任<br/><strong>預算／時程：</strong>無，純避雷警示</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>風險貼文（點名攻擊／黑心商家指控）｜<strong>等級：</strong>風險</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（風險貼文，不留言不自薦，僅觀察）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常有人問我們手工費怎麼算。老實說，這行的定價確實常常是個黑盒子——我們選擇把材料費、設計費、工費分開列，讓每一塊錢的去向都說得清楚，師傅的工錢也合理，沒有中間剝一層皮。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒的手工費都花去哪裡了？」透明定價圖文<br/><strong>Reels：</strong>定價結構拆解（公式A）<br/><strong>限動：</strong>問答：你會想知道婚戒的錢花在哪裡嗎？<br/><strong>LINE／官網：</strong>檢查官網是否有材料／工費拆分的定價透明頁面</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議補充「定價怎麼算」頁面區塊，回應這類信任焦慮</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">風險貼文，不留言不追蹤，僅記錄為透明度內容素材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@wo.7826813" target="_blank">@wo.7826813</a></div><div class="post-date">2026-05-27</div></div>
-<div class="post-likes viral">❤️ 132</div>
+<div class="post-right"><div class="post-likes viral">❤️ 132</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">日系婚戒的品牌溢價也太高，去看了iprimo價格跟品質差太多😥 是物價高？還是品牌溢價？已經不知道花錢買的是什麼了，那麼簡單的設計一對都超過10萬😵‍💫 服務也不是說很好，感覺一直想要強迫我們購買，這點還蠻煩的，到後來說趕時間還是一直想要給我們看別的款式，不知道是不是月底缺業績，跟她說今天不會買才比較安靜🙂</div>
 <div class="post-stats"><span>💬 52則留言</span><span>↗ 223次轉發</span></div>
@@ -366,10 +407,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>品牌溢價高、簡單設計破10萬，服務強迫推銷<br/><strong>深層焦慮：</strong>「我不是買不起，是你的服務不值這個價」——覺得在幫門市業績KPI買單<br/><strong>預算／時程：</strong>10萬以上，已比較但未購買</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解 ／ 4 品牌實品失望｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">10萬的預算其實可以有很多選擇，重點是這筆錢花在哪裡——如果只是為了門市業績KPI，真的不划算。可以找沒有檔期壓力的訂製工作室聊聊，同樣預算通常能拿到更貼近需求的設計。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">我們的定價裡沒有門市租金和業績壓力，只有材料和師傅的工錢——這也是為什麼同樣的預算，訂製通常能換到更貼近你想法的設計，而不是為了品牌溢價買單。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「10萬預算能做出什麼樣的婚戒？」價格帶拆解<br/><strong>Reels：</strong>材質與工法分配（公式A）<br/><strong>限動：</strong>問答箱：你在意品牌溢價還是設計本身？<br/><strong>LINE／官網：</strong>確認三段價格帶自動回覆與價格頁清楚</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">需檢查價格頁是否清楚呈現「錢花在哪」</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@xuan_0508" target="_blank">@xuan_0508</a></div><div class="post-date">2026-05-27</div></div>
-<div class="post-likes">❤️ 44</div>
+<div class="post-right"><div class="post-likes">❤️ 44</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">天啊～～～好焦慮呀！雖然想著今年要結婚，但真的要開始籌備了整個沒方向。婚期定在12月份，目前進度3%。✅提親 ✅婚紗照 ✅婚宴日期——但對戒、鑽戒、新秘、主持人、婚禮遊戲、喜餅、婚宴場地、桌數座位表、婚攝婚錄、場佈喜帖⋯⋯還有什麼是我忽略到的嗎🫠</div>
 <div class="post-stats"><span>💬 68則留言</span><span>↗ 4次轉發</span></div>
@@ -383,10 +424,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>備婚清單一堆焦慮，對戒還沒處理<br/><strong>深層焦慮：</strong>不知從哪裡開始的茫然，對戒是清單裡「還沒勾」的那一項<br/><strong>預算／時程：</strong>12月婚期，目前進度3%，時程明確且緊迫</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>5 時程焦慮｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">對戒建議真的要提前處理，訂製工期一般15-18個工作天，12月婚期現在啟動剛剛好，不用趕也不能拖。先把款式方向定下來，後面每個環節都會輕鬆很多。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">備婚清單最容易被拖到後面的，往往就是對戒——因為感覺不急。但訂製需要時間醞釀，15-18個工作天只是製作期，前面還有討論和蠟模確認。讓對戒成為清單上最早確定、最不用煩惱的一項，反而能讓其他籌備更輕鬆。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚期回推：對戒什麼時候該啟動？」時程表輪播<br/><strong>Reels：</strong>15-18工作天流程一鏡到底<br/><strong>限動：</strong>問答：你婚期定了嗎？進度到哪了？<br/><strong>LINE／官網：</strong>確認預約流程頁與諮詢表單清楚</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無（工期口徑已統一）</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="RISK" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@yjyg169" target="_blank">@yjyg169</a></div><div class="post-date">2026-04-27 · 32萬次瀏覽</div></div>
-<div class="post-likes viral">❤️ 684</div>
+<div class="post-right"><div class="post-likes viral">❤️ 684</div><span class="level-tag level-RISK">⚫ 風險</span></div>
 </div>
 <div class="post-content">我自行宣布，第一屆《服務最差的婚戒品牌》大賽正式開始！選手如下，求幫避雷⋯⋯ 我先來一個：iprimo 櫃姐態度差，第一次去說沒預約不能看，第二次預約完全沒介紹，每10分鐘問一次選好了嗎，最後聽到我們要去別家看就瘋狂批評。</div>
 <div class="post-stats"><span>💬 225則留言</span><span>↗ 979次轉發</span></div>
@@ -402,10 +443,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>發起「服務最差婚戒品牌」大賽，徵集各品牌服務差評<br/><strong>深層焦慮：</strong>集體憤怒源自「被輕視」——素顏被看輕、被追問是否要買<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>風險貼文（大型避雷串）｜<strong>等級：</strong>風險</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（風險貼文，不留言不自薦，僅觀察）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">「下次付錢的人再來看」——這句話我們記了很久。訂製這件事不該看人下菜，所以我們沒有專櫃、沒有交班，量圍、蠟模、成品都是同一位設計師從頭跟到尾，不會因為你今天穿得隨便就被區別對待。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「被店員看輕的那一刻，你會怎麼做？」情緒共鳴貼文<br/><strong>Reels：</strong>「不看人下菜」服務理念（公式B）<br/><strong>限動：</strong>投票：你遇過被看輕的購物經驗嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">風險貼文，不留言不追蹤，但列入品牌故事題庫（原文引用素材價值高）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@lazyann_studio" target="_blank">@lazyann_studio</a></div><div class="post-date">2026-04-24</div></div>
-<div class="post-likes">❤️ 41</div>
+<div class="post-right"><div class="post-likes">❤️ 41</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">薩爾達婚戒求婚順利，新娘可愛的感想跟配圖，讓我小感動 其實每次做婚戒都是期待興奮又充滿壓力的，新郎獨自來討論訂製的case更是，總會怕，是不是還不夠好，會不會無法做不出新人們喜歡的設計，所有的緊繃，設計的燒腦，都會在收到正面回覆這一刻的圓滿</div>
 <div class="post-stats"><span>💬 944則留言</span><span>↗ 5次轉發</span></div>
@@ -419,10 +460,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>分享一次成功求婚案例，坦白訂製過程中的自我懷疑<br/><strong>深層焦慮：</strong>婚戒師本身也怕「做不出顧客要的」——雙向焦慮<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類，同業觀察／情感共鳴｜<strong>等級：</strong>C 情緒共鳴（同業帳號）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（同業帳號，不留言／不比較，避免顯得競品互動）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">很少有人知道，設計師在交件前也會焦慮——怕做出來的不是你想像的樣子。這也是我們堅持先做蠟模的原因：讓這份雙向的不安，在你說「好」之前就先歸零，而不是等拆開盒子才知道答案。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需製作（同業素材不宜直接引用）<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>無<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，僅作品牌故事靈感參考，不留言不轉發</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@uni.corn7402" target="_blank">@uni.corn7402</a></div><div class="post-date">2026-03-24</div></div>
-<div class="post-likes">❤️ 214</div>
+<div class="post-right"><div class="post-likes">❤️ 214</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">去iprimo試戴，結果櫃姐一直在說別家不好，都不會覺得這樣人家也不會選你嗎。服務的方式也蠻隨便，叫我們看檯面上的，每隔5分鐘就走出來問一下選好了嗎，很急的感覺。總之體驗真的很不好，實際體驗才知道網路上那些評價都是騙人的。</div>
 <div class="post-stats"><span>💬 103則留言</span><span>↗ 202次轉發</span></div>
@@ -438,10 +479,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>服務隨便、被催促決定、店員批評別家<br/><strong>深層焦慮：</strong>網路評價與實際體驗落差，對「該相信誰的評價」感到混亂<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">服務體驗真的因人因店而異，這也是為什麼「多看幾家」永遠是最保險的建議。比起別人的評價，自己走進去的感受、有沒有被好好對待，才是最準的判斷依據。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">我們不做「別家不好」這種比較，因為每個人適合的不一樣。我們能保證的是：不用預約、設計師本人接待，你看到的服務就是你會得到的服務，沒有落差。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「網路評價 vs 實際體驗，到底該信誰？」<br/><strong>Reels：</strong>無壓力接待日常（公式B）<br/><strong>限動：</strong>問答：你有被貨比三家的服務經驗嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫「怎麼判斷該不該相信網路評價」</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@susidyjewellery" target="_blank">@susidyjewellery</a></div><div class="post-date">2026-3-10</div></div>
-<div class="post-likes viral">❤️ 2,236 · 🔥 3,027 互動</div>
+<div class="post-right"><div class="post-likes viral">❤️ 2,236 · 🔥 3,027 互動</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">很多人以為買婚戒就是去門市看一看、覺得漂亮就買。但一位在珠寶業待了二十年的師傅曾說，他見過無數個男人在選戒指的時候，比選手機殼還隨便。不是不愛。是沒有人告訴他，選婚戒可以有一個方法。其實女生也一樣——翻了半年的圖、走了四五間門市、被業務催了又催，最後還是帶著「大概就這樣吧」的心情付了款。婚戒不應該是這樣選的。</div>
 <div class="post-stats"><span>💬 高互動貼文</span><span>↗ 3,027 總互動</span></div>
@@ -454,10 +495,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>觀察式貼文，講述男生女生選婚戒都缺乏方法論<br/><strong>深層焦慮：</strong>消費者渴望「有方法、被引導」而非隨便交差<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類，同業觀點文／高互動｜<strong>等級：</strong>C 情緒共鳴（同業帳號）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（同業帳號，不留言，避免顯得同業競爭）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">選婚戒不該比選手機殼還隨便，但很多人真的沒被教過怎麼選。蠟模試戴的意義就在這裡——在你說『好』之前，先讓手來說話，不用等交件那天才發現不對。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需製作（同業素材轉譯風險）<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>無<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，僅記錄作內容靈感，不留言不轉發</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@febby_dailyyy" target="_blank">@febby_dailyyy</a></div><div class="post-date">2026-2-15</div></div>
-<div class="post-likes">❤️ 292 · 596 互動</div>
+<div class="post-right"><div class="post-likes">❤️ 292 · 596 互動</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">婚戒心得分享（4家走完）— I-primo完全不考慮，服務和品質都讓人失望；JOY COLORI培育鑽看了很久，CP值高但還在猶豫；比較了幾家之後，在亞立詩的命定婚戒付了訂金。走完四家才付款，因為那一家給我的是「命定感」，不是業績壓力。</div>
 <div class="post-stats"><span>💬 596 互動</span><span>↗ 4家比較心得</span></div>
@@ -470,10 +511,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>走完4家比較後分享心得，強調「命定感」而非業績壓力<br/><strong>深層焦慮：</strong>想要的不是CP值最高，而是「這一枚就是它」的確認感<br/><strong>預算／時程：</strong>已完成比較與訂金，無明確數字</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望的正面對照｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">「命定感」這個說法真的很傳神，比起業績推銷，那種「就是它」的篤定感才是最終決定的關鍵。願意走完4家才下決定，代表你很清楚自己要什麼。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">很多人走完好幾家才找到「命定感」，其實那份篤定，可以更早出現。蠟模試戴讓你在下訂前就先確認手感和比例，不用比較到第4家才敢相信自己的選擇。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「怎麼分辨『這是命定』還是『業績推銷』？」比較指南<br/><strong>Reels：</strong>4家比較心得懶人包（公式A）<br/><strong>限動：</strong>投票：你會為了「感覺對」多看幾家嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「命定感」品牌故事題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@chuyun_0213" target="_blank">@chuyun_0213</a></div><div class="post-date">2026-01-18</div></div>
-<div class="post-likes">❤️ 263</div>
+<div class="post-right"><div class="post-likes">❤️ 263</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">想詢問大家結婚對戒，已預約 K.UNO、I-PRIMO、ALUXE，開始做功課後發現好像都大同小異，沒有特別喜歡的⋯⋯蠻想試試看銀樓訂製，想問問各位有沒有推薦的銀樓？太苦惱了。</div>
 <div class="post-stats"><span>💬 161則留言</span><span>↗ 188次轉發</span></div>
@@ -489,10 +530,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>已預約K.UNO、I-PRIMO、ALUXE都大同小異，沒有特別喜歡，詢問銀樓訂製推薦<br/><strong>深層焦慮：</strong>想要「客製／獨特」而非公版統一款，但不知道訂製門路<br/><strong>預算／時程：</strong>未提供，處於品牌比較階段</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦 ／ 4 品牌實品失望｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">大品牌通常都是同一批公版模具在跑，會覺得大同小異很正常。訂製的差別在於可以先看過設計圖跟蠟模再決定，戒指是你們的故事，不用被固定款式綁住。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">如果幾家品牌看下來都覺得差不多，那可能不是你的問題，是選項本來就長得很像。訂製／銀樓方向可以先看過設計圖跟蠟模再決定，先讓手來說話，不用被固定款式綁住。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「品牌對戒 vs 訂製對戒，差在哪？」對比輪播<br/><strong>Reels：</strong>訂製流程一鏡到底（公式A）<br/><strong>限動：</strong>問答：你想要公版款還是專屬設計？<br/><strong>LINE／官網：</strong>確認訂製流程頁清楚呈現看圖看蠟模步驟</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無（已有）</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="D" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@annieliiee" target="_blank">@annieliiee</a></div><div class="post-date">2025-10-31</div></div>
-<div class="post-likes viral">❤️ 2,560</div>
+<div class="post-right"><div class="post-likes viral">❤️ 2,560</div><span class="level-tag level-D">⚪ D</span></div>
 </div>
 <div class="post-content">我自行宣布，第一屆《threads史上最爛的求婚》大賽正式開始——最爛的會置頂（我想看鬼故事）。熱門回應：前男友在談分手時求婚，婚戒看起來是在路邊金飾店花車買的過氣款，證書是A4黑白影印折爛塞進戒盒⋯⋯</div>
 <div class="post-stats"><span>💬 281則留言</span><span>↗ 1,832次轉發</span></div>
@@ -535,10 +576,10 @@
 </div>
 </div>
 <div class="posts-grid">
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="RISK" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@warmstory.tw" target="_blank">@warmstory.tw</a></div><div class="post-date">2026-07-21</div></div>
-<div class="post-likes">❤️ 2</div>
+<div class="post-right"><div class="post-likes">❤️ 2</div><span class="level-tag level-RISK">⚫ 風險</span></div>
 </div>
 <div class="post-content">我們家的特色除了日本婚戒之外，更希望讓挑戒指變成一段兩個人的回憶。會一起聊故事、挑戒指、寫情書，把這一天留下來。如果這剛好是妳喜歡的，可以來看看我們☺️</div>
 <div class="post-stats"><span>💬 尚無留言</span><span>↗ 0次轉發</span></div>
@@ -563,10 +604,10 @@
 <div class="jessica-text">不留言不追蹤，僅記錄觀察（同業定位參考）</div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@amuuu___la" target="_blank">@amuuu___la</a></div><div class="post-date">2026-07-20</div></div>
-<div class="post-likes">❤️ 3</div>
+<div class="post-right"><div class="post-likes">❤️ 3</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">挖到之前去做手工戒指的側拍，想到那時候我老公請店員騙我戒指還要等好幾天才能拿到，結果我直接臉黑了：） 嚇得店員趕快把老公拉去旁邊商討怎麼辦🤣 所以老公的求婚儀式直接被破壞 （到今天他還是覺得沒有求婚是因為我破壞了😒 當初結婚的時候有金戒指是收藏的，但這個手工戒指要用在日常來戴，然後老公泡溫泉給泡沒了！！！！！</div>
 <div class="post-stats"><span>💬 尚無留言</span><span>↗ 0次轉發</span></div>
@@ -592,10 +633,10 @@
 </div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@fatshe.note" target="_blank">@fatshe.note</a></div><div class="post-date">2024-11-29</div></div>
-<div class="post-likes">❤️ 750</div>
+<div class="post-right"><div class="post-likes">❤️ 750</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">被求婚才知道的事，原來求婚戒是求婚戒，之後還要再買對戒</div>
 <div class="post-stats"><span>💬 31則留言</span><span>↗ 93次轉發</span></div>
@@ -611,10 +652,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>被求婚後才知道，原來求婚戒跟結婚對戒是兩件事，還要再買一次對戒<br><strong>深層焦慮：</strong>對婚戒相關知識不熟悉，怕自己漏掉該準備的東西；留言也反映品牌／店家在教育消費者上的資訊落差，甚至有人質疑是「商人手法」<br><strong>預算／時程：</strong>未提供，剛求婚完，屬於備婚初期</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類（消費知識落差／求婚驚喜後的認知調整）｜<strong>等級：</strong>C</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">求婚戒跟結婚對戒本來就是分開的兩件事，很多人求婚後才發現，不用太緊張，對戒通常可以晚一點再準備，剛好也能兩人一起挑、一起決定款式，會更有參與感。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">很多人被求婚後才發現，原來求婚戒跟結婚對戒是兩回事——我都會說，這其實是好事。求婚戒是一個人的驚喜，對戒才是兩個人一起做的決定，晚一點準備，剛好留時間讓兩人一起挑出真正屬於你們的款式。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「求婚戒跟結婚對戒，原來不一樣」新人常見疑問科普圖卡<br><strong>Reels：</strong>公式B（迷思破解）「求婚戒＝結婚戒？其實你還少了這一件」<br><strong>限動：</strong>問答箱：求婚戒跟對戒，你分得清楚差在哪嗎？<br><strong>LINE／官網：</strong>FAQ新增「求婚戒與結婚對戒的差別」說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在官網新人專區新增「求婚戒 vs 結婚對戒」科普頁面／FAQ</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為官網FAQ／新人專區科普文章題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@lingubai55" target="_blank">@lingubai55</a></div><div class="post-date">2026-06-09</div></div>
-<div class="post-likes">❤️ 129</div>
+<div class="post-right"><div class="post-likes">❤️ 129</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">老婆的婚戒好幾年前不小心弄丟了，她一直很難過。最近結婚紀念日快到了，想再送她一個，但因為老婆個性很迷糊，還蠻怕她又再弄丟的，這樣不只她心疼，我也會😅 不知道大家有沒有好看CP值高的鑽戒或婚戒推薦，想要大概10萬內就好，之前在銀樓買20萬...</div>
 <div class="post-stats"><span>💬 80則留言</span><span>↗ 26次轉發</span></div>
@@ -626,10 +667,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>老婆的婚戒幾年前弄丟了一直很難過，結婚紀念日將近，想再送一個<br><strong>深層焦慮：</strong>擔心老婆個性迷糊會再弄丟，心疼老婆也心疼自己；之前在銀樓花20萬的經驗留下陰影，這次想找預算內、能安心配戴的選擇<br><strong>預算／時程：</strong>預算10萬內，結婚紀念日將近，時程明確</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>8 舊戒傳承重製（婚戒遺失重買，情感修復類）｜<strong>等級：</strong>A</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">弄丟過一次，很多人會特別在意戒圍要不要更貼合、材質會不會太容易滑落。挑款式的時候可以順便考慮圈型設計，讓戒指更服貼、不容易脫落，紀念日重新戴上會更安心。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">遇過不少客人，是因為婚戒弄丟了想重新訂製。我都會特別提醒，除了款式好不好看，圈型是不是服貼、會不會太容易滑落，才是能不能安心戴一輩子的關鍵。弄丟過一次的遺憾，值得被好好接住。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒弄丟了，重新訂製前要注意什麼？」<br><strong>Reels：</strong>公式A（常見問題破解）「婚戒容易滑落怎麼辦」<br><strong>限動：</strong>問答箱：你有弄丟過婚戒的經驗嗎？<br><strong>LINE／官網：</strong>FAQ補充「防滑落圈型設計」說明，並可提及舊金改造測試帶方案</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在商品頁補充「圈型服貼度」說明，並連結舊金改造／重製服務頁面</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆或有進一步討論；留言區出現同業自薦帳號，僅記錄觀察不涉入</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@speakmacaron_host" target="_blank">@speakmacaron_host</a></div><div class="post-date">2026-06-30</div></div>
-<div class="post-likes">❤️ 17</div>
+<div class="post-right"><div class="post-likes">❤️ 17</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">我是婚顧但我第一次結婚🎈 故事4 關於婚戒。「最近一直在思考，結婚戴對戒的意義是什麼？」一來是另一半工作關係不一定能戴著，二來是我自己也沒喜好鑽戒或品牌，逛了好幾輪也沒有心動的對戒款。但登記沒結婚戒好像很欠揍🤣 正在臨時抱佛腳找戒中💍 趁機查了幾個戴戒指的歷史故事，覺得很有趣～（第3個第一次看到！）</div>
 <div class="post-stats"><span>💬 7則留言</span><span>↗ 7次轉發</span></div>
@@ -640,10 +681,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>身為婚顧卻是第一次自己結婚，開始思考「戴對戒的意義是什麼」<br><strong>深層焦慮：</strong>另一半工作關係不一定能戴、自己對鑽戒或品牌沒有特別喜好，逛了好幾輪找不到心動款式，又覺得登記沒有婚戒說不過去，帶點自嘲的臨時抱佛腳心情<br><strong>預算／時程：</strong>無明確預算，無明確時程，正在尋找中</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類（情感／文化故事分享，帶輕度求推薦意圖）｜<strong>等級：</strong>C</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">戴戒指的意義本來就沒有標準答案，找不到心動的款式很正常，慢慢找比急著買更重要。如果需要一起聊聊想法，隨時歡迎。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常有客人問我「戴對戒到底代表什麼」，其實答案因人而異。有人在意天天戴著的儀式感，有人更在意刻在裡面的那句話。沒有標準答案，慢慢找到屬於自己的意義，比急著買一款更重要。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「戴對戒的意義是什麼？」邀請粉絲分享自己的故事<br><strong>Reels：</strong>無<br><strong>限動：</strong>問答箱：你的對戒對你來說代表什麼？<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展故事／內容題材（對戒意義的情感故事可作為後續內容靈感）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@7632ashley" target="_blank">@7632ashley</a></div><div class="post-date">2026-07-15</div></div>
-<div class="post-likes">❤️ 1</div>
+<div class="post-right"><div class="post-likes">❤️ 1</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">冰島婚戒💍 在冰島補遲到12年的求婚 前幾天終於拿到戒指了 人生第一顆鑽石 不用光線就能感受到它的閃亮 裡面還刻著我們的代號與水藍色寶石 寶石意思是⋯ 願我倆將生活點滴轉化爲微笑的動力 我倆關係永遠雋永如新 看著店裡面都是準備結婚的新婚夫妻 這段話真的很適合我們這對12年小老鳥 我很愛這個婚戒 也謝謝老公愛我❤️ ⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯題外話 拿到戒指隔天大兒終於發現我的戒指 手上抱著新買的眼鏡清洗液的他拿著瓶蓋環 兒：請你嫁給我 母：謝謝你喔！但我有點替你未來女友擔心你這直男思維 女：媽媽你就不用擔心了，因為他連女友都不會有🤣 兒：🤨 #這就是手足 #收到12歲的求婚 #沒想到瓶蓋竟然剛剛好</div>
 <div class="post-stats"><span>💬 0則留言</span><span>↗ 0次轉發</span></div>
@@ -655,10 +696,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>分享遲來12年的求婚故事與內圈刻字的婚戒<br><strong>深層焦慮：</strong>無明顯焦慮，屬正向情感分享，但反映「等待多年才擁有婚戒」的普遍心情<br><strong>預算／時程：</strong>無明確預算與時程，純情感紀念分享</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>7 求婚驚喜與共同決定（延遲求婚／內圈刻字的情感重塑）｜<strong>等級：</strong>C</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">12年後補上的求婚，比準時的更讓人感動。內圈刻字這種小小的心意，戴在手上才會一直記得那段對話。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">最近遇到一對交往12年才補求婚的客人，我問她會不會覺得晚了，她說「剛好而已，我們都還在」。婚戒不一定要在對的時間出現，只要出現的時候，兩個人還願意一起走下去，就是最好的時機。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>主題「遲來的求婚」，切角：婚戒沒有標準時程，感情濃度比時間點重要<br><strong>Reels：</strong>無<br><strong>限動：</strong>問答箱「你們交往多久才結婚／求婚？」<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展故事／內容題材，可延伸「不趕時程」系列內容</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@decidedhedy" target="_blank">@decidedhedy</a></div><div class="post-date">2026-07-15</div></div>
-<div class="post-likes">❤️ 179</div>
+<div class="post-right"><div class="post-likes">❤️ 179</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">我媽給了我一個戒指～他笑著說這是假的喔！開什麼玩笑！只要是媽媽給的我都喜歡❤️不管他是真的黃金還是假的對吧？不過我就是順便問一下～你們覺得這個是真的黃金還是假的？我就順便問一下而已😆🤣🤣🤣</div>
 <div class="post-stats"><span>💬 82則留言</span><span>↗ 0次轉發</span></div>
@@ -674,10 +715,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>媽媽給的戒指材質看起來像被凹折過，想確認是不是真金<br/><strong>深層焦慮：</strong>真正在意的不是黃金真假，而是這份「媽媽給的」情感連結該怎麼被好好留住、好好保存<br/><strong>預算／時程：</strong>無購買預算或時程訊號，屬情感分享型貼文</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>8 舊戒傳承重製｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">戒指上彎彎的痕跡看起來像是戴了很久，很有生活感。比起真假，這種「媽媽給的」的溫度感覺更難被取代。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常遇到客人拿著媽媽或阿嬤的舊戒指來，說材質已經看不出來、圈也變形了，但就是捨不得丟。其實這些舊金留著的，從來就不是它值多少錢，而是那份「這是媽媽給的」的重量。比起鑑定真假，我更常建議大家想想：這枚戒指想繼續陪你多久、用什麼樣子陪你。舊金可以留著重新做成現在戴得住、戴得久的款式，讓那份心意換一種方式繼續戴在手上。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「媽媽給的戒指，比黃金真假更重要的事」——情感先於材質<br/><strong>Reels：</strong>公式C「舊戒指材質認不出來，還能怎麼辦？」情感故事→設計轉譯<br/><strong>限動：</strong>問答箱：你也有一枚說不出材質、但捨不得丟的舊戒指嗎？<br/><strong>LINE／官網：</strong>官網舊金改造頁可補充「材質不明也能鑑定、重新設計」說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在舊金改造頁面加註「不確定材質真假沒關係，可先送來鑑定再決定如何設計」，降低疑慮門檻</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「舊戒傳承」品牌故事／內容題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@cw00324" target="_blank">@cw00324</a></div><div class="post-date">2026-07-15</div></div>
-<div class="post-likes">❤️ 0</div>
+<div class="post-right"><div class="post-likes">❤️ 0</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">不管真的假的，我覺得只要是父母給的就很有收藏意義 我媽當年在我爸去世時也有送我一顆藍寶石戒指，雖然小小的，我也不知道是真假，但我帶著出門感受到爸媽滿滿的愛❤️好好收藏吧</div>
 <div class="post-stats"><span>💬 0則留言</span><span>↗ 0次轉發</span></div>
@@ -689,10 +730,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>父親過世後，母親轉贈一顆藍寶石戒指作紀念，材質真假不明<br/><strong>深層焦慮：</strong>面對至親離世，如何用「戴得到」的方式延續那份愛與記憶<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>8 舊戒傳承重製（涉及至親過世，需格外溫和）｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">能帶著爸媽給的東西出門，是很溫柔的一件事，那份心意本身就很珍貴了。（涉及至親過世，語氣需格外溫和，不追問細節、不推銷）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">有些戒指的價值，從來不是拿去鑑定所能衡量的。遇過不少客人，戒指是父母留下的，材質可能已經說不清楚，但那雙曾經為自己戴上戒指的手，才是最捨不得放開的部分。如果哪天想讓這樣的戒指換一個更適合日常配戴的樣子，那份記憶還是可以繼續戴在手上，只是換了一種方式陪著你。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「父母留下的戒指，你會怎麼收藏／配戴？」語氣溫柔、不追問細節<br/><strong>Reels：</strong>無（題材涉及喪親，不適合做成互動短影音）<br/><strong>限動：</strong>無（避免消費使用者的喪親經驗）<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，僅作為內容題材參考，延伸內容需維持溫和、不消費悲傷的原則，不主動追問當事人</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@xuan.95" target="_blank">@xuan.95</a></div><div class="post-date">2025-06-24</div></div>
-<div class="post-likes">❤️ 1,389</div>
+<div class="post-right"><div class="post-likes">❤️ 1,389</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">我被求婚了!!!! 徐說他挑0.6克拉鑽石💎 大小剛剛好 旁邊線條是玫瑰金 我好喜歡💍 戒圍他趁我睡覺的時候偷偷量我的戒圍多少 想說那天睡覺他怎麼一直摸我的手🤣</div>
 <div class="post-stats"><span>💬 48則留言</span><span>↗ 4次轉發</span></div>
@@ -708,10 +749,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>分享被求婚的喜悅，未婚夫挑選0.6克拉鑽石＋玫瑰金戒台，還偷偷量了戒圍<br><strong>深層焦慮：</strong>無明顯焦慮，純粹情感分享與紀念時刻<br><strong>預算／時程：</strong>0.6克拉鑽石＋玫瑰金，具體預算未提</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>7 求婚驚喜與共同決定｜<strong>等級：</strong>C</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">偷偷量戒圍這段也太浪漫，這種藏在細節裡的用心，比戒指本身還珍貴。祝福你們幸福！</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">我很喜歡聽這種「偷偷量戒圍」的求婚故事——那代表對方早就把這件事放在心上很久了。做戒指這麼多年我發現，最打動人的往往不是鑽石大小，而是那些藏在細節裡的心意：量手指的動作、選的顏色、甚至是害怕被發現的小心翼翼。這些才是婚戒真正的重量。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「求婚故事裡最浪漫的小動作」<br><strong>Reels：</strong>公式C（情感陳述）「求婚戒指裡藏著的小心思」<br><strong>限動：</strong>問答箱：你的求婚故事裡有什麼浪漫的小細節？<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「求婚驚喜細節」內容題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@d_7_2_2_i_e" target="_blank">@d_7_2_2_i_e</a></div><div class="post-date">2024-03-23</div></div>
-<div class="post-likes">❤️ 51</div>
+<div class="post-right"><div class="post-likes">❤️ 51</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">欸我好奇問一下，如果男生要求婚的話，求婚戒指的預算會怎麼抓呢？💍💍💍</div>
 <div class="post-stats"><span>💬 31則留言</span></div>
@@ -727,10 +768,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>好奇求婚戒指預算怎麼抓，留言意見分歧，從幾千到數十萬都有<br><strong>深層焦慮：</strong>沒有明確標準可依循，怕抓太低顯得不重視、抓太高又有財務壓力<br><strong>預算／時程：</strong>提問型，本人未表態自己的預算，屬資訊蒐集階段</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解（提問型）｜<strong>等級：</strong>B</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">其實沒有標準答案，重點是這筆預算會不會讓兩人生活壓力變大。比起參考「應該花多少」，不如直接問對方喜歡什麼樣的設計跟大小，戴上去合不合意才是重點。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">每次看到「求婚戒指預算該抓多少」的討論都覺得很有趣，答案永遠五花八門。但做戒指久了我發現，真正重要的從來不是花多少錢，而是有沒有把對方的手型、喜好、生活習慣放進設計裡。一只花心思了解過對方的戒指，比任何預算公式都更動人。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「求婚戒指預算到底該怎麼抓」<br><strong>Reels：</strong>公式A（開場提問）「求婚戒指預算眾說紛紜，到底該聽誰的」<br><strong>限動：</strong>投票：求婚戒指預算你覺得該看月薪倍數還是對方喜好？<br><strong>LINE／官網：</strong>FAQ補充「沒有一定要花到多少錢」的口徑，降低預算焦慮</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">FAQ可增加「求婚戒指預算」相關常見問答</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@ccddandme" target="_blank">@ccddandme</a></div><div class="post-date">2026-07-12</div></div>
-<div class="post-likes">❤️ 8 · 13 互動</div>
+<div class="post-right"><div class="post-likes">❤️ 8 · 13 互動</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">你離開的第1905天，我與孩子要搬第二個家。先生離開第五年，我第三次練習人生的斷捨離⋯⋯我添置了小小的防潮箱擺放紀念：先生的手錶、記錄生活的硬碟，與我們的結婚對戒。今天再次戴上婚戒看著閃閃的鑽石，還會在心裡讚嘆：「天呀⋯⋯真是好看⋯⋯」「我眼光還是挺不錯的⋯⋯」每一次的「離」，我都更確定自己想「留」下的——什麼是該丟掉的執念，什麼是捨不去也沒關係的思念。</div>
 <div class="post-stats"><span>💬 5則留言（6篇系列文）</span><span>↗ 784次瀏覽</span></div>
@@ -742,10 +783,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>先生離世第五年，搬家整理遺物，重新戴上結婚對戒<br/><strong>深層焦慮：</strong>婚戒成為「該留下什麼、該放下什麼」的情感錨點，物件承載已逝之人的存在感<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>8 舊戒傳承重製（情感層面，非重製需求）｜<strong>等級：</strong>C 情緒共鳴（高度私人化哀悼敘事，非商業詢問）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">戒指還在，代表那份重要從來沒被搬空過。每一次重新戴上它，都是一種溫柔地把回憶帶在身上的方式，不需要放下也可以好好前進。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（哀悼敘事私人化程度高，不主動延伸發文，僅作為品牌對「戒指是情感陪伴物」理解的內部靈感）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作（不宜直接商業轉譯）<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>無<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，僅記錄為「戒指作為情感陪伴物」的內容靈感，不留言不轉發，保持尊重距離</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@unauu37uu" target="_blank">@unauu37uu</a></div><div class="post-date">2026-06-01</div></div>
-<div class="post-likes">❤️ 新</div>
+<div class="post-right"><div class="post-likes">❤️ 新</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">我跟我老公深夜對話。當初說不辦婚禮不買戒指的我，談起了買婚戒的事：從4月到現在發生的一連串的事情，我內心出現了混亂搖擺不定的徬徨感，內心其實很雜亂。終於能理解一生的承諾寄託在紀念物上的重要性。🌸：經過這次奇怪事件，我覺得我們需要婚戒💍 👀：怎麼這麼突然 🌸：其實事情發生的這些日子我很搖擺不夠堅定，但我理解了婚戒的重要性，是一種提醒自己跟穩定心智的一個紀念物，一部分我太年輕。稀鬆平常的婚姻日常。我想要的單純日子，我老公給了我。一起有了挑戒指的煩惱。</div>
 <div class="post-stats"><span>💬 情感轉折分享</span><span>#結婚</span></div>
@@ -759,10 +800,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>原本說不辦婚禮不買戒指，經歷一連串事件後改變心意，決定要婚戒<br/><strong>深層焦慮：</strong>婚戒從「形式」轉化為「穩定心智的紀念物」，是對不確定人生的一種錨定需求<br/><strong>預算／時程：</strong>無明確，剛決定要開始挑戒指</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>8 舊戒傳承重製的情感前導版（新戒但具強烈情感轉折）｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">婚戒對每個人的意義都不一樣，你們現在賦予它的「穩定心智」這層意義，反而比制式的紀念日更珍貴。挑選的時候，也可以把這份心境放進設計裡，讓它不只是一枚戒指，是這段轉折的見證。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">不是每個人買婚戒的理由都一樣——有人是承諾，有人是穩定自己的心。這份心境本身就值得被放進設計裡，讓戒指記住的不只是婚姻，也是你們一起走過的那段搖擺與篤定。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒不只是承諾，也可以是穩定心智的紀念物」觀點文<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：你的婚戒對你來說代表什麼？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入內容題庫「婚戒意義的重新定義」</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@rndcomtw" target="_blank">@rndcomtw</a></div><div class="post-date">2026-05-23</div></div>
-<div class="post-likes viral">❤️ 4.4萬</div>
+<div class="post-right"><div class="post-likes viral">❤️ 4.4萬</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">最近朋友求婚，他做了一件我覺得超聰明的事：沒有自己亂猜戒圍和款式，先去租了一只真鑽求婚，求婚成功後再帶女友一起回店挑真正要戴的婚戒。而且租金可以全額折抵婚戒。等於先把最難的那一關（猜她喜歡什麼）交給時間，求婚的感動一點都沒少。我問他為什麼不直接買，他說：「我不想幫她決定要戴一輩子的樣式。」⋯⋯好，我輸了，這句太強。</div>
 <div class="post-stats"><span>💬 464則留言</span><span>↗ 1,738次轉發</span><span>🔁 7,350次引用</span></div>
@@ -778,10 +819,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>朋友求婚用租借鑽戒完成儀式，事後再一起挑真正的婚戒，租金可折抵<br/><strong>深層焦慮：</strong>「不想幫她決定要戴一輩子的樣式」——把決定權還給對方，是另一種深情的表現<br/><strong>預算／時程：</strong>無明確，但涉及具體服務模式（租借折抵）</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>7 求婚驚喜兩難（完美解法）｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">「不想幫她決定要戴一輩子的樣式」這句真的很有智慧——求婚的感動留給那一刻，真正要戴一輩子的設計，交給兩個人一起決定，這樣誰都不用賭運氣。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">我們也提供類似的免費鑽戒租借服務：先完成求婚儀式，感動一點都不會少；等兩個人準備好了，再一起把真正要戴一輩子的婚戒做出來，租金全額折抵。不用幫對方決定，也不用犧牲驚喜。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「先租鑽戒求婚，再一起挑真正的婚戒」服務介紹圖文<br/><strong>Reels：</strong>租借→求婚→共同訂製（公式C）<br/><strong>限動：</strong>投票：你會想用租借鑽戒求婚嗎？<br/><strong>LINE／官網：</strong>確認免費鑽戒租借服務頁清楚呈現「租金可折抵」規則</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">這則貼文描述的模式與品牌服務高度吻合，建議近期主動延伸為正式內容</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內轉為Threads延伸貼文並觀察互動</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@xwu22202025" target="_blank">@xwu22202025</a></div><div class="post-date">2026-05-23</div></div>
-<div class="post-likes">❤️ 36</div>
+<div class="post-right"><div class="post-likes">❤️ 36</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">我家那位平常其實不太懂浪漫，但今年520真的讓我很驚訝🥹 前一陣子我隨口跟他說想看看對戒，他自己就默默去做了功課。520前的週末，他帶我去大安那裡吃午餐後，沒跟我講目的地，默默帶我去試戴婚戒，還跟我說：今年的禮物，我們一起去選。後來才發現他事先連門市都預約好了，甚至記得我比較喜歡細鑽、不愛華麗款、喜歡淡金色。我們現場試戴了好久，也下訂了客製對戒。從這些小細節裡，感覺到一直都有被好好愛著 謝謝你🫶</div>
 <div class="post-stats"><span>💬 6則留言</span><span>↗ 0次轉發</span></div>
@@ -795,10 +836,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>男友默默做功課、記得她的喜好細節（細鑽／淡金色），520驚喜安排試戴並下訂客製對戒<br/><strong>深層焦慮：</strong>「被記得的細節」是感受到被愛的核心證明，比戒指本身更重要<br/><strong>預算／時程：</strong>已下訂客製對戒</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>3 兩人審美衝突的正面解方（提前溝通型）｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">他記得你喜歡細鑽、不喜歡華麗款，這種細節真的比任何驚喜都動人——用心從來不是花多少錢，是有沒有認真聽你說過的話。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">好的訂製體驗，是設計師記得你隨口說過的每一個細節——喜歡細鑽、不愛華麗、偏好淡金色——不用每次都重新解釋一遍。這種被記得的感覺，往往比戒指本身更讓人感動。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「被記得的細節，比戒指本身更浪漫」故事型貼文<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：另一半記得你的婚戒喜好嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「用心傾聽」品牌故事素材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="RISK" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@syyau00.0" target="_blank">@syyau00.0</a></div><div class="post-date">2026-03-24</div></div>
-<div class="post-likes viral">❤️ 1,531</div>
+<div class="post-right"><div class="post-likes viral">❤️ 1,531</div><span class="level-tag level-RISK">⚫ 風險</span></div>
 </div>
 <div class="post-content">求助！！朋友家昨天被盜竊，爸爸留下的遺物黃金項鍊、玉戒指、外婆給的嫁妝（金戒指）都不翼而飛。朋友的媽媽自責到快要想不開，想請屏東的朋友幫幫忙，如果家中有經營金飾店⋯⋯</div>
 <div class="post-stats"><span>💬 180則留言</span><span>↗ 313次轉發</span></div>
@@ -810,10 +851,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>家中遭竊，父親遺物項鍊、外婆嫁妝金戒指全部遺失，媽媽自責崩潰<br/><strong>深層焦慮：</strong>傳家珠寶承載的是家族連結與記憶，遺失傷的不只是財產，是與上一代的情感紐帶<br/><strong>預算／時程：</strong>無，非購買情境，屬協尋求助</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>8 舊戒傳承重製（極端情境：遺失而非改造）｜<strong>等級：</strong>風險／D（非購買訊號，敏感協尋事件）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（協尋求助貼文不宜置入品牌訊息，不留言，僅表達善意）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（不直接引用此事件延伸發文，改用通用敘事處理傳家珠寶主題，避免消費他人不幸）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「傳家珠寶為什麼這麼難被取代」觀點文（不引用此事件，改用通用敘事）<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>無<br/><strong>LINE／官網：</strong>檢查是否有「舊戒設計圖／秤重存檔」相關服務說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充「傳家珠寶存檔備份」服務說明，回應這類遺失風險焦慮</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">敏感協尋事件，不留言不追蹤，僅記錄「傳家珠寶不可替代性」為內容靈感</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@tttxuan25" target="_blank">@tttxuan25</a></div><div class="post-date">2026-02-27</div></div>
-<div class="post-likes viral">❤️ 1.5萬</div>
+<div class="post-right"><div class="post-likes viral">❤️ 1.5萬</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">去年告訴家人預計今年要結婚，那時候的我們都覺得還很久，眨眼間今年也已經要三月了。挑了喜歡的對戒，把神仙教母跟咒語刻進婚戒裡（店員錯愕沒想到有人不刻紀念日刻咒語）。願往後的日子裡都帶著幸福快樂的魔法🪄🤍</div>
 <div class="post-stats"><span>💬 110則留言</span><span>↗ 606次轉發</span><span>🔁 1,857次引用</span></div>
@@ -829,10 +870,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>婚戒內圈刻上「神仙教母跟咒語」而非傳統紀念日，店員驚訝<br/><strong>深層焦慮：</strong>想要專屬於自己故事的個人化印記，而非套用制式的「1314」符號<br/><strong>預算／時程：</strong>訂做需兩個月</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類，個人化訂製故事型｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">不刻紀念日刻咒語，這個選擇本身就很有故事——內圈刻字最珍貴的地方，就是它只有你們兩個看得懂。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">內圈刻字從來不用是標準答案。紀念日、暱稱、一句只有兩人懂的密語，甚至是「神仙教母的咒語」——重點不是刻了什麼，是那句話只屬於你們。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「內圈刻字，你會刻什麼？」創意輪播（收集不同顧客的刻字故事）<br/><strong>Reels：</strong>刻字特寫過程（公式A）<br/><strong>限動：</strong>問答：如果不刻紀念日，你會刻什麼？<br/><strong>LINE／官網：</strong>確認內圈刻字服務頁有列出常見／創意刻字範例</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充刻字範例區塊，鼓勵跳脫「1314」框架</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「內圈刻字故事」系列內容</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@mable__chang" target="_blank">@mable__chang</a></div><div class="post-date">2026-2-9</div></div>
-<div class="post-likes viral">❤️ 1,893 · 🔥 2,103 互動</div>
+<div class="post-right"><div class="post-likes viral">❤️ 1,893 · 🔥 2,103 互動</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">結婚4年了，今天把當初的求婚戒指拿出來戴。想起他跑去101泡了一整天，在那麼多枚戒指裡，選了一枚月薪7倍的鑽戒——連戒圍都猜對了，不需要換。4年後的今天我才懂，那不是運氣，是他真的用心了解我。戒指還是那枚戒指，但我戴著它的心情，跟當初不一樣了。</div>
 <div class="post-stats"><span>💬 2,103 總互動</span><span>↗ 情感記憶</span></div>
@@ -845,10 +886,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>結婚4年後重新戴上求婚戒，回憶先生當初花7倍月薪、連戒圍都猜對<br/><strong>深層焦慮：</strong>隨時間推移對同一枚戒指產生的情感層次變化——從「浪漫」到「懂得」<br/><strong>預算／時程：</strong>已完成購買（求婚戒）</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準，情感回顧型｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">連戒圍都猜對這種細節，真的是把心思都放在了解你身上，而不是單純追求排場。四年後還能因為同一枚戒指有新的體會，這就是好設計最動人的地方。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">戒指的意義會隨時間累積得更深。剛拿到手時覺得浪漫，幾年後才懂那份用心——好的訂製，是讓你多年後回頭看，依然覺得「他真的懂我」。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「多年後重新戴上求婚戒，你會想起什麼？」情感式貼文<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>問答：你的求婚戒還留著嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「時間淬煉的意義」品牌故事題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@omo0425" target="_blank">@omo0425</a></div><div class="post-date">2025-12-17</div></div>
-<div class="post-likes viral">❤️ 1,417</div>
+<div class="post-right"><div class="post-likes viral">❤️ 1,417</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">媽媽結婚的時候，爸爸還是窮小子，沒有為她準備婚戒。小時候我不懂，買了一盒塑膠戒指當禮物送她。現在我終於長大了，也有能力了。今天牽著她的手，走進亞立詩，換上一只閃閃發亮到過曝的真鑽戒——媽媽的手指閃亮亮的，眼睛也閃亮亮的。好像彌補了年輕時的那個小小遺憾。</div>
 <div class="post-stats"><span>💬 32則留言</span><span>❤️ 1,417讚</span></div>
@@ -891,10 +932,10 @@
 </div>
 </div>
 <div class="posts-grid">
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@dora.hyh" target="_blank">@dora.hyh</a></div><div class="post-date">2026-07-20</div></div>
-<div class="post-likes">❤️ 4</div>
+<div class="post-right"><div class="post-likes">❤️ 4</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">請問有小眾、有個性、簡約的婚戒品牌嗎？ 9月要去大阪，有日本品牌也拜託幫忙推推</div>
 <div class="post-stats"><span>💬 8則留言</span><span>↗ 0次轉發</span></div>
@@ -924,10 +965,10 @@
 <div class="jessica-text">A級，24小時內回頭看留言串是否有新回覆；因原貼文留言區已高度飽和同業自薦廣告（8則留言中多為品牌自我推銷），暫不留言以免顯得像跟風推銷，優先在自家平台延伸「怎麼選」的內容角度</div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@jenjenjelly_" target="_blank">@jenjenjelly_</a></div><div class="post-date">2026-07-03</div></div>
-<div class="post-likes">❤️ 37</div>
+<div class="post-right"><div class="post-likes">❤️ 37</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">黎緊去婚展，有冇邊個展位係必行？ 我自己想買對戒 阿媽話想去睇金器， 老豆就話最緊要性價比高要夠抵😆</div>
 <div class="post-stats"><span>💬 62則留言</span><span>↗ 1次轉發</span></div>
@@ -957,10 +998,10 @@
 <div class="jessica-text">B級，納入FAQ／輪播題庫（家庭決策衝突／婚展避雷主題）</div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@voiciimariee" target="_blank">@voiciimariee</a></div><div class="post-date">2026-07-19</div></div>
-<div class="post-likes">❤️ 17</div>
+<div class="post-right"><div class="post-likes">❤️ 17</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">2027年4月big day✨ 話咁快倒數9個月... J人表示開始有少少壓力🥲 想問下大家試妝有啲咩要留意💭 同埋有無nudebra同婚紗舖推介👰🏽‍♀️ 感謝! 順便update下progress🔜 ✅教堂 ✅晚宴場地 ✅2P ✅2V ☑️MUA 連姊妹化妝 (book咗兩個8月試妝) ✅證婚牧師 ❌prewedding (諗住10月係香港影) ❌婚戒 (可能婚展睇下?） ❌證婚婚紗 ❌頭紗 ❌輕婚紗 (用嚟跳舞💃🏽🪩) ❌晚裝 ❌西裝 ✅婚鞋 ❌兄弟姊妹衫 (有心水colour tone) ❌媽咪衫 ❌MC (諗住搵朋友幫手) ☑️囍帖 (場地包) ☑️photo booth (場地包) ☑️deco (場地包) ❌花球 ❌餅卡 ❌回禮禮物 ☑️rundown (慢慢砌緊...)</div>
 <div class="post-stats"><span>💬 20則留言</span><span>↗ 8次轉發</span></div>
@@ -991,10 +1032,10 @@
 </div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="RISK" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@fancy_ou" target="_blank">@fancy_ou</a></div><div class="post-date">2026-07-17</div></div>
-<div class="post-likes">❤️ 462</div>
+<div class="post-right"><div class="post-likes">❤️ 462</div><span class="level-tag level-RISK">⚫ 風險</span></div>
 </div>
 <div class="post-content">人生的交叉入口，好難抉擇⋯跟男友交往了十年，第9年時，男友透露想結婚生子的念頭，而當時我以人生計畫告訴他，現在還不想結婚，希望等到工作穩定、薪水達標後再結婚生子。男友想婚的原因是他覺得爸媽年紀大了，他也快40了，想結婚生小孩，踏入人生下一階段。我不想踏入婚姻，不想因此被迫過年要回他家過、還要因應他家傳統習俗，各種祭祀⋯還有個現實的問題是，我們買房了，當初買房他說是因為我讓他有想安定的感覺，所以決定買房、裝潢。（1/7 系列貼文）</div>
 <div class="post-stats"><span>💬 256則留言</span><span>↗ 205次轉發</span></div>
@@ -1007,10 +1048,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>交往十年的伴侶對「何時結婚」有時程與價值觀落差，牽涉買房、生子、婆家傳統習俗等多重壓力<br><strong>深層焦慮：</strong>對婚姻與家庭傳統習俗的抗拒、對承諾期限的不確定感，屬於高度個人化的感情／家庭議題，留言區也出現對當事人的道德評價與衝突<br><strong>預算／時程：</strong>未涉及婚戒具體需求，非典型消費場景</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類（敏感家庭／婚姻時程議題）｜<strong>等級：</strong>風險</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（不留言，不自薦／涉及敏感家庭與婚姻決策議題，避免涉入）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（風險／敏感議題，暫不延伸發文）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作<br><strong>Reels：</strong>無<br><strong>限動：</strong>無<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">風險貼文，不留言不追蹤，僅記錄觀察（婚姻時程與家庭傳統壓力，作為社會情緒觀察素材，暫不使用）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="D" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@goldlife0111" target="_blank">@goldlife0111</a></div><div class="post-date">2026-05-03</div></div>
-<div class="post-likes">❤️ 158</div>
+<div class="post-right"><div class="post-likes">❤️ 158</div><span class="level-tag level-D">⚪ D</span></div>
 </div>
 <div class="post-content">這顆鑽戒現值200多萬 . . . 當初如果買婚戒的錢，拿去買台積電的話</div>
 <div class="post-stats"><span>💬 114則留言</span><span>↗ 31次轉發</span></div>
@@ -1023,10 +1064,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>以「婚戒現值200多萬」為梗，開玩笑說當初買婚戒的錢若拿去買台積電股票現在會更值錢<br><strong>深層焦慮：</strong>帶有「消費後悔」情緒的迷因內容，非真實購買決策，反映社會對「婚戒是不是必要開銷」的調侃心態<br><strong>預算／時程：</strong>無實際購買需求</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類（娛樂迷因／消費後悔玩笑）｜<strong>等級：</strong>D</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（D級低對頻，僅記錄，不主動留言）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（D級娛樂內容，暫不延伸發文）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作<br><strong>Reels：</strong>無<br><strong>限動：</strong>無<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">D級，僅記錄（反映「婚戒是否值得投資」的社會情緒，可作為未來品牌溝通「婚戒情感價值」的參考素材）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@weiwei_0528" target="_blank">@weiwei_0528</a></div><div class="post-date">2025-03-15</div></div>
-<div class="post-likes">❤️ 1,449</div>
+<div class="post-right"><div class="post-likes">❤️ 1,449</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">我被求婚了！媽我真的30歲嫁了自己🥹 以下想請請大家推薦婚戒（對戒）品牌</div>
 <div class="post-stats"><span>💬 70則留言</span><span>↗ 26次轉發</span></div>
@@ -1041,10 +1082,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>求婚成功後，想找大家推薦婚戒（對戒）品牌，尚無明確方向<br><strong>深層焦慮：</strong>人生新階段的重要決定，希望選到「對」的品牌而非隨便一間，也隱含想要一份被慎重對待的感覺；留言區已有品牌帳號搶先自薦，顯示此類貼文是同業必爭的高意圖流量<br><strong>預算／時程：</strong>未提供具體預算或時程，屬於剛開始蒐集資訊階段</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦｜<strong>等級：</strong>A</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">先恭喜～挑對戒真的建議先想清楚兩個人日常會不會戴、喜歡的粗細跟質感，比先鎖定品牌更重要。可以的話兩人一起去試戴幾種款式，戴在手上的感覺比照片準很多。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常有客人問我們要怎麼挑對戒品牌，我都建議先別急著鎖定名字，先想兩件事：會不會天天戴、喜歡什麼樣的重量感。戒指是要陪你們過日子的東西，不是拍完照就收起來的紀念品。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「挑對戒前，先問自己這兩個問題」圖卡<br><strong>Reels：</strong>公式A（開場提問）「選婚戒前，你該想的不是品牌，是這兩件事」<br><strong>限動：</strong>投票：挑婚戒時，你比較在意款式還是品牌？<br><strong>LINE／官網：</strong>無需另外更新，可作為FAQ「怎麼開始挑婚戒」素材</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可在官網新增「怎麼開始挑選對戒」入門引導區塊</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否有更多留言或被官方帳號回覆／自薦</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@zhengjianxue3" target="_blank">@zhengjianxue3</a></div><div class="post-date">2026-06-25</div></div>
-<div class="post-likes">❤️ 384</div>
+<div class="post-right"><div class="post-likes">❤️ 384</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">預計下個月女友生日要和她求婚，最近下班都在研究婚戒，結果越看越焦慮>< 現在最煩的問題是求婚戒到底要不要有鑽石？？？女友的個性算是務實派的，平時也不太戴飾品，但又怕女生心裏想的又不一樣，問了身邊朋友有些人覺得把錢拿去辦婚禮或蜜月比較實際，但也有一派人說有鑽石才有儀式感，頭超痛啊啊啊！！！我的預算差不多抓7、8萬，目前應該會是AMC、I-PRIMO這兩家在選，想問問各位脆友怎麼看鑽戒這一題，還有這兩家品牌推嗎？</div>
 <div class="post-stats"><span>💬 114則留言</span><span>↗ 164次轉發</span></div>
@@ -1057,10 +1098,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>下個月要求婚，研究婚戒卻越看越焦慮，糾結求婚戒到底要不要有鑽石<br><strong>深層焦慮：</strong>女友務實派、平常不戴飾品，怕自己選錯讓女友失望，朋友圈又有兩派意見拉扯，陷入自我懷疑，同時對兩大品牌的選擇也沒有把握<br><strong>預算／時程：</strong>預算7-8萬，時程明確（下個月）</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解（交織7 求婚驚喜兩難）｜<strong>等級：</strong>A</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">鑽石有沒有不是重點，重點是這枚戒指戴不戴得住她的日常。務實派的女生通常更在意舒不舒服、會不會勾衣服，比起「有沒有鑽石」，我會更建議先想清楚她的生活習慣，再決定款式。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常有準新郎問我求婚戒要不要有鑽石，我都反問一句：她平常戴不戴飾品？務實派的女生，往往更在意戒指戴起來舒不舒服，而不是閃不閃。與其糾結有沒有鑽石，不如先想清楚她的生活習慣，戒指才會被天天戴著，而不是收進盒子。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「求婚戒到底要不要鑽石？」從生活習慣出發的選戒指南<br><strong>Reels：</strong>公式C（價值觀陳述）「比起閃不閃，我更在意戴不戴得住」<br><strong>限動：</strong>投票：求婚戒你覺得要有鑽石嗎？<br><strong>LINE／官網：</strong>FAQ補充「務實派女友適合的婚戒款式建議」</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在商品頁增加「依生活習慣選擇婚戒」的引導段落，降低品牌比較焦慮</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看該篇留言區品牌討論走向，評估是否有延伸溝通機會</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="D" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@c81224" target="_blank">@c81224</a></div><div class="post-date">2026-07-16</div></div>
-<div class="post-likes">❤️ 29</div>
+<div class="post-right"><div class="post-likes">❤️ 29</div><span class="level-tag level-D">⚪ D</span></div>
 </div>
 <div class="post-content">鑽戒vs金戒 大家結婚會喜歡哪種當婚戒？（投票 1/2）</div>
 <div class="post-stats"><span>💬 32則留言</span><span>↗ 6次轉發</span></div>
@@ -1071,10 +1112,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>單純發起投票「鑽戒vs金戒，大家結婚會喜歡哪種當婚戒？」<br><strong>深層焦慮：</strong>無明確個人情境或購買訊號，屬於話題式互動貼文<br><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類（材質偏好投票，娛樂UGC徵集）｜<strong>等級：</strong>D</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（不留言，不自薦／純投票性質，無明確需求可回應）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（暫不延伸發文／話題過於單薄，無具體情境可延伸）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作<br><strong>Reels：</strong>無<br><strong>限動：</strong>可參考此投票形式，未來自製「鑽戒vs金戒」限動投票蒐集受眾偏好<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">D級，僅記錄（材質偏好話題可作未來限動投票靈感）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="D" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@kelly163_" target="_blank">@kelly163_</a></div><div class="post-date">2026-06-30</div></div>
-<div class="post-likes">❤️ 17</div>
+<div class="post-right"><div class="post-likes">❤️ 17</div><span class="level-tag level-D">⚪ D</span></div>
 </div>
 <div class="post-content">最近想做手作戒指💍 但我對手作真的完全沒有研究，也不知道哪一間做起來比較有質感、體驗又好😂 希望是在雙北地區，預算不限（合理就好）。成品好看、日常會想戴／老師教學有耐心，新手也能完成／整個體驗不會太趕、有儀式感／如果可以刻字或有不同材質可以選更好✨ 想請大家推薦自己做過、真的會想回訪或推薦給朋友的店家！也歡迎分享經驗，讓我避雷🙏</div>
 <div class="post-stats"><span>💬 10則留言</span><span>↗ 2次轉發</span></div>
@@ -1085,10 +1126,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>想找雙北地區手作戒指體驗課程，非訂製婚戒<br><strong>深層焦慮：</strong>想要有儀式感、成品好看又能日常配戴的手作體驗，怕踩雷<br><strong>預算／時程：</strong>預算不限（合理即可），無時程</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類（手作課程詢問，非客製訂製婚戒品類）｜<strong>等級：</strong>D</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（不留言，不自薦／需求為手作體驗課程，非客製訂製婚戒服務範疇）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（暫不延伸發文／非核心品類，暫無延伸價值）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作<br><strong>Reels：</strong>無<br><strong>限動：</strong>無<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">D級，僅記錄（可觀察手作課程需求是否為潛在客製訂製前導興趣）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@yayapapapa" target="_blank">@yayapapapa</a></div><div class="post-date">2026-07-15</div></div>
-<div class="post-likes">❤️ 184</div>
+<div class="post-right"><div class="post-likes">❤️ 184</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">真心覺得天然鑽的市場應該完全回不來了。 之前和太太去了一趟北京，其中一個目的就是要看人造鑽的婚戒，前幾天收到了完工影片，一克拉的祖母綠切割鑽石，成色D淨度VVS1搭配上18K金戒台，買下來大約四萬出頭台幣。 更誇張的是，單單鑽石的價格其實大概只有一萬出頭，如果要買到同樣等級的天然鑽，至少要二十萬起跳。完全無法想像廠商到底要如何說服消費者去花二十倍的價錢去買一個條件一樣甚至還更差一點的東西。 另外還有一個有趣的點是，在台灣看婚戒的時候，白金的價錢通常比18K金還要高，但在中國卻完全相反，反而是買18K金要加錢。從貴金屬的報價來看，今天黃金大概4000鎂/盎司和白金1650鎂/盎司，中國市場的邏輯相較比較合理，到底為什麼台灣的白金婚戒會比較貴呢？不知道有沒有業內人士可以解答的～</div>
 <div class="post-stats"><span>💬 79則留言</span><span>↗ 179次轉發</span></div>
@@ -1104,10 +1145,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>想知道為什麼台灣婚戒白金比18K金貴、人工鑽和天然鑽的價差是否合理<br><strong>深層焦慮：</strong>怕花大錢買到「品牌溢價」而非真正的價值，擔心自己或身邊人被業者資訊不對稱坑錢<br><strong>預算／時程：</strong>明確提到20萬預算分配（人工鑽＋黃金），屬理性比價型消費者，非急迫時程</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類（材質與市場行情知識型提問，貼近預算與審美拉扯中的CP值與材質選擇）｜<strong>等級：</strong>B</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">其實鉑金比18K金貴，很多時候真的是「工藝損耗」加上「資訊不透明」疊出來的，不是材質本身差那麼多。台灣店家會不會加價、加多少，一家一家不一樣，建議直接請對方把報價拆開（金重、工錢、鑲工分開列），會清楚很多。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">每次有人問「白金怎麼比18K金貴」，我都會建議先把報價拆開看：金重多少、工錢多少、鑲嵌多少。同樣的克拉數，因為鑲法、爪型、拋光方式不同，工錢可以差到好幾千。與其糾結「哪個材質比較貴」，不如先搞清楚自己在為什麼付錢。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>主題「婚戒報價怎麼拆解」，切角：教消費者看懂鉑金／18K金／鑽石報價單的組成<br><strong>Reels：</strong>題目「為什麼白金比較貴？3分鐘拆解婚戒報價單」，公式A（痛點開場→拆解→結論）<br><strong>限動：</strong>問答箱「你在意婚戒材質保值，還是喜歡的樣子？」<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可考慮在商品頁或FAQ補充「金重／工錢／鑲工」報價透明化說明，回應消費者對資訊不對稱的疑慮</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫，後續內容可延伸「婚戒報價怎麼看」系列</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@zhi_maffei" target="_blank">@zhi_maffei</a></div><div class="post-date">2026-07-06</div></div>
-<div class="post-likes">❤️ 294</div>
+<div class="post-right"><div class="post-likes">❤️ 294</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">我跟我未婚夫快發瘋了 有沒有人有推薦的婚戒品牌 我們兩個都很忙 真的想破頭又第一次結婚 請廣大的脆友們推薦品牌 沒有預算限制</div>
 <div class="post-stats"><span>💬 168則留言</span><span>↗ 2次轉發</span></div>
@@ -1123,10 +1164,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>兩人第一次結婚、忙碌沒空研究，不知道從哪裡找婚戒品牌<br><strong>深層焦慮：</strong>怕選錯、怕決定太倉促，想要有人幫忙縮小範圍省時間<br><strong>預算／時程：</strong>沒有預算上限，但時間壓力大（沒空研究）</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦｜<strong>等級：</strong>A</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">沒空做功課真的會很崩潰，其實比起先看品牌，先想清楚兩件事會更快：你們平常戴不戴戒指、預算大概抓多少，很多糾結都是從這兩點沒想清楚開始的。工期也記得提前問，多數品牌落在2-3週上下。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">最近常遇到新人問我「沒空做功課怎麼挑婚戒」。老實說，這句話背後的焦慮我很懂——不是不重視，是真的忙到沒力氣一家一家比較。我都建議先問自己兩個問題：這對戒指你們會不會每天戴？還有，你們願意花多少時間等一只真正屬於自己的戒指？想清楚這兩點，選擇會少一半。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「沒空做功課的新人怎麼挑婚戒」——兩個問題法<br><strong>Reels：</strong>公式A（開場提問）「沒空研究婚戒？先問自己這兩件事」<br><strong>限動：</strong>投票：選婚戒你會不會先做功課？<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆／追蹤後續選擇</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@kamuig" target="_blank">@kamuig</a></div><div class="post-date">2026-01-25</div></div>
-<div class="post-likes">❤️ 172</div>
+<div class="post-right"><div class="post-likes">❤️ 172</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">又來找threads友求助🥺 有人買過婚結、對戒的 有推薦的婚戒嗎🫶🏻 預算不高（5萬內有可能的嗎🥺？沒有概念） 只是想買個儀式感 但是不想隨便買個打發自己 但也沒有一定要品牌名店！ 不用多複雜的款式 也不用多大的鑽 就是想要日常出門也能佩戴的 不會太浮誇 主要是簡單 簡約 素雅就好 歡迎推薦🫶🏻</div>
 <div class="post-stats"><span>💬 134則留言</span><span>↗ 5次轉發</span></div>
@@ -1142,10 +1183,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>預算5萬內想買儀式感強、簡約日常可戴的對戒，沒有品牌迷思<br><strong>深層焦慮：</strong>怕被推薦「黃金保值」而非自己真正想要的鑽戒／銀戒，需要被尊重個人選擇而非理性投資建議<br><strong>預算／時程：</strong>5萬內，對戒</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解｜<strong>等級：</strong>A</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">5萬內其實可以做到很不錯的簡約對戒，重點反而不是預算夠不夠，是材質厚度跟內圈弧度有沒有顧到——薄的戒台便宜是便宜，但戴久了容易變形卡手。日常會戴的話，這兩點比鑽石大小更值得先問清楚。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">很多人跟我說，不想聽「黃金保值」的建議，只想要一個自己喜歡、每天戴得住的戒指。我完全懂——婚戒本來就不是投資，是每天要看到、摸到的東西。比起保不保值，我更在乎的是內圈有沒有磨手、厚度夠不夠撐十年。這些才是戴進生活裡的細節。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒不是投資，是每天的陪伴」<br><strong>Reels：</strong>公式B（迷思破解）「為什麼婚戒不用聽保值建議」<br><strong>限動：</strong>投票：選婚戒你在乎保值還是喜歡？<br><strong>LINE／官網：</strong>FAQ可增加「5萬預算能做到什麼程度」說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在商品頁補充「入門預算對戒」實際案例與價格區間說明</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@chunisontheway" target="_blank">@chunisontheway</a></div><div class="post-date">2026-03-17</div></div>
-<div class="post-likes">❤️ 672</div>
+<div class="post-right"><div class="post-likes">❤️ 672</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">💍 婚戒試戴心得｜7 間品牌試戴紀錄 I-Primo — 小白友善，服務很好，款式多，有選到喜歡的款式，但不是最終的選擇。Acredo — 強調德國工藝，客製化空間大，簡單鉑金婚戒落在8萬+。亞立詩 — 對戒沒有看到喜歡的。Bulgari — 設計太華麗。Tiffany — 實際戴起來份量感比想像輕很多。Cartier 1895 — 意外驚喜！男女對戒約10萬，戴起來超舒服。De Beers — 上手更舒適。銀座白石 — 做了小變化成為「台灣目前沒人選過」的設計，成為最終選擇🏆</div>
 <div class="post-stats"><span>💬 34則留言</span><span>↗ 36次轉發</span></div>
@@ -1161,10 +1202,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>跑了7間品牌試戴比較服務、質感、價格，最終選銀座白石因為「獨一無二」<br><strong>深層焦慮：</strong>怕撞款、怕買到跟別人一樣的婚戒，重視稀有性與個人化<br><strong>預算／時程：</strong>對戒約10萬（以Cartier 1895為參考價），已完成購買決策</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類（多品牌試戴比較文，近似審美與品牌選擇）｜<strong>等級：</strong>C</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">恭喜找到獨一無二的設計！比起選品牌，找到「別人沒有選過的自己」真的更難得。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">這幾年遇到最多新人在意的一句話，是「不想跟同事撞戒」。老實說，這也是客製化最大的意義——不是因為訂製比較高級，而是每一只戒指從設計那一刻起，就只屬於你們兩個人。獨一無二不是行銷詞，是真的沒有第二只一樣的。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「不想撞戒的人最後都去了哪裡」<br><strong>Reels：</strong>公式A（開場提問）「為什麼新人開始不想選大牌婚戒」<br><strong>限動：</strong>問答箱：你會擔心婚戒跟別人撞款嗎？<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「不撞款」系列內容題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@yinyu.li.5" target="_blank">@yinyu.li.5</a></div><div class="post-date">2026-01-30</div></div>
-<div class="post-likes">❤️ 41</div>
+<div class="post-right"><div class="post-likes">❤️ 41</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">最近在選婚戒，一直卡在預算。因為聽滿多人都說「一輩子一次，不要省」，一開始也被這種說法影響，想說是不是要選高價一點，沒選貴一點好像就不夠重視這段婚姻？但真的試戴之後，因為工作長時間需要用手，戒台太高太複雜最後一定會收起來不敢天天戴。跟老公討論後，決定選日常可以每天戴的AMC經典款，但姊妹都說一生一次怎麼不選貴一點的？想問大家婚戒預算大概落在哪個區間？</div>
 <div class="post-stats"><span>💬 86則留言</span><span>↗ 12次轉發</span></div>
@@ -1180,10 +1221,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>卡在預算，姐妹說「一生一次不要省」，但自己因工作需要用手，怕買太高鑽台的戒指不敢戴<br><strong>深層焦慮：</strong>被「不夠重視婚姻＝選便宜戒指」的說法動搖，需要外部肯定選日常好戴的沒有錯<br><strong>預算／時程：</strong>AMC經典款，方向為中低預算、日常可戴</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>3 兩人審美衝突（自己與親友輿論的衝突）｜<strong>等級：</strong>B</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">會每天戴的戒指，才是真的被珍惜的戒指。比起「貴不貴」，更該問「適不適合你的生活」——如果工作常用手，選低戒台、圓角設計，才不會因為怕刮傷而捨不得戴，那才是真的可惜。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常被問「婚戒是不是要選貴一點才代表重視」。我的看法剛好相反——如果買了因為捨不得戴而收進抽屜，那才是真正的浪費。我做戒指時，內圈弧度、戒台高度都盡量顧到日常，因為我相信，被每天戴著的戒指，才是真正被愛著的戒指。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「一輩子一次，不代表要選最貴的」<br><strong>Reels：</strong>公式B（迷思破解）「婚戒選貴的才是重視婚姻？」<br><strong>限動：</strong>投票：婚戒你選貴一點點放著看，還是便宜一點天天戴？<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫（日常配戴與職業限制相關題材）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@siting._.1001" target="_blank">@siting._.1001</a></div><div class="post-date">2026-06-25</div></div>
-<div class="post-likes">❤️ 33</div>
+<div class="post-right"><div class="post-likes">❤️ 33</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">安妞～ 想請問大家 有推薦的結婚對戒 品牌、店家嗎 盡量是台中的 謝謝大家～💍💍</div>
 <div class="post-stats"><span>💬 87則留言</span><span>↗ 27次轉發</span></div>
@@ -1199,10 +1240,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>想找台中的結婚對戒品牌／店家推薦，留言湧入大量同業自薦與同業評價警示<br><strong>深層焦慮：</strong>怕資訊爆炸不知道怎麼篩選，怕找到品質不佳的商家<br><strong>預算／時程：</strong>無明確預算，地區限定台中，4天內已自行預約完成</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦｜<strong>等級：</strong>B（已在4天內自行找到店家並預約，購買決策已完成，反映消費者篩選困境）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（不留言，不自薦／留言區已涉及同業評價與具體爭議指控，避免涉入）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">每次看到新人在網路上問婚戒推薦，底下總會出現滿滿的自薦留言。我都建議，與其看誰推薦得多，不如自己列3個標準：預算範圍、想不想客製化、多久要拿到，帶著這3個問題去問，比爬100則留言更快找到適合自己的答案。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「滿滿的婚戒推薦留言，怎麼篩選才不會迷路」<br><strong>Reels：</strong>無<br><strong>限動：</strong>投票：找婚戒品牌你會問朋友還是網路爬文？<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫（消費者篩選品牌困境）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@hh8560221" target="_blank">@hh8560221</a></div><div class="post-date">2026-07-12</div></div>
-<div class="post-likes">❤️ 6</div>
+<div class="post-right"><div class="post-likes">❤️ 6</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">想買婚戒（台北桃園都可以）有比較推薦cp值高的店嗎？預算5萬以下🥹</div>
 <div class="post-stats"><span>💬 9則留言</span><span>↗ 0次轉發</span></div>
@@ -1217,10 +1258,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>找台北／桃園地區、預算5萬以下、cp值高的婚戒品牌或銀樓<br/><strong>深層焦慮：</strong>怕花了預算卻買到品質普通或被當肥羊坑，需要有人幫忙篩選避雷、安心跨出第一步<br/><strong>預算／時程：</strong>明確預算5萬以下，地點限定台北／桃園，時程未提及</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>八類之二 預算明確求解｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">5萬以下這個預算其實可以先鎖定簡約線戒款式，鑽的克拉數不用追求大顆，選淨度眼睛看不出瑕疵的等級，工藝紮實比品牌名氣重要。建議實際去現場試戴比較手感和厚度，會不會勾衣服、硌手也很關鍵，多看兩三家再決定不吃虧。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">最近常被問「5萬以下能不能買到有質感的婚戒」，答案是可以，但要懂得把錢花在看不到卻最重要的地方：內圈有沒有做圓角、戴久了會不會磨手，比鑽石大小更值得在意。很多新人第一次挑婚戒容易被品牌溢價迷惑，其實工藝紮實、尺寸合手，日常願意天天戴著，才是最好的投資。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「5萬預算也能買到有質感婚戒」實例分享<br/><strong>Reels：</strong>公式A（開頭鉤子：這樣的預算能買到什麼樣的婚戒？）<br/><strong>限動：</strong>問答箱「你的婚戒預算設定在多少？」<br/><strong>LINE／官網：</strong>可更新自動回覆加入「5萬以下推薦款式」關鍵字對應</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">這類貼文常被珠寶品牌帳號搶先留言攻佔（本例4則回覆多為品牌自薦），建議加快首次留言回覆速度，搶在同業前提供有用資訊建立信任感，而非直接推銷</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆或新人有進一步詢問</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@abbeyhuang2.0" target="_blank">@abbeyhuang2.0</a></div><div class="post-date">2026-07-13</div></div>
-<div class="post-likes">❤️ 新</div>
+<div class="post-right"><div class="post-likes">❤️ 新</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">備婚目前只完成婚紗，拍攝成果尚可。偶然看到台中華納婚紗推出32800專案有送婚戒，目前是打算下週去門市了解詳細的內容，想詢問是否有學姊們可以給建議
 1.婚戒已經有到百貨專櫃及銀樓調查行情，比較喜歡專櫃款式，但是大概都需要5萬以上，有點超出預算。拿婚紗專案送的婚戒（送銀飾對戒，50分培育鑽）結婚適合嗎？
@@ -1235,10 +1276,10 @@
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>婚紗方案贈送的銀飾對戒（50分培育鑽）划不划算，跟專櫃5萬以上的婚戒怎麼選<br/><strong>深層焦慮：</strong>怕貪小便宜選了「送的」東西結果婚戒不耐戴、不夠有質感，但預算抓得緊，怕多花錢卻換不到對應價值<br/><strong>預算／時程：</strong>目前卡在5萬以上覺得超出預算，加價3萬可打包婚戒＋婚攝，下週要去門市確認</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>八類之二 預算明確求解（複合：贈品婚戒 vs 專櫃品質的取捨）｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">贈品婚戒通常是銀飾鍍層，日常配戴半年到一年可能會需要重新拋光或有褪色情形，如果希望戒指能天天戴不用太費心保養，會建議把預算集中在婚戒本身，選材質扎實、售後有保固的款式，加購價則可以另外比較是否真的划算。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常遇到新人問「婚紗方案送的婚戒能不能直接戴」，我的建議是先想清楚這對戒是要天天戴一輩子、還是拍照用的道具。銀飾鍍層適合拍照上鏡，但長期配戴容易褪色變色，如果婚戒要陪你們過日常，材質耐磨、售後有保固會比划算的加購價更重要。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚紗方案送的婚戒能不能當婚戒戴」科普文<br/><strong>Reels：</strong>公式B（迷思破解：贈品婚戒 vs 正式訂製婚戒材質差異）<br/><strong>限動：</strong>投票「你會選婚紗方案送的戒指，還是自己另外買？」<br/><strong>LINE／官網：</strong>FAQ新增「婚紗方案贈品婚戒材質說明」對照表</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在商品頁補充材質保固與日常配戴耐用度說明，直接回應「划算 vs 耐用」的比較焦慮</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看貼文是否有其他人分享同款方案的實際配戴心得</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@glamorousme1021" target="_blank">@glamorousme1021</a></div><div class="post-date">2026-07-13</div></div>
-<div class="post-likes">❤️ 1</div>
+<div class="post-right"><div class="post-likes">❤️ 1</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">卡地亞的trinity 經典 半鋪鑲鑽
 Harry Winston Ribbon疊戴Tiffany6爪
@@ -1254,10 +1295,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>想在卡地亞Trinity、Harry Winston Ribbon、Tiffany之外，找更多好看的對戒或疊戴組合<br/><strong>深層焦慮：</strong>大牌經典款式撞款機率高，想在精品的安心感之外找到更有個人風格的疊戴選擇<br/><strong>預算／時程：</strong>已鎖定精品品牌線（預算區間高），時程未提及</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>八類之一 無方向求推薦（已有初步方向，徵求更多疊戴組合）｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">疊戴的話除了大牌經典款，也可以留意線戒的寬窄比例跟弧度，太細的戒圈疊在一起容易互卡，選同系列不同寬度的組合會比混搭不同品牌更耐看，長期戴著也比較不會互相刮傷。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">很多人問我疊戴對戒怎麼挑才不會踩雷，重點不是品牌多大牌，而是戒圈的弧度跟厚度合不合。太尖的內緣長期疊戴容易互相摩擦刮花，我自己做客製時都會特別把內弧修圓、控制在舒適的厚度，才不會捨不得每天戴出門。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「疊戴對戒怎麼選才不互相刮傷」教學文<br/><strong>Reels：</strong>公式C（迷思破解：大牌疊戴 vs 自訂疊戴的差異）<br/><strong>限動：</strong>投票「疊戴對戒你會選同牌還是混搭？」<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入「疊戴對戒選購」FAQ／輪播題庫</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@dks11101" target="_blank">@dks11101</a></div><div class="post-date">2026-06-23</div></div>
-<div class="post-likes">❤️ 185 · 196 互動</div>
+<div class="post-right"><div class="post-likes">❤️ 185 · 196 互動</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">昨天陪朋友去挑婚戒，隔壁桌坐了一對看起來快要結婚的情侶。男方故意用整間店都聽得到的音量跟店員說：「我可是把三個月的薪水都拿出來買這顆一克拉的鑽戒給我老婆」，然後轉頭用一種看窮人的眼神看著我朋友的未婚夫：「結婚只有一次，兄弟你預算太低老婆會生氣的」。我朋友的未婚夫連眼皮都沒抬一下，直接把手上的黑卡遞給店員：「這款項鍊跟這對對戒一起包起來」，然後說：「我不用存三個月薪水，我這禮拜的零用錢剛好夠買這些」。笑死，那個男的瞬間安靜像被按了靜音鍵的啞巴，他老婆在旁邊白眼翻到快要抽筋。</div>
 <div class="post-stats"><span>💬 5則留言</span><span>↗ 1次轉發</span></div>
@@ -1272,10 +1313,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>敘事型貼文，諷刺用預算大小比較誰更愛老婆的攀比心態<br/><strong>深層焦慮：</strong>婚戒預算被拿來當愛的證明，觀眾在笑的同時也在確認自己不想被這樣比較<br/><strong>預算／時程：</strong>無明確</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類，敘事型故事文（諷刺攀比）｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">這種「用預算證明愛」的比較真的很傷感情，戒指買得起買不起從來不該變成攀比擂台，適合自己的節奏跟預算才是最重要的。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常聽到有人拿婚戒花多少錢來證明誰更愛誰，但預算從來不是排場，是排序——先想清楚兩個人要的是什麼，錢自然會花在對的地方，不用跟任何人比。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒預算，不該是攀比擂台」觀點文<br/><strong>Reels：</strong>無（敘事類不易轉譯）<br/><strong>限動：</strong>投票：你有被婚戒預算比較過嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「預算不是排序不是攀比」品牌故事題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@h.e.a.r.t_voice" target="_blank">@h.e.a.r.t_voice</a></div><div class="post-date">2026-06-18</div></div>
-<div class="post-likes">❤️ 101 · 178 互動</div>
+<div class="post-right"><div class="post-likes">❤️ 101 · 178 互動</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">跟另一半開啟挑婚戒的闖關遊戲，看到最後我們一致同意選iprimo，但事情哪有這麼順利！在挑款式的時候問題浮出水面：我喜歡左邊那款的女戒，碎鑽面積很大，戴起來一定是超閃；但老公喜歡右邊這種不是流線型的男戒，平常戴比較低調，上面雕刻不會讓款式太單調。我們兩個都各持己見，決定發Threads請求意見，真的不行就要猜拳決定了，我不想輸啊😭</div>
 <div class="post-stats"><span>💬 59則留言</span><span>↗ 18次轉發</span></div>
@@ -1291,10 +1332,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>女戒想要碎鑽大面積閃亮，男戒想要低調雕刻款式，雙方各持己見<br/><strong>深層焦慮：</strong>想要「共同決定」又想保留「個人風格」的兩難，怕自己讓步覺得委屈<br/><strong>預算／時程：</strong>已鎖定品牌選項，未提及具體預算</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>3 兩人審美衝突｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">男女戒真的不用強求同一個設計語言，很多情侶是各自挑喜歡的款式，只用共同的一個小細節（材質、刻字、或某個弧度）串起來，兩個人的風格都保留了，戴起來也更自在。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">男女戒不一定要長得一樣才叫對戒。我們常建議情侶用一個共同元素——可能是內圈的刻字、可能是同一種弧度——把兩個人的故事串起來，款式可以完全不同，意義反而更完整。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「男女戒一定要一樣嗎？」款式混搭指南<br/><strong>Reels：</strong>男女戒不同款對比（公式A）<br/><strong>限動：</strong>投票：你們婚戒是同款還是各自選？<br/><strong>LINE／官網：</strong>確認FAQ有「男女戒可否不同款」說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充「男女戒不同款」FAQ</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@sunny6617_" target="_blank">@sunny6617_</a></div><div class="post-date">2026-05-29</div></div>
-<div class="post-likes">❤️ 5</div>
+<div class="post-right"><div class="post-likes">❤️ 5</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">男友吃飯時突然說：最近在看婚戒⋯⋯但不知道婚戒是要給對方驚喜還是都會一起去挑？如果是給驚喜的話，要怎麼知道對方的戒圍？我說：嗯⋯婚戒應該都可以提供換尺寸吧！他問我：那妳會想要一起去挑，還是想要驚喜？兩人一同說著：嗯⋯這個問題好大人喔！真的不懂。</div>
 <div class="post-stats"><span>💬 留言累積中</span></div>
@@ -1308,10 +1349,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>求婚驚喜vs一起挑的兩難，不知道怎麼知道戒圍<br/><strong>深層焦慮：</strong>兩人都還在摸索「怎麼決定」這件事本身的方法論空白<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>7 求婚驚喜兩難｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">戒圍其實不用猜，可以先量好或借一枚平常戴的戒指去對，或選擇可事後免費調整尺寸的品牌，一起挑跟求婚驚喜其實不衝突，可以先決定大方向再留一點驚喜細節。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">戒圍不用靠猜的，求婚驚喜跟一起挑選也不衝突——先量好尺寸，或用免費鑽戒租借完成求婚儀式，再一起把戒指做成真正屬於你們的樣子，驚喜跟決定權都不用犧牲。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「戒圍怎麼量才不會破梗？」實用指南<br/><strong>Reels：</strong>求婚驚喜小技巧（公式B）<br/><strong>限動：</strong>投票：你會想要驚喜還是一起挑？<br/><strong>LINE／官網：</strong>確認免費鑽戒租借頁與戒圍量測FAQ</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無（已規劃）</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，但原始貼文連結不存在（僅帳號主頁連結，貼文不存在），24小時內嘗試確認貼文狀態</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@4fun4food" target="_blank">@4fun4food</a></div><div class="post-date">2026-05-28（備婚日記）</div></div>
-<div class="post-likes viral">❤️ 242 · 557 互動</div>
+<div class="post-right"><div class="post-likes viral">❤️ 242 · 557 互動</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">📣 2027/01/23 要辦婚宴啦，目前進度：10，婚戒花了太多錢，還有房貸🥺 想要走簡單小資CP值高路線，我需要：婚宴婚紗 / 喜帖/婚佈 / 婚秘 / 婚禮小物 等等⋯⋯⋯地點：北北桃，歡迎各大廠商自薦💌，也歡迎各位姐妹或朋友推薦給我 🙏</div>
 <div class="post-stats"><span>💬 211則留言</span><span>↗ 103次轉發</span></div>
@@ -1327,10 +1368,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>備婚清單多項預算緊繃，婚戒已花不少錢，仍有房貸壓力，走小資CP值路線<br/><strong>深層焦慮：</strong>婚戒預算與整體婚禮／人生財務規劃的排序焦慮<br/><strong>預算／時程：</strong>2027/01/23婚宴，婚戒已支出但金額未提供</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解（隱含）｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">婚戒預算已經定案的話，其他項目找CP值高的方案分配，是很聰明的做法。婚戒這種一次性的重要支出，提前規劃好反而能讓後面的籌備更輕鬆。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">婚戒工期最長，也最適合最先確定——這樣後面婚紗、婚宴、小物才能圍繞著已經定案的預算來分配，不會臨時被打亂。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「備婚預算怎麼分配？婚戒排第幾？」規劃輪播<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：婚戒佔你婚禮預算多少比例？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫「婚戒該佔預算多少」</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@fangrenp" target="_blank">@fangrenp</a></div><div class="post-date">2026-05-26</div></div>
-<div class="post-likes">❤️ 183</div>
+<div class="post-right"><div class="post-likes">❤️ 183</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">最近終於開始著手備婚了～但沒想到一開始就在婚戒這裡遇到大困難。想知道大家婚戒價格跟薪水都怎麼抓比例的？一些大牌子動輒幾十萬，總覺得婚戒雖然重要，但還是要在經濟能力寬裕的情況下才不會焦慮😭。後來去看了亞立詩，預算滿彈性的，目前挑到最後剩下兩款——一款完全在預算內，另一款在預算臨界點，但因為價差整整一倍，現在整個卡關！！大家覺得婚戒到底要花到幾個月的薪水才算合理呢？</div>
 <div class="post-stats"><span>💬 74則留言</span><span>↗ 42次轉發</span><span>👁 1.9萬次瀏覽</span></div>
@@ -1346,10 +1387,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>在亞立詩兩款之間猶豫，一款預算內、一款超一倍，不知道該花到幾個月薪水才合理<br/><strong>深層焦慮：</strong>想要「合理化」自己的消費選擇，怕花太多有壓力也怕選便宜的委屈<br/><strong>預算／時程：</strong>亞立詩兩款價差一倍，具體數字未提供</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">會讓你猶豫、有壓力的價差，通常代表那不是輕鬆的決定——選擇會讓你安心戴著、而不是想著錢的那一款，長期來說反而更划算。婚戒沒有一個「該花幾個月薪水」的標準答案，量力而為才是真正合理的比例。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">婚戒該花幾個月薪水，從來沒有標準答案。真正該問的是：這筆錢花下去，你戴起來會不會安心。設計感不等於昂貴，量力而為才是最合理的比例。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒該花多少薪水才合理？」破除迷思<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：你的婚戒預算佔月薪幾倍？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="D" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@nbkdyg84615" target="_blank">@nbkdyg84615</a></div><div class="post-date">2026-05-25</div></div>
-<div class="post-likes">❤️ 175</div>
+<div class="post-right"><div class="post-likes">❤️ 175</div><span class="level-tag level-D">⚪ D</span></div>
 </div>
 <div class="post-content">結婚花費流水帳：登記260、書約690、登記小洋裝1000、登記妝髮5000、登記寫真4000、登記捧花2500、結婚對戒70000、請朋友吃飯12000、家宴40000、鑽戒xx0000、蜜月預估380000、婚宴預估1300000…人生只有一次 盡量不留遺憾。至於錢的部分.. 投資台積電就有了（誤 老公說他會看著辦😗</div>
 <div class="post-stats"><span>💬 7則留言</span><span>↗ 68次轉發</span><span>👁 1萬次瀏覽</span></div>
@@ -1365,10 +1406,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>條列婚禮各項花費，婚戒7萬，用幽默口吻帶過財務壓力<br/><strong>深層焦慮：</strong>表面輕鬆，實則透露龐大的整體婚禮財務負擔<br/><strong>預算／時程：</strong>婚戒70000已支出</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類，花費分享型｜<strong>等級：</strong>D 低對頻</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">婚戒的部分抓得很扎實，這種清楚列出每一筆的做法其實很值得參考，讓後面規劃更有底。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（純分享型內容轉譯價值低，暫不另外撰寫延伸貼文）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>無<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">D級，僅記錄市場訊號（婚戒平均花費7萬區間，驗證主力價格帶）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@huangjopei" target="_blank">@huangjopei</a></div><div class="post-date">2026-05-15</div></div>
-<div class="post-likes">❤️ 67</div>
+<div class="post-right"><div class="post-likes">❤️ 67</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">有沒有推薦的結婚對戒品牌或材質 在規劃求婚但真的沒概念😆 但我們又都喜歡簡約風格，一般婚戒都好花俏 黃金對戒他又覺得不太適合日常戴 銀的又好像有點廉價容易黑掉 白金是我目前能想到最合適的</div>
 <div class="post-stats"><span>💬 39則留言</span><span>↗ 2次轉發</span></div>
@@ -1381,10 +1422,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>求推薦簡約款對戒品牌／材質，覺得黃金不適合日常、銀太廉價、白金是目前想到最合適的<br/><strong>深層焦慮：</strong>想要「簡約但不廉價」的材質判斷依據，缺乏材質知識<br/><strong>預算／時程：</strong>無明確</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦 ／ 6 日常佩戴問題｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">白金確實是簡約風格裡耐看又不容易顯廉價的選擇，如果想要更保色更持久，也可以看看鉑金——同樣走簡約線條，但材質更純、日常配戴不易褪色。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">簡約風格最怕材質選錯讓設計看起來廉價。白金好看但長期會需要重新鍍銠，鉑金純度更高、更耐看，兩者都能做出乾淨的線條感，差別在後續保養頻率。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「簡約風婚戒的材質怎麼選？」白金／鉑金／黃金比較<br/><strong>Reels：</strong>材質特寫對比（公式A）<br/><strong>限動：</strong>投票：你偏好哪種材質？<br/><strong>LINE／官網：</strong>確認商品頁材質介紹清楚</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@armadillo.26140112" target="_blank">@armadillo.26140112</a></div><div class="post-date">2026-05-13</div></div>
-<div class="post-likes">❤️ 30</div>
+<div class="post-right"><div class="post-likes">❤️ 30</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">最近開始認真討論結婚的事，另一半說婚戒這部分讓我來決定，我以為這樣比較自由，結果一開始查資料反而更混亂。想先問一個基本問題：鉑金跟白金到底差在哪？如果預算只差一點點的話，是不是直接選鉑金比較值得？我們兩個人的婚戒預算加起來在五萬以內，本來覺得應該很夠，但實際看了幾家之後才發現好像要再提高一點。很怕因為預算不夠選白金但又怕不耐戴，真的好難選啊～</div>
 <div class="post-stats"><span>💬 29則留言</span><span>↗ 20次轉發</span></div>
@@ -1399,10 +1440,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>婚戒決定權交給自己反而更混亂，問鉑金與白金差異，預算5萬內看起來不太夠<br/><strong>深層焦慮：</strong>被賦予決定權卻沒有判斷依據的無助感，怕選錯又怕預算不夠被說小氣<br/><strong>預算／時程：</strong>兩人合計5萬內預算，考慮提高</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">鉑金純度更高、耐磨不易變色，白金則是鍍銠處理，長期會需要重新拋光鍍膜。如果預算只差一點，鉑金確實比較省心。5萬內鉑金對戒是做得到的，只是選擇會比大牌子更集中在訂製或中小品牌。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">鉑金和白金最大的差別在「純度」——鉑金本身就是白色，白金則靠鍍層維持光澤，時間久了會需要保養。5萬預算內做鉑金對戒是可行的，重點是材質和工法怎麼分配，不一定要靠大牌子的名字。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「鉑金 vs 白金，差在哪？」科普輪播<br/><strong>Reels：</strong>材質特寫對比（公式A）<br/><strong>限動：</strong>問答：你分得清鉑金和白金嗎？<br/><strong>LINE／官網：</strong>確認FAQ材質介紹清楚</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充「5萬內鉑金對戒怎麼選」FAQ</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@ashllleyy_xx" target="_blank">@ashllleyy_xx</a></div><div class="post-date">2026-05-08</div></div>
-<div class="post-likes">❤️ 259</div>
+<div class="post-right"><div class="post-likes">❤️ 259</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">11月底結婚，現在才開始研究婚戒⋯⋯來得及嗎😭 做了一輪功課：I-Primo（口碑好但怕撞戒）、亞立詩（划算但一樣怕撞款）、Tiffany／Cartier（狂推但小資族要捏預算）、銀座白石／De Beers（聽說有半客製）、CH尋光珠寶（朋友推薦全客製）。</div>
 <div class="post-stats"><span>💬 112則留言</span><span>↗ 317次轉發</span></div>
@@ -1418,10 +1459,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>11月底結婚才剛開始研究婚戒，做了一輪功課比較各品牌，擔心來不及<br/><strong>深層焦慮：</strong>時間壓力下的資訊過載焦慮，想要有人幫忙整理選項<br/><strong>預算／時程：</strong>11月底婚期，時程緊迫</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>5 時程焦慮 ／ 1 無方向求推薦｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">11月的話工期還算得上，只要現在開始就來得及，訂製類的話一般是15-18個工作天，重點是先確定風格方向而不是把所有品牌都比過一輪，會比較有效率。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">越接近婚期越容易陷入「全部品牌都比一輪」的資訊焦慮，其實先確定風格方向，工期抓15-18個工作天回推，時間反而很夠用。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「快結婚了才開始選婚戒，來得及嗎？」時程指南<br/><strong>Reels：</strong>15-18工作天流程（公式A）<br/><strong>限動：</strong>投票：你婚期還有幾個月？<br/><strong>LINE／官網：</strong>確認預約流程頁清楚</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無（已有）</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@star621823" target="_blank">@star621823</a></div><div class="post-date">2026-05-06</div></div>
-<div class="post-likes">❤️ 166</div>
+<div class="post-right"><div class="post-likes">❤️ 166</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">精挑細選了最後兩間婚戒——Cartier 跟 I PRIMO。最喜歡的款式大概是這幾個，好猶豫要選哪個，放上來問問大家的意見🙏</div>
 <div class="post-stats"><span>💬 77則留言</span><span>↗ 104次轉發</span></div>
@@ -1437,10 +1478,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>精挑細選剩兩家Cartier vs IPRIMO，猶豫哪個<br/><strong>深層焦慮：</strong>想要「別人幫忙拍板」來降低選錯的焦慮，同時在意手型是否合適<br/><strong>預算／時程：</strong>已進入最終決策階段</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望的中性版 ／ 1 無方向求推薦｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">兩個都是不錯的選擇，但比起品牌名字，更值得看的是戴在你手上的實際比例和光澤——建議直接去試戴比對，手感跟合不合適，往往比照片準很多。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（與蠟模試戴主題重複，併入既有內容規劃，不重複發文）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作（同類主題已規劃）<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：選婚戒你更看重品牌還是上手效果？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫「怎麼在兩個喜歡的款式間做決定」</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="RISK" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@deer.6652385" target="_blank">@deer.6652385</a></div><div class="post-date">2026-01-28 · 5.1萬次瀏覽</div></div>
-<div class="post-likes viral">❤️ 302</div>
+<div class="post-right"><div class="post-likes viral">❤️ 302</div><span class="level-tag level-RISK">⚫ 風險</span></div>
 </div>
 <div class="post-content">最近在為婚戒的事有點卡關⋯⋯婆婆的想法是婚戒去銀樓買比較大氣，有面子也比較保值。後來老公覺得既然婆婆都願意花錢，我們就退一步不要讓她不開心。可是婚戒是要戴一輩子的，難道不該選自己真正喜歡的款式嗎？這件事好像變成誰出錢誰決定，講太多好像是我不懂事，不講又覺得很委屈😭</div>
 <div class="post-stats"><span>💬 422則留言</span><span>↗ 72次轉發</span></div>
@@ -1456,10 +1497,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>婆婆希望婚戒去銀樓買比較有面子保值，老公要求妥協，自己想選喜歡的款式<br/><strong>深層焦慮：</strong>「誰出錢誰決定」的權力焦慮，怕被貼上不懂事標籤，也怕未來家庭決策模式定型<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>3 兩人審美衝突（延伸為家庭決策衝突）｜<strong>等級：</strong>風險／C 情緒共鳴（家庭關係敏感議題）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（涉及婆媳家庭關係的敏感議題，品牌不適合介入評論家庭決策，不留言）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">婚戒是要戴一輩子的東西，我們不評論家庭裡的角力，只想說：無論最後是誰出資，找到自己真心喜歡、願意天天戴著的設計，永遠值得被認真對待。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作（敏感議題不適合直接引用）<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>無<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">風險／敏感議題，不留言不轉發，僅記錄「多方期待下的婚戒決策」為觀察題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@nonametw000" target="_blank">@nonametw000</a></div><div class="post-date">2025-12-09</div></div>
-<div class="post-likes viral">❤️ 762</div>
+<div class="post-right"><div class="post-likes viral">❤️ 762</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">年薪和婚戒價格有個合理的比例嗎？當初求婚時婚戒的價格大概30000，我想買貴一點的婚戒，這次想換我跟老公求婚！現在在看婚戒20幾萬真的好貴喔，是不是我的薪水還沒有到這個程度。</div>
 <div class="post-stats"><span>💬 329則留言</span><span>↗ 201次轉發</span></div>
@@ -1471,10 +1512,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>詢問年薪與婚戒價格的合理比例，這次想換她主動買婚戒給老公，看中20幾萬的款式<br/><strong>深層焦慮：</strong>「婚戒值多少錢才代表我夠愛你」的隱藏焦慮，並打破傳統男性購買婚戒的敘事<br/><strong>預算／時程：</strong>20幾萬區間，無明確時程</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">婚戒價格從來沒有一個跟年薪綁定的「合理比例」，那個數字比較是安全感的問題，不是愛的計分表。想清楚自己想傳達什麼樣的心意，比對照別人的價格更重要。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">換她主動求婚，買一枚屬於他的戒指——這件事本身就很動人。價格從來不是愛的度量衡，比起數字，更值得思考的是這枚戒指要說出什麼樣的故事。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「換她主動求婚，是什麼感覺？」性別角色反轉故事<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：婚戒該花多少錢，你怎麼想？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，但原始貼文連結不存在（僅帳號主頁連結，貼文不存在），24小時內嘗試確認貼文狀態</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@04.12amber" target="_blank">@04.12amber</a></div><div class="post-date">2025-9-17</div></div>
-<div class="post-likes">❤️ 274 · 626 互動</div>
+<div class="post-right"><div class="post-likes">❤️ 274 · 626 互動</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">9年長跑，最近在挑求婚戒。我有品牌迷思（Cartier好想要），但又擔心買了捨不得日常戴。看了Cartier、亞立詩、AMC，各有優缺點。Cartier是夢想但價格太高；亞立詩設計漂亮有質感；AMC價格親切但款式少。最後想的是：品牌迷思讓我想要Cartier，但我更想要的是一枚每天戴起來都有故事可說的戒指。</div>
 <div class="post-stats"><span>💬 626 互動</span><span>↗ 3品牌比較</span></div>
@@ -1487,10 +1528,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>對Cartier有品牌迷思但又擔心買了捨不得日常戴，比較Cartier／亞立詩／AMC<br/><strong>深層焦慮：</strong>「符號價值」與「日常實用」的拉扯，最終想清楚要的是有故事的戒指而非名牌光環<br/><strong>預算／時程：</strong>無明確</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>3 兩人審美衝突（自我內在拉扯） ／ 4 品牌實品失望｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">捨不得戴的戒指某種程度上也失去了戴著它的意義。品牌迷思很正常，但如果最後想要的是每天戴起來都有故事可說的那一枚，訂製反而更容易做到——因為那個故事本來就是你們的。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">品牌迷思很真實，但捨不得戴的戒指某種程度上也少了它原本的意義。蠟模試戴的另一個好處，是讓你先摸過、先確認會不會捨得每天戴，而不是買了才發現只能供起來。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「品牌迷思 vs 想每天戴」拉扯心理解析<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：你會捨得日常戴精品婚戒嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫「精品迷思與日常配戴的拉扯」</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@ariel_cai" target="_blank">@ariel_cai</a></div><div class="post-date">2024-10-01</div></div>
-<div class="post-likes viral">❤️ 477 💬 487</div>
+<div class="post-right"><div class="post-likes viral">❤️ 477 💬 487</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">脆友們秀出你的鑽戒或婚戒！！！婚禮籌備 有沒有特別推薦的品牌款式🥺</div>
 <div class="post-stats"><span>💬 487則留言</span><span>↗ 479次轉發</span><span>#婚禮籌備</span></div>
@@ -1504,10 +1545,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>秀婚戒並詢問推薦品牌款式<br/><strong>深層焦慮：</strong>純粹分享與蒐集靈感，帶動留言區品牌大亂鬥<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">大牌子跟獨立工作室各有優勢，如果還沒定案，可以留意有沒有能先看蠟模再決定的選項，能大幅降低選錯的風險，畢竟每個人適合的風格都不一樣。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（與蠟模試戴主題重複，併入既有內容規劃，不重複發文）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作（已有類似蠟模主題內容）<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：你婚戒是大牌還是訂製？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@c_f_c_1_1" target="_blank">@c_f_c_1_1</a></div><div class="post-date">2024-09-04 · 20萬次瀏覽</div></div>
-<div class="post-likes viral">❤️ 2,478</div>
+<div class="post-right"><div class="post-likes viral">❤️ 2,478</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">為什麼是先去看婚戒，在求婚。驚喜在哪🤯 求解——不是應該先求婚，再一起去挑婚戒嗎？隊友說：我怕買錯款式。</div>
 <div class="post-stats"><span>💬 167則留言</span><span>↗ 224次轉發</span></div>
@@ -1550,10 +1591,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 </div>
 <div class="posts-grid">
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@_1996_.yishan_" target="_blank">@_1996_.yishan_</a></div><div class="post-date">2026-07-19</div></div>
-<div class="post-likes">❤️ 1</div>
+<div class="post-right"><div class="post-likes">❤️ 1</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">我和我老公是不喜歡太高調，婚戒是選碎鑽款（亞立詩），滿推的戴起來手不會有異物感，每天出門或工作時都很自在，而且很喜歡這種低調質感，碎鑽排列的細節很好看！</div>
 <div class="post-stats"><span>💬 1則留言</span><span>↗ 0次轉發</span></div>
@@ -1579,10 +1620,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@weddingprepare2026" target="_blank">@weddingprepare2026</a></div><div class="post-date">2025-05-26</div></div>
-<div class="post-likes">❤️ 38</div>
+<div class="post-right"><div class="post-likes">❤️ 38</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">平常不會帶戒指，結了婚和另一半也都不會帶戒指（因為工作、也因為不喜歡帶任何首飾）那婚戒該怎麼選，大家有想法嗎，想選平價又精緻好看的</div>
 <div class="post-stats"><span>💬 38則留言</span><span>↗ 3次轉發</span></div>
@@ -1595,10 +1636,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>夫妻倆平常都不戴戒指（因工作、不喜歡配戴飾品），不知道婚戒該怎麼處理<br><strong>深層焦慮：</strong>擔心買了卻不戴是不是浪費，也在意婚戒該有的象徵意義跟生活習慣有衝突<br><strong>預算／時程：</strong>想選「平價」款式，未提供具體金額，仍在蒐集階段</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題｜<strong>等級：</strong>B</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">不常戴戒指的話，選簡單耐磨、內圈滑順不磨手的款式會比較實際，平常收起來、重要場合再戴也是很多人的做法，戒指的意義不在於天天戴，而在於你們決定好好收著它。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常有人問我，如果平常都不戴戒指，婚戒到底該怎麼選。我都說，選一款戴上去不磨手、收起來也安心的款式就好，戒指的意義從來不是逼自己每天戴著，而是知道它一直都在。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「不常戴戒指的人，婚戒該怎麼選」實用選款建議<br><strong>Reels：</strong>公式A（開場提問）「婚戒買了都不戴，是浪費錢嗎？」<br><strong>限動：</strong>投票：你平常會一直戴著婚戒嗎？<br><strong>LINE／官網：</strong>FAQ補充「不常配戴飾品的人該怎麼選婚戒材質／款式」</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在商品頁增加「適合不常戴飾品的人」選款指引</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫（不常戴飾品族群選款建議）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@necy0426" target="_blank">@necy0426</a></div><div class="post-date">2026-06-03</div></div>
-<div class="post-likes">❤️ 10</div>
+<div class="post-right"><div class="post-likes">❤️ 10</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">想問台北、新北有沒有推薦結婚對戒，想平日配戴，洗澡也不用拿下來的那種～因為太常把戒指弄丟，所以對戒預算抓一到兩萬🤣就是一個象徵而已。歡迎自薦！</div>
 <div class="post-stats"><span>💬 11則留言</span><span>↗ 0次轉發</span></div>
@@ -1609,10 +1650,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>想找台北新北的結婚對戒，希望能平日配戴、洗澡也不用拿下來<br><strong>深層焦慮：</strong>因為太常弄丟戒指，對婚戒的期待從「珍藏品」降低為「一個象徵」，背後其實是對自己保管能力沒信心，也怕再花大錢又弄丟<br><strong>預算／時程：</strong>預算抓1-2萬，沒有明確時程</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題｜<strong>等級：</strong>B</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">洗澡配戴的話，材質和圈型會比款式更重要，圓潤無死角的內圈設計比較不容易卡皂垢，日常也比較不刮手。如果會擔心弄丟，先從能安心配戴的材質開始，之後想升級也不遲。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">遇過不少客人跟我說「戒指只是一個象徵，不用太貴」，我都能理解——比起價格，能安心天天戴著才是重點。我自己在設計時會特別注意內弧圓角，讓戒指洗澡、洗手都不用拿下來，這比款式好不好看更實際。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒可以洗澡戴嗎？」材質與圈型選擇小知識<br><strong>Reels：</strong>公式A（常見問題破解）「婚戒洗澡到底要不要拿下來」<br><strong>限動：</strong>投票：你的婚戒平常會拿下來嗎？<br><strong>LINE／官網：</strong>FAQ補充「哪些材質適合日常不拆戴」說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在商品頁補充「哪些材質／圈型適合長時間配戴不拆」的說明段落</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫（日常配戴材質選擇）</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@angel1090409" target="_blank">@angel1090409</a></div><div class="post-date">2026-07-15</div></div>
-<div class="post-likes">❤️ 201</div>
+<div class="post-right"><div class="post-likes">❤️ 201</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">問脆友：另一半說很久沒戴婚戒了 出去玩的時候要不要戴一下 我說：不要啊～因為我可能會弄丟… 然後你可能戴進去就拔不出來了🫣 你們結婚後還會戴著婚戒嗎🤔（本人後續留言追蹤：昨天講到婚戒的話題大家反應很熱烈，想說拿出來戴戴看，原來戴不進去的是我餒～～我都不記得我以前手有這麼細，沒戴沒事一戴好受傷……）</div>
 <div class="post-stats"><span>💬 278則留言</span><span>↗ 7次轉發</span></div>
@@ -1628,10 +1669,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>結婚後婚戒到底該不該常態配戴、出門旅遊要不要戴<br><strong>深層焦慮：</strong>怕弄丟、怕戴不下（身材／水腫變化）、怕另一半不重視婚戒代表的意義<br><strong>預算／時程：</strong>無明確預算或時程，屬已婚族群的長期配戴習慣討論</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題｜<strong>等級：</strong>C</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">戒圍會隨季節、水腫、體重浮動，真的不是只有你會戴不下去。日常怕勾到東西或弄丟的話，可以請師傅做內弧圓角、圈身薄一點的款式，配戴感會差很多，也比較不容易因為腫脹卡手。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">常聽到「婚戒戴一戴戴不下去了」，其實戒圍本來就會因為天氣、水腫、生活階段變化，這很正常，不是誰變胖了。比起執著要天天戴著同一枚戒指，我更常建議客人：戒圍每年抓一次時間免費調整，戴得舒服比戴得久更重要。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>主題「婚戒戴不下去怎麼辦」，切角：戒圍調整是很正常的保養行為<br><strong>Reels：</strong>題目「婚戒突然戴不下去？3個原因＋解法」，公式B（迷思破解型）<br><strong>限動：</strong>投票「婚後你還天天戴婚戒嗎？會／不會」<br><strong>LINE／官網：</strong>可補充「免費戒圍調整」服務說明於官網FAQ</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在官網／LINE自動回覆補充戒圍調整服務與流程，回應「戴不下」焦慮</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展故事／內容題材，可做成戒圍調整衛教系列</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@xinhao.0407" target="_blank">@xinhao.0407</a></div><div class="post-date">2026-07-16</div></div>
-<div class="post-likes">❤️ 0</div>
+<div class="post-right"><div class="post-likes">❤️ 0</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">怎麼辦 我找不到我們的對戒 好焦慮</div>
 <div class="post-stats"><span>💬 0則留言</span><span>↗ 0次轉發</span></div>
@@ -1643,10 +1684,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>對戒不見了，正在焦急尋找<br><strong>深層焦慮：</strong>怕弄丟象徵婚姻承諾的信物，怕要花錢重買或有愧疚感<br><strong>預算／時程：</strong>無明確預算與時程，屬突發情緒抒發</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題（意外遺失）｜<strong>等級：</strong>C</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">先別自責，很多人都遇過這種狀況。可以先想想最近脫下來的幾個地方（洗手台、包包夾層、口袋）重新找一次，真的找不到的話，戒指本身的意義不會因為弄丟就消失。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">偶爾會有客人跟我說婚戒不見了，語氣都很自責。我都會說，戒指弄丟不代表什麼，那份心意本來就不是靠一個物品證明的。如果真的要重新做一個，我們也會留一份原始的3D檔案，之後不管是重做或修改都不用重新丈量。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作<br><strong>Reels：</strong>無<br><strong>限動：</strong>問答箱「婚戒弄丟過的舉手🙋」蒐集共鳴故事<br><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，僅記錄觀察，可作為未來「戒指遺失後如何處理」內容素材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@alice.214" target="_blank">@alice.214</a></div><div class="post-date">2026-07-14</div></div>
-<div class="post-likes">❤️ 39</div>
+<div class="post-right"><div class="post-likes">❤️ 39</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">有沒有推薦小戒圍的戒指店家 跟小手圍的手鏈店家🥹🥹 真的很難找不然就是款式很少🤯🤯</div>
 <div class="post-stats"><span>💬 57則留言</span><span>↗ 3次轉發</span></div>
@@ -1660,10 +1701,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>手圍、戒圍偏小，市面現成款式選擇少，很難找到合適店家<br/><strong>深層焦慮：</strong>擔心自己「非標準尺寸」的需求被市場忽略，只能一直將就不合手的尺寸<br/><strong>預算／時程：</strong>無明確預算與時程，純粹尋找貨源／店家</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">小戒圍真的不好找，因為多數品牌是照平均尺寸開模，越往下修改成本越高，願意做的店家也少。如果是訂製，可以先量好指圍再開版，會比在現成款式裡硬找合適的更省力氣。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">最近常聽到手圍、戒圍偏小的朋友抱怨，市面上好看的款式常常做不到那麼小，不然就是選擇少到可憐。其實不是你的手不「正常」，而是大部分現成款是照平均尺寸開模，越往下修改，版型跟鑲工都要重新調整，願意做的店家自然也少。如果從頭訂製，就能先把手圍量準了再設計，不用委屈自己去將就一個不合的尺寸。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「小手圍/小戒圍找戒指有多難」——從將就到量身訂做<br/><strong>Reels：</strong>公式A「戒圍太小買不到？」痛點開場→解法<br/><strong>限動：</strong>問答箱：你的戒圍/手圍也偏小找不到喜歡的款式嗎？<br/><strong>LINE／官網：</strong>可補充FAQ「特殊尺寸（過小/過大）是否能訂製」</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議在官網FAQ／諮詢流程加註「過小過大戒圍皆可訂做」，降低尺寸疑慮</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@ericatw520" target="_blank">@ericatw520</a></div><div class="post-date">2026-07-12</div></div>
-<div class="post-likes viral">❤️ 195 · 220 互動</div>
+<div class="post-right"><div class="post-likes viral">❤️ 195 · 220 互動</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">台日文化差別 結婚篇：在日本每天都戴婚戒，讓別人知道自己已經結婚了；在台灣卻很少看到有人日常戴婚戒。（引發 23 則熱議：太貴怕弄丟、做事不方便、收進抽屜就忘了⋯⋯）</div>
 <div class="post-stats"><span>💬 23則留言</span><span>↗ 2次轉發 · 4,504次瀏覽</span></div>
@@ -1679,10 +1720,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>觀察台日戴戒差異，引發「太貴怕弄丟、不方便、忘記戴」熱議<br/><strong>深層焦慮：</strong>婚戒被收起來等於婚姻承諾被「收納」，隱含對婚戒融入生活方式的渴望<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">「怕弄丟、不方便」常常是戒圍或厚度不合適造成的，找到真正適合日常動作的版型，戴不戴得住就會差很多。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">台日的配戴習慣差異其實反映了同一件事：戒指有沒有被設計成適合天天戴。我們堅持內弧圓角、1.8mm厚度底線，就是想讓婚戒不只是拍照那天美，而是每天做家事、打字、運動都不覺得卡卡的。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「為什麼婚戒收在抽屜裡？」台日配戴文化對比<br/><strong>Reels：</strong>內弧圓角特寫（公式A）<br/><strong>限動：</strong>投票：你平常有戴婚戒嗎？<br/><strong>LINE／官網：</strong>檢查產品頁是否強調日常舒適設計語言</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充商品頁「為什麼選內弧圓角」說明</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「婚戒日常配戴」品牌故事／輪播</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="RISK" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@beckybec___y" target="_blank">@beckybec___y</a></div><div class="post-date">2026-07-11</div></div>
-<div class="post-likes viral">❤️ 149 · 267 互動</div>
+<div class="post-right"><div class="post-likes viral">❤️ 149 · 267 互動</div><span class="level-tag level-RISK">⚫ 風險</span></div>
 </div>
 <div class="post-content">建議結婚吾好揀靚仔啦，都唔好揀蒲開啦，周圍flirt真係🚩🚩🚩⋯⋯其實結左婚就戴戒指囉💍 好仔一定會戴，吾戴一定係渣男🚩 佢有幾愛、幾重視你地的婚姻？無戴結婚戒指，一律當單身。</div>
 <div class="post-stats"><span>💬 61則留言</span><span>↗ 1次轉發 · 1.7萬次瀏覽</span></div>
@@ -1698,10 +1739,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>主張沒戴戒指等於渣男、不重視婚姻<br/><strong>深層焦慮：</strong>底層其實是對「配偶忠誠度不可見」的不安全感，把戒指當成忠誠度的可見證明<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題（情緒化爭論）｜<strong>等級：</strong>風險（偏激道德判斷，易變戰場）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（爭議性道德判斷貼文，不留言，避免捲入戰局）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">戴不戴戒指從來不是忠誠度的證明，很多職業因素讓人沒辦法配戴。如果擔心「看不見的連結」，內圈刻字或訂製一枚只在特殊場合戴的典禮款，也是很多人選擇的替代方式。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「戴不戴戒指，能代表什麼？」溫和破解迷思<br/><strong>Reels：</strong>無（爭議話題不適合輕鬆化處理）<br/><strong>限動：</strong>投票：你覺得戴戒指＝忠誠嗎？（謹慎使用，觀察風向）<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">風險貼文，不留言，僅記錄為「配戴焦慮」內容素材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@may_wu12" target="_blank">@may_wu12</a></div><div class="post-date">2026-07-02</div></div>
-<div class="post-likes">❤️ 78 · 88 互動</div>
+<div class="post-right"><div class="post-likes">❤️ 78 · 88 互動</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">小孩快週歲了 我的婚戒還是戴不進去 卡在指節🤨 有人比我還久嗎⋯⋯ 還沒懷孕前冬天都會太鬆才特地把戒圍改小 現在思考要不要改回去 但怕哪天如果瘦回來（？ 又要改改改🫨</div>
 <div class="post-stats"><span>💬 9則留言</span><span>↗ 1次轉發</span></div>
@@ -1714,10 +1755,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>產後戒圍改變，戒指卡指節，猶豫要不要改圍<br/><strong>深層焦慮：</strong>身體變化與婚戒尺寸的長期落差焦慮，怕改了又要再改<br/><strong>預算／時程：</strong>無明確，正在猶豫改圍時機</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">戒圍隨生活階段變動很正常，可以考慮先不急著改小，等身型穩定後再一次處理，比較不會反覆花錢。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">戒圍不是一次定生死的事，身體本來就會隨著不同階段變化。我們的改圍服務就是為了因應這種狀況，不用因為一時尺寸不合就對戒指失去信心。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「產後戒圍變化怎麼辦？」科普輪播<br/><strong>Reels：</strong>改戒圍過程（公式A）<br/><strong>限動：</strong>問答：你的婚戒改過幾次圍？<br/><strong>LINE／官網：</strong>檢查改戒圍服務頁是否清楚說明流程與費用</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充「改戒圍」服務頁面／FAQ</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@yyconomise" target="_blank">@yyconomise</a></div><div class="post-date">2026-06-01</div></div>
-<div class="post-likes">❤️ 新</div>
+<div class="post-right"><div class="post-likes">❤️ 新</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">結婚一年多最常被問 你婚戒呢？怎麼沒看你在戴 不是！難道都沒人擔心很容易不見嗎？！ 其他戒指脫戴頻繁，一個月不見幾個雖然心會疼但肉不疼，反正便宜、淘汰率也高。但是婚戒不一樣，繫著屬於我們的情感和小巧思。所以不是沒戴啦！只是偶爾換個出沒方式😝 順便分享一下我的婚戒三種戴法。</div>
 <div class="post-stats"><span>💬 日常佩戴體感</span><span>#婚戒</span></div>
@@ -1731,10 +1772,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>常被問怎麼沒戴婚戒，其實有輪流配戴方式<br/><strong>深層焦慮：</strong>婚戒承載情感重量，不想因為天天戴而冒弄丟風險，但又想維持存在感<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題（正面案例）｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">「換個出沒方式」這個說法很浪漫，比起天天戴在同一根手指，找到適合自己生活節奏的配戴方式，才是能長久走下去的方法。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">婚戒不一定要天天戴在同一根手指上才算珍惜，項鍊、手鍊、輪流配戴都是很多人找到的節奏。重要的不是頻率，是那份牽掛一直都在。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒的多種戴法」輪播<br/><strong>Reels：</strong>多種配戴方式示範（公式A）<br/><strong>限動：</strong>投票：你婚戒平常怎麼戴？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「婚戒多元配戴方式」內容題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@usami0116" target="_blank">@usami0116</a></div><div class="post-date">2026-05-24</div></div>
-<div class="post-likes">❤️ 28</div>
+<div class="post-right"><div class="post-likes">❤️ 28</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">請大家分享跟推薦婚戒！實在沒什麼概念，金銀白金都看。很怕硌手會卡卡的⋯⋯有在考慮bee my love系列，但有點爆預算⋯⋯</div>
 <div class="post-stats"><span>💬 22則留言</span><span>↗ 3次轉發</span></div>
@@ -1749,10 +1790,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>沒有具體概念，怕硌手，看bee my love但超預算<br/><strong>深層焦慮：</strong>想要「舒適耐戴」但不知道怎麼在預算內達成同樣質感<br/><strong>預算／時程：</strong>bee my love價位爆預算，暗示希望更親民的區間</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解 ／ 6 日常佩戴問題｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">怕硌手通常是戒圍寬度和內側弧度的問題，跟金銀白金材質關係比較小。喜歡的款式如果超預算，可以請訂製工作室抓同樣的設計語言，用不同材質分配把預算抓回來，質感不會差太多。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">很多人以為舒適度是材質決定的，其實內弧圓角和厚度才是關鍵。喜歡的貴婦款超預算沒關係，同樣的設計語言可以用不同材質分配重新抓預算，戴起來的舒適感不會打折。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「喜歡的貴婦款超預算怎麼辦？」材質替代方案輪播<br/><strong>Reels：</strong>內弧特寫舒適測試（公式A）<br/><strong>限動：</strong>問答：你最怕婚戒哪裡不舒服？<br/><strong>LINE／官網：</strong>確認FAQ有「精品款平替」相關內容</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充「相似設計語言、不同預算」FAQ</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="D" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@eye065hook_kr" target="_blank">@eye065hook_kr</a></div><div class="post-date">2026-05-16</div></div>
-<div class="post-likes viral">❤️ 3.1萬</div>
+<div class="post-right"><div class="post-likes viral">❤️ 3.1萬</div><span class="level-tag level-D">⚪ D</span></div>
 </div>
 <div class="post-content">急急急！！！！ 請問有人現在在那霸機場可以幫我個忙嗎😭 婚戒忘在43A登機口前的女廁，最後一間親子廁所的衛生紙架上面了⋯ 帶小孩上廁所時發現她手上拿著爸爸的戒指，怕掉進馬桶叫她先放在衛生紙架上面就忘記拿了⋯飛機都在助跑起飛了才熊熊想到⋯</div>
 <div class="post-stats"><span>💬 1,193則留言</span><span>↗ 564次轉發</span></div>
@@ -1768,10 +1809,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>意外把婚戒忘在機場廁所，緊急求助<br/><strong>深層焦慮：</strong>戒指＝婚姻信物的失落恐慌，反映物品承載重大情感意義<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類，意外事件／情緒共鳴｜<strong>等級：</strong>D 低對頻（純意外事件，無購買訊號），但高互動具轉譯價值</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（意外求助貼文不宜置入品牌訊息，僅表達善意即可，不涉及推廣）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">戒指弄丟的那一秒，慌的不是價格，是那份重量突然不見了。其實就算真的發生，秤重存檔和設計圖都留著，重製一枚一樣的並不是不可能，只是希望誰都不用真的走到這一步。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒弄丟了怎麼辦？」安心指南（設計圖／秤重存檔重製流程）<br/><strong>Reels：</strong>無（不適合輕鬆化他人焦慮時刻）<br/><strong>限動：</strong>無<br/><strong>LINE／官網：</strong>檢查是否有「戒指遺失後重製」相關FAQ</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充「遺失重製」FAQ，回應這類意外情境</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">D級，記錄為「弄丟怎麼辦」內容題材，不留言不追蹤</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@x_adam_kuo_x" target="_blank">@x_adam_kuo_x</a></div><div class="post-date">2026-05-11</div></div>
-<div class="post-likes">❤️ 8</div>
+<div class="post-right"><div class="post-likes">❤️ 8</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">準備結婚的男生 誠心推薦婚戒帶另一半去金工互敲給對方，首先要敲得合手並不難，其次是獨一無二且滿滿的儀式感⋯⋯重點是並不貴 (x</div>
 <div class="post-stats"><span>💬 17則留言</span><span>↗ 金工婚戒</span></div>
@@ -1785,10 +1826,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>推薦準備結婚的男生一起做金工互敲戒指，強調儀式感、不貴<br/><strong>深層焦慮：</strong>想要獨一無二、共同參與感，而非單方面挑選<br/><strong>預算／時程：</strong>暗示不貴，無具體數字</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>3 兩人審美衝突（共同參與型）｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">兩個人一起動手做真的會讓戒指多一層意義，這種共同參與感是買現成款很難取代的。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">訂製不只是選好款式等交件，我們也鼓勵兩個人一起參與討論、一起看蠟模——那個共同決定的過程，往往比戒指本身更難忘。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「一起做戒指的儀式感」體驗分享<br/><strong>Reels：</strong>共同設計／打樣過程（公式B）<br/><strong>限動：</strong>投票：你會想跟另一半一起參與做戒指的過程嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「共同參與訂製」內容題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="D" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@yvonne.peace.insideout" target="_blank">@yvonne.peace.insideout</a></div><div class="post-date">2026-05-06</div></div>
-<div class="post-likes viral">❤️ 熱門</div>
+<div class="post-right"><div class="post-likes viral">❤️ 熱門</div><span class="level-tag level-D">⚪ D</span></div>
 </div>
 <div class="post-content">結婚三年半，剛剛突然發現我的結婚戒指不見了！只剩下求婚鑽戒😅😅 難道只能回家踏了嗎？！ 怎麼辦，在線等！</div>
 <div class="post-stats"><span>💬 熱門討論</span><span>↗ 婚戒 · 日常佩戴</span></div>
@@ -1802,10 +1843,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>結婚三年半發現婚戒不見，只剩求婚鑽戒<br/><strong>深層焦慮：</strong>婚戒遺失的驚慌與自責<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準八類，意外事件｜<strong>等級：</strong>D 低對頻</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（意外求助貼文不宜置入品牌訊息）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（與遺失主題相關，併入「弄丟怎麼辦」系列內容，不重複發文）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>無需另外製作（與遺失重製主題重複，合併進同一支內容）<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>無<br/><strong>LINE／官網：</strong>同上，檢查遺失重製FAQ</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無（已於同類貼文規劃）</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">D級，僅記錄市場訊號</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="A" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@linghan2643" target="_blank">@linghan2643</a></div><div class="post-date">2026-04-28</div></div>
-<div class="post-likes">❤️ 224</div>
+<div class="post-right"><div class="post-likes">❤️ 224</div><span class="level-tag level-A">🔴 A</span></div>
 </div>
 <div class="post-content">最近在看婚對戒，但看得好亂⋯⋯預算 5～8 萬內有機會嗎？不想買太誇張的款式，就是日常也能戴、素雅有線條設計的那種。求大家分享你們怎麼選的！品牌、款式、價位都想知道😊</div>
 <div class="post-stats"><span>💬 89則留言</span><span>↗ 175次轉發</span></div>
@@ -1821,10 +1862,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>預算5-8萬，想要素雅、日常可戴、有線條設計，看得很亂<br/><strong>深層焦慮：</strong>資訊過載，不知道怎麼從眾多品牌中篩選<br/><strong>預算／時程：</strong>5-8萬明確預算，無時程</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦 ／ 2 預算明確求解｜<strong>等級：</strong>A 高意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">5-8萬在這個區間其實選擇不少，重點是先確定「日常線條感」這個方向——素雅款最怕做工看起來廉價，材質厚度和邊角處理反而比設計本身更關鍵，試戴時可以特別注意這兩點。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">5-8萬是婚戒最主流的甜蜜點，這個預算已經可以講究材質分配和專屬比例，不用只能選公版素圈。想要日常線條感，重點放在厚度跟邊角處理，會比只看款式圖更準。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「5-8萬怎麼分配」價格帶輪播<br/><strong>Reels：</strong>材質厚度舒適度特寫（公式A）<br/><strong>限動：</strong>問答：你的婚戒預算是多少？<br/><strong>LINE／官網：</strong>確認三段價格帶自動回覆有涵蓋此區間</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無（已有）</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">A級，24小時內回頭看是否被回覆</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@hrz_0909_" target="_blank">@hrz_0909_</a></div><div class="post-date">2026-04-19</div></div>
-<div class="post-likes">❤️ 12</div>
+<div class="post-right"><div class="post-likes">❤️ 12</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">消防員，上班不能戴任何飾品，婚戒也不例外。跟另一半討論後決定刺青——沿著無名指刻上兩個人的圖案。脫不掉，也不會忘記。</div>
 <div class="post-stats"><span>💬 留言</span></div>
@@ -1840,10 +1881,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>消防員職業限制無法戴戒指，改用刺青代替<br/><strong>深層焦慮：</strong>想要「脫不掉、不會忘記」的永久連結，戒指的替代方案<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題（極端情境）｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">職業限制真的是配戴婚戒最現實的難題，刺青是很浪漫的替代方案。如果之後想同時保留一枚實體戒指作紀念或典禮用，也可以做成不常戴、只在特殊場合拿出來的款式。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">不是每個人都能天天戴著戒指工作，這不代表少了那份重視。內圈刻字、或是專門為典禮場合設計的一枚戒指，都是讓意義留下來的方式，不一定要天天戴在手上。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「戴不了戒指的職業，怎麼保留儀式感？」<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：你的職業能戴戒指嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充「不便日常配戴」情境的FAQ（典禮款／收藏款設計）</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，納入FAQ／內容題庫</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@s___i___x____" target="_blank">@s___i___x____</a></div><div class="post-date">2026-04-18</div></div>
-<div class="post-likes viral">❤️ 491</div>
+<div class="post-right"><div class="post-likes viral">❤️ 491</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">想問已婚的大家，你們還有戴婚戒嗎？我跟老公結婚後就沒帶過婚戒了，當初花8000多打了兩個戒指，結果只有拍照跟婚禮當天帶過而已😆</div>
 <div class="post-stats"><span>💬 256則留言</span><span>↗ 102次轉發</span></div>
@@ -1859,10 +1900,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>婚後幾乎沒戴過戒指，只有拍照和婚禮當天戴過<br/><strong>深層焦慮：</strong>對「戴戒指」缺乏日常誘因，戒指變成閒置資產<br/><strong>預算／時程：</strong>8000元對戒，已完成購買</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">戴不戴其實很個人，但如果本來想戴卻總是懶得戴，通常是舒適度或風格跟日常生活不夠貼合，換個更貼近習慣的款式或許會有差。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">戒指會被收起來，很多時候不是不夠愛，是設計跟生活習慣沒對上。厚度、弧度、重量感——這些日常細節，往往比款式好不好看更決定一枚戒指會不會被天天戴著。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「你的婚戒還在戴嗎？」互動投票式貼文<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：結婚後你還天天戴婚戒嗎？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為「戒指閒置率」話題內容</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@tong._.0704" target="_blank">@tong._.0704</a></div><div class="post-date">2026-03-11</div></div>
-<div class="post-likes">❤️ 2,139</div>
+<div class="post-right"><div class="post-likes">❤️ 2,139</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">不覺得帶對戒真的很浪漫嗎</div>
 <div class="post-stats"><span>💬 101則留言</span><span>↗ 331次轉發</span><span>🔁 862次引用</span></div>
@@ -1876,10 +1917,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>單純表達戴對戒很浪漫的心情<br/><strong>深層焦慮：</strong>對戒作為「無聲默契」的情感連結渴望<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>非標準，情感共鳴型｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">這種「無聲的默契」真的是對戒最迷人的地方，兩個人各自過一天，卻在低頭那一刻被同一件事連結起來。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">對戒的浪漫，從來不在昂貴，而在於同一個故事被戴在兩個人手上——低頭看到一樣的線條，就想起你們是一起走到這裡的。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「對戒的浪漫，是什麼？」情感式貼文<br/><strong>Reels：</strong>兩人對戒特寫對照（公式B）<br/><strong>限動：</strong>問答：你覺得對戒最浪漫的地方是？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為情感共鳴內容素材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@momodrinktw" target="_blank">@momodrinktw</a></div><div class="post-date">2025-09-27</div></div>
-<div class="post-likes">❤️ 93</div>
+<div class="post-right"><div class="post-likes">❤️ 93</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">認真發問，婚戒才戴沒兩個禮拜就刮成這樣合理嗎？平常運動重訓什麼的都會拿下來，不做家事（男友不準我做🤣）是刮到用手指摸都摸的出來的那種🥹 材質是18K玫瑰金。卡地亞Love 系列戴了五年都沒刮到這麼誇張，而且之前甚至運動都戴著🤣</div>
 <div class="post-stats"><span>💬 31則留言</span><span>↗ 39次轉發</span></div>
@@ -1893,10 +1934,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>18K玫瑰金兩週刮傷嚴重，質疑是否合理，對比卡地亞5年沒刮<br/><strong>深層焦慮：</strong>對材質耐用度的失望，覺得沒被告知玫瑰金比較軟的特性<br/><strong>預算／時程：</strong>已購買</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>4 品牌實品失望（材質認知落差）｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">玫瑰金因為銅的比例較高、硬度確實比黃金或白金低，容易留下使用痕跡是材質特性，不是品質不良。訂製前如果店家有說明清楚材質特性和保養方式，會比較不會有這種落差感。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">每種金屬都有自己的個性，玫瑰金浪漫但偏軟，鉑金耐磨但價格高——訂製前把這些特性講清楚，才不會讓你買了才失望。我們會依你的生活型態，誠實建議適合的材質，不是只推薦最貴的。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「18K金 vs 玫瑰金 vs 白金，硬度大解密」科普輪播<br/><strong>Reels：</strong>材質耐刮度對比（公式A）<br/><strong>限動：</strong>投票：你的婚戒材質是？<br/><strong>LINE／官網：</strong>確認商品頁是否清楚說明各材質特性與保養方式</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">建議補充材質特性與保養說明頁面</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／材質科普內容題庫</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="B" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@_lin917" target="_blank">@_lin917</a></div><div class="post-date">2025-03-19</div></div>
-<div class="post-likes">❤️ 44</div>
+<div class="post-right"><div class="post-likes">❤️ 44</div><span class="level-tag level-B">🟠 B</span></div>
 </div>
 <div class="post-content">結婚快8年了一直捨不得帶婚戒，最近想帶發現戒圍大了好多，可能是因為懷孕後期買的尺寸抓不準😭，請問卡地亞婚戒能改戒圍嗎？不懂就問脆。</div>
 <div class="post-stats"><span>💬 29則留言</span></div>
@@ -1912,10 +1953,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>戒圍不合，詢問卡地亞是否能改圍<br/><strong>深層焦慮：</strong>當初尺寸沒抓準留下的遺憾，多年後想重新戴回卻卡關<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題｜<strong>等級：</strong>B 問題意圖</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">戒圍能不能改，通常要看戒指的設計結構，鑲鑽或密釘款式改圍的彈性比較小，簡單素圈類的通常都能調整。建議直接拿去給師傅看過比較準。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">戒圍能不能改，關鍵在戒指的結構，不是每一款都能無痛調整。這也是為什麼我們在設計階段就會考慮未來可能的尺寸變化，讓改圍這件事不會變成多年後的難題。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒可以改戒圍嗎？」科普輪播（哪些設計可改／不可改）<br/><strong>Reels：</strong>改圍過程（公式A）<br/><strong>限動：</strong>問答：你的戒圍變過嗎？<br/><strong>LINE／官網：</strong>確認改戒圍服務頁清楚說明可調整範圍</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">可補充「改戒圍可行性」依款式分類的說明</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B級，納入FAQ／輪播題庫</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="C" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@juju__junjun" target="_blank">@juju__junjun</a></div><div class="post-date">2025-03-10</div></div>
-<div class="post-likes">❤️ 164</div>
+<div class="post-right"><div class="post-likes">❤️ 164</div><span class="level-tag level-C">🔵 C</span></div>
 </div>
 <div class="post-content">結婚快一年，近期被朋友提醒婚戒戴錯手！才發現原來不論男女婚戒都是左手呀╭(°A°`)╮</div>
 <div class="post-stats"><span>💬 18則留言</span><span>↗ 33次轉發</span></div>
@@ -1931,10 +1972,10 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>婚後快一年才發現婚戒該戴左手，原本戴錯<br/><strong>深層焦慮：</strong>對「傳統習俗／正確做法」的不確定感，戴錯手引發旁人關注的尷尬<br/><strong>預算／時程：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題（習俗類）｜<strong>等級：</strong>C 情緒共鳴</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">左右手戴法沒有絕對對錯，比較像文化習慣——傳統上是左手無名指連著心臟的說法比較廣為流傳，但開心舒服最重要，戴哪隻手都不影響它的意義。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">婚戒戴哪隻手，其實是文化習慣而不是規則。傳統說法是左手無名指連著心臟，但比起「對不對」，我們更在意戴起來舒不舒服——意義從來不是靠規定撐起來的。完整故事看 IG @trumi_jewelry</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>「婚戒到底該戴哪隻手？」小知識輪播<br/><strong>Reels：</strong>無<br/><strong>限動：</strong>投票：你婚戒戴左手還右手？<br/><strong>LINE／官網：</strong>無</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">無</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C級，發展為文化小知識內容題材</div></div>
 </div>
 </div>
-<div class="post-card" onclick="toggleCard(this, event)">
+<div class="post-card" data-level="D" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.net/@anita_0972" target="_blank">@anita_0972</a></div><div class="post-date">2024-09-14</div></div>
-<div class="post-likes">❤️ 112</div>
+<div class="post-right"><div class="post-likes">❤️ 112</div><span class="level-tag level-D">⚪ D</span></div>
 </div>
 <div class="post-content">結婚4年後第二次戴婚戒🤣，想說盒子都放到發霉了⋯⋯該出來透透氣😅，想問有認真在戴婚戒的人嗎？</div>
 <div class="post-stats"><span>💬 147則留言</span></div>
@@ -2513,6 +2554,27 @@ Harry Winston Ribbon疊戴Tiffany6爪
   const now = new Date();
   const pad = n => String(n).padStart(2,'0');
   document.getElementById('lastUpdate').textContent = '最後更新：' + now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+
+  function computeLevelCounts() {
+    const counts = {A:0,B:0,C:0,D:0,RISK:0};
+    document.querySelectorAll('.post-card[data-level]').forEach(c => {
+      const lvl = c.getAttribute('data-level');
+      if (counts.hasOwnProperty(lvl)) counts[lvl]++;
+    });
+    Object.keys(counts).forEach(k => {
+      const el = document.getElementById('levelCount' + k);
+      if (el) el.textContent = counts[k];
+    });
+  }
+  function filterLevel(level, el) {
+    document.querySelectorAll('.level-filter-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.post-card[data-level]').forEach(c => {
+      const lvl = c.getAttribute('data-level');
+      c.style.display = (level === 'ALL' || lvl === level) ? '' : 'none';
+    });
+  }
+  computeLevelCounts();
 </script>
 </body>
 </html>
