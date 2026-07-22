@@ -128,7 +128,9 @@
 
   .level-bar { background: var(--cream); border-bottom: 2px solid var(--border); padding: 12px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
   .level-summary { display:flex; gap:10px; flex-wrap:wrap; }
-  .level-chip { display:flex; align-items:center; gap:6px; font-size:.75rem; font-weight:700; padding:5px 12px; border-radius:20px; font-family:'Noto Sans TC',sans-serif; color:#fff; }
+  .level-chip { display:flex; align-items:center; gap:6px; font-size:.75rem; font-weight:700; padding:5px 12px; border-radius:20px; font-family:'Noto Sans TC',sans-serif; color:#fff; cursor:pointer; border:2px solid transparent; transition:all .15s; user-select:none; }
+  .level-chip:hover { filter:brightness(1.12); transform:translateY(-1px); }
+  .level-chip.active { border-color:var(--dark); box-shadow:0 0 0 2px rgba(0,0,0,.15); transform:translateY(-1px); }
   .level-chip b { font-size:.85rem; }
   .level-chip.chip-A { background:#c0392b; }
   .level-chip.chip-B { background:#d9822b; }
@@ -178,19 +180,14 @@
 </div>
 <div class="level-bar">
 <div class="level-summary">
-<span class="level-chip chip-A">🔴 A 高意圖 <b id="levelCountA">0</b></span>
-<span class="level-chip chip-B">🟠 B 問題意圖 <b id="levelCountB">0</b></span>
-<span class="level-chip chip-C">🔵 C 情緒共鳴 <b id="levelCountC">0</b></span>
-<span class="level-chip chip-D">⚪ D 低對頻 <b id="levelCountD">0</b></span>
-<span class="level-chip chip-RISK">⚫ 風險 <b id="levelCountRISK">0</b></span>
+<span class="level-chip chip-A" onclick="filterLevel('A', this)">🔴 A 高意圖 <b id="levelCountA">0</b></span>
+<span class="level-chip chip-B" onclick="filterLevel('B', this)">🟠 B 問題意圖 <b id="levelCountB">0</b></span>
+<span class="level-chip chip-C" onclick="filterLevel('C', this)">🔵 C 情緒共鳴 <b id="levelCountC">0</b></span>
+<span class="level-chip chip-D" onclick="filterLevel('D', this)">⚪ D 低對頻 <b id="levelCountD">0</b></span>
+<span class="level-chip chip-RISK" onclick="filterLevel('RISK', this)">⚫ 風險 <b id="levelCountRISK">0</b></span>
 </div>
 <div class="level-filter">
-<button class="level-filter-btn active" onclick="filterLevel('ALL', this)">全部</button>
-<button class="level-filter-btn" onclick="filterLevel('A', this)">🔴 A</button>
-<button class="level-filter-btn" onclick="filterLevel('B', this)">🟠 B</button>
-<button class="level-filter-btn" onclick="filterLevel('C', this)">🔵 C</button>
-<button class="level-filter-btn" onclick="filterLevel('D', this)">⚪ D</button>
-<button class="level-filter-btn" onclick="filterLevel('RISK', this)">⚫ 風險</button>
+<button class="level-filter-btn active" onclick="filterLevel('ALL', this)">顯示全部</button>
 </div>
 </div>
 <div class="main">
@@ -2686,9 +2683,18 @@ Harry Winston Ribbon疊戴Tiffany6爪
       if (el) el.textContent = counts[k];
     });
   }
+  let currentLevelFilter = 'ALL';
   function filterLevel(level, el) {
+    // clicking the already-active chip again resets the filter
+    if (level !== 'ALL' && currentLevelFilter === level) level = 'ALL';
+    currentLevelFilter = level;
     document.querySelectorAll('.level-filter-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
+    document.querySelectorAll('.level-chip').forEach(c => c.classList.remove('active'));
+    if (level === 'ALL') {
+      document.querySelector('.level-filter-btn').classList.add('active');
+    } else if (el && el.classList.contains('level-chip')) {
+      el.classList.add('active');
+    }
     document.querySelectorAll('.post-card[data-level]').forEach(c => {
       const lvl = c.getAttribute('data-level');
       c.style.display = (level === 'ALL' || lvl === level) ? '' : 'none';
