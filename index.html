@@ -2963,7 +2963,11 @@ Harry Winston Ribbon疊戴Tiffany6爪
   function cardMatchesKw(card, kwspec){
     var terms = kwspec.toLowerCase().split('|').map(function(s){return s.trim();}).filter(Boolean);
     var dk = (card.getAttribute('data-keywords') || '').toLowerCase();
-    var txt = (card.textContent || '').toLowerCase();
+    // 只比對貼文原文與留言，排除 jessica-insight 分析模板（其含制式「預算／時程」等字會污染比對）
+    var parts = [];
+    var pc = card.querySelector('.post-content'); if(pc) parts.push(pc.textContent);
+    card.querySelectorAll('.comment-text').forEach(function(el){ parts.push(el.textContent); });
+    var txt = parts.join(' ').toLowerCase();
     return terms.some(function(t){ return dk.indexOf(t) >= 0 || txt.indexOf(t) >= 0; });
   }
   function filterKeyword(kwspec, label, el){
