@@ -160,6 +160,19 @@
   .level-filter-btn { font-size:.72rem; font-weight:600; padding:5px 12px; border-radius:20px; border:1px solid var(--border); background:var(--card-bg); color:var(--text-muted); cursor:pointer; font-family:'Noto Sans TC',sans-serif; transition:all .15s; }
   .level-filter-btn:hover { border-color:var(--gold); color:var(--dark); }
   .level-filter-btn.active { background:var(--gold); border-color:var(--gold); color:var(--dark); }
+  /* ===== 關鍵字查詢列（Theo 優化 2026-07-24）===== */
+  .keyword-bar { background: var(--cream); border-bottom: 2px solid var(--border); padding: 10px 40px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .keyword-bar .kw-label { font-size: .75rem; font-weight: 700; color: var(--text-muted); font-family: 'Noto Sans TC', sans-serif; margin-right: 4px; }
+  .kw-chip { font-size: .74rem; font-weight: 600; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-muted); cursor: pointer; font-family: 'Noto Sans TC', sans-serif; transition: all .15s; user-select: none; }
+  .kw-chip:hover { border-color: var(--gold); color: var(--dark); transform: translateY(-1px); }
+  .kw-chip.active { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+  .kw-result-banner { background: rgba(230,180,34,.12); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 8px; padding: 12px 18px; margin-bottom: 20px; font-family: 'Noto Sans TC', sans-serif; font-size: .85rem; color: var(--text); }
+  .kw-result-banner b { color: var(--dark); }
+  .kw-clear { display: inline-block; margin-left: 10px; background: var(--dark); color: var(--gold-light); padding: 3px 10px; border-radius: 14px; font-size: .72rem; cursor: pointer; }
+  .kw-clear:hover { filter: brightness(1.15); }
+  .kw-empty { padding: 30px; text-align: center; color: var(--text-muted); font-family: 'Noto Sans TC', sans-serif; }
+  .stat-pill.clickable { cursor: pointer; transition: all .15s; }
+  .stat-pill.clickable:hover { background: rgba(230,180,34,.22); transform: translateY(-1px); }
   .post-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
   .level-tag { font-size:.64rem; font-weight:700; padding:2px 9px; border-radius:10px; font-family:'Noto Sans TC',sans-serif; white-space:nowrap; color:#fff; }
   .level-tag.level-A { background:#c0392b; }
@@ -188,7 +201,7 @@
 <div class="stat-pill"><div class="num">2,139</div><div class="lbl">最高單篇讚數</div></div>
 <div class="stat-pill"><div class="num">9,708+</div><div class="lbl">總留言數</div></div>
 <div class="stat-pill"><div class="num">4</div><div class="lbl">分析維度</div></div>
-<div class="stat-pill"><div class="num">婚戒審美</div><div class="lbl">本週最熱關鍵字</div></div>
+<div class="stat-pill clickable" onclick="filterKeyword('審美|款式|設計感|撞款','婚戒審美',null)" title="點擊查詢相關貼文"><div class="num">婚戒審美</div><div class="lbl">本週最熱關鍵字 🔎</div></div>
 </div>
 <!-- ===== Tru-Mi 產出成效摘要條（Theo 優化）===== -->
 <div class="output-bar">
@@ -217,7 +230,40 @@
 <button class="level-filter-btn active" onclick="filterLevel('ALL', this)">顯示全部</button>
 </div>
 </div>
+<!-- ===== 關鍵字查詢列（Theo 優化 2026-07-24）===== -->
+<div class="keyword-bar">
+<span class="kw-label">🔎 關鍵字查詢</span>
+<span class="kw-chip" data-kw="推薦|口袋名單" onclick="filterKeyword('推薦|口袋名單','婚戒推薦',this)">婚戒推薦</span>
+<span class="kw-chip" data-kw="對戒" onclick="filterKeyword('對戒','對戒',this)">對戒</span>
+<span class="kw-chip" data-kw="求婚" onclick="filterKeyword('求婚','求婚',this)">求婚</span>
+<span class="kw-chip" data-kw="預算|萬|價格|cp" onclick="filterKeyword('預算|萬|價格|cp','預算',this)">預算</span>
+<span class="kw-chip" data-kw="硌手|勾|卡手|刺刺|磨" onclick="filterKeyword('硌手|勾|卡手|刺刺|磨','硌手勾衣',this)">硌手勾衣</span>
+<span class="kw-chip" data-kw="改圍|戒圍|尺寸" onclick="filterKeyword('改圍|戒圍|尺寸','改圍尺寸',this)">改圍尺寸</span>
+<span class="kw-chip" data-kw="舊戒|舊金|重製|改造|遺物|傳承" onclick="filterKeyword('舊戒|舊金|重製|改造|遺物|傳承','舊戒重製',this)">舊戒重製</span>
+<span class="kw-chip" data-kw="落差|實品|翻車|避雷|失望|掉鑽" onclick="filterKeyword('落差|實品|翻車|避雷|失望|掉鑽','實品落差',this)">實品落差</span>
+<span class="kw-chip" data-kw="專櫃|服務|態度|店員|sales|銷售" onclick="filterKeyword('專櫃|服務|態度|店員|sales|銷售','專櫃服務',this)">專櫃服務</span>
+<span class="kw-chip" data-kw="刻字|內圈" onclick="filterKeyword('刻字|內圈','刻字',this)">刻字</span>
+<span class="kw-chip" data-kw="鉑金|白金|材質|純金|k金|鑽" onclick="filterKeyword('鉑金|白金|材質|純金|k金|鑽','材質鉑金',this)">材質鉑金</span>
+<span class="kw-chip" data-kw="日系|iprimo|ip|海瑞|hw|卡地亞|品牌" onclick="filterKeyword('日系|iprimo|ip|海瑞|hw|卡地亞|品牌','品牌迷思',this)">品牌迷思</span>
+<span class="kw-chip" data-kw="工期|時程|多久|來得及|製作時間|預留" onclick="filterKeyword('工期|時程|多久|來得及|製作時間|預留','工期時程',this)">工期時程</span>
+<span class="kw-chip" data-kw="長輩|家人|父母|婆|媽媽|爸媽" onclick="filterKeyword('長輩|家人|父母|婆|媽媽|爸媽','長輩介入',this)">長輩介入</span>
+<span class="kw-chip" data-kw="審美|款式|設計感|撞款|客製|訂製" onclick="filterKeyword('審美|款式|設計感|撞款|客製|訂製','審美客製',this)">審美客製</span>
+</div>
 <div class="main">
+<!-- ===== 關鍵字查詢結果面板（Theo 優化 2026-07-24）===== -->
+<div class="category-panel" id="panel-search">
+<div class="cat-header">
+<div class="cat-emoji">🔎</div>
+<div>
+<div class="cat-title">關鍵字查詢結果</div>
+<div class="cat-subtitle">跨全部分頁 · 依你點擊的關鍵字即時篩選</div>
+</div>
+<div class="cat-line"></div>
+</div>
+<div class="kw-result-banner">🔍 關鍵字查詢：<b id="searchKwLabel">—</b> · 跨全部分頁共 <b id="searchCount">0</b> 則結果<span class="kw-clear" onclick="clearKeyword()">✕ 清除查詢</span></div>
+<div id="searchEmpty" class="kw-empty" style="display:none">這個關鍵字目前沒有符合的貼文，換一個關鍵字試試。</div>
+<div class="posts-grid" id="searchGrid"></div>
+</div>
 <!-- ══ 溝通與翻車焦慮 ══ -->
 <div class="category-panel active" id="panel-comms">
 <div class="cat-header">
@@ -2864,6 +2910,8 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 <script>
   function switchTab(id, el) {
+    currentKw = null;
+    document.querySelectorAll('.kw-chip').forEach(k => k.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.category-panel').forEach(p => p.classList.remove('active'));
     el.classList.add('active');
@@ -2909,6 +2957,56 @@ Harry Winston Ribbon疊戴Tiffany6爪
     });
   }
   computeLevelCounts();
+
+  /* ===== 關鍵字查詢：跨分頁篩選（Theo 優化 2026-07-24）===== */
+  var currentKw = null;
+  function cardMatchesKw(card, kwspec){
+    var terms = kwspec.toLowerCase().split('|').map(function(s){return s.trim();}).filter(Boolean);
+    var dk = (card.getAttribute('data-keywords') || '').toLowerCase();
+    var txt = (card.textContent || '').toLowerCase();
+    return terms.some(function(t){ return dk.indexOf(t) >= 0 || txt.indexOf(t) >= 0; });
+  }
+  function filterKeyword(kwspec, label, el){
+    if(currentKw === kwspec){ clearKeyword(); return; }
+    currentKw = kwspec;
+    document.querySelectorAll('.kw-chip').forEach(function(k){ k.classList.remove('active'); });
+    if(el && el.classList && el.classList.contains('kw-chip')) el.classList.add('active');
+    else { document.querySelectorAll('.kw-chip').forEach(function(k){ if(k.getAttribute('data-kw')===kwspec) k.classList.add('active'); }); }
+    // reset any level filter so keyword search sees all cards
+    if(typeof currentLevelFilter !== 'undefined') currentLevelFilter = 'ALL';
+    document.querySelectorAll('.post-card[data-level]').forEach(function(cc){ cc.style.display=''; });
+    document.querySelectorAll('.level-chip').forEach(function(cc){ cc.classList.remove('active'); });
+    var lb = document.querySelector('.level-filter-btn'); if(lb) lb.classList.add('active');
+    var grid = document.getElementById('searchGrid');
+    grid.innerHTML = '';
+    var count = 0;
+    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-strategy) .post-card').forEach(function(card){
+      if(cardMatchesKw(card, kwspec)){
+        var clone = card.cloneNode(true);
+        clone.classList.remove('expanded');
+        var h = clone.querySelector('.expand-hint'); if(h) h.textContent = '▼ 點擊展開';
+        grid.appendChild(clone);
+        count++;
+      }
+    });
+    document.getElementById('searchKwLabel').textContent = label;
+    document.getElementById('searchCount').textContent = count;
+    document.getElementById('searchEmpty').style.display = count ? 'none' : 'block';
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    document.querySelectorAll('.category-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById('panel-search').classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  function clearKeyword(){
+    currentKw = null;
+    document.querySelectorAll('.kw-chip').forEach(function(k){ k.classList.remove('active'); });
+    document.getElementById('panel-search').classList.remove('active');
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    var firstTab = document.querySelector('.tab'); if(firstTab) firstTab.classList.add('active');
+    document.querySelectorAll('.category-panel').forEach(function(p){ p.classList.remove('active'); });
+    var pc = document.getElementById('panel-comms'); if(pc) pc.classList.add('active');
+    window.scrollTo(0, 0);
+  }
 
   /* ===== 效益追蹤：本機儲存 + 產出成效摘要自動加總（Theo 優化 2026-07-24）===== */
   (function(){
