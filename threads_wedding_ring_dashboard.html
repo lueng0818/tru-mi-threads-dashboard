@@ -116,9 +116,12 @@
   .comment-text { font-size: .82rem; color: var(--text); line-height: 1.55; }
 
   /* Jessica 靈感 */
-  .jessica-insight { margin-top: 12px; background: linear-gradient(135deg, rgba(39,78,19,.12), rgba(226,179,87,.08)); border: 1px solid rgba(226,179,87,.3); border-left: 3px solid var(--gold); border-radius: 8px; padding: 11px 14px; }
-  .jessica-drawer { display: inline-block; font-size: .65rem; font-weight: 700; color: var(--gold); letter-spacing: .08em; text-transform: uppercase; font-family: 'Noto Sans TC', sans-serif; margin-bottom: 5px; }
-  .jessica-text { font-size: .8rem; line-height: 1.7; color: var(--text); }
+  .jessica-insight { margin-top: 12px; background: linear-gradient(135deg, rgba(39,78,19,.12), rgba(226,179,87,.08)); border: 1px solid rgba(226,179,87,.3); border-left: 3px solid var(--gold); border-radius: 8px; padding: 14px 16px; }
+  .jessica-drawer { display: inline-block; font-size: .66rem; font-weight: 700; color: var(--dark); letter-spacing: .08em; text-transform: uppercase; font-family: 'Noto Sans TC', sans-serif; margin-bottom: 6px; }
+  /* 八段之間加淡分隔線＋間距，展開後不再是一大坨（2026-07-25 資訊密度優化）*/
+  .jessica-insight .jessica-drawer[style] { border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 12px !important; }
+  .jessica-text { font-size: .84rem; line-height: 1.75; color: var(--text); }
+  .jessica-text + .jessica-drawer { display: block; }
   /* 今日草稿 */
   .draft-card { background: var(--card-bg); border: 1.5px solid var(--gold); border-radius: 14px; padding: 26px 28px; margin-bottom: 30px; position: relative; }
   .draft-badge { position: absolute; top: -11px; left: 20px; background: var(--gold); color: #fff; font-size: .68rem; font-weight: 700; padding: 3px 12px; border-radius: 99px; letter-spacing: .1em; font-family: 'Noto Sans TC', sans-serif; }
