@@ -63,6 +63,25 @@
   .tab.week-tab .count { background: #c0392b; color: #fff; }
   .week-summary-banner { background: var(--cream); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; margin-bottom: 22px; font-size: .88rem; color: var(--text); font-family: 'Noto Sans TC', sans-serif; line-height: 1.8; }
   .week-level-empty { font-size: .82rem; color: var(--text-muted); padding: 4px 2px 4px; font-family: 'Noto Sans TC', sans-serif; }
+  .tab.todo-tab { color: var(--dark); font-weight: 700; }
+  .tab.todo-tab .count { background: #c0392b; color: #fff; }
+  .todo-item { background: var(--card-bg); border: 1px solid var(--border); border-left: 5px solid var(--gold); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; font-family: 'Noto Sans TC', sans-serif; }
+  .todo-item.level-A { border-left-color: #c0392b; }
+  .todo-item.level-B { border-left-color: #d9822b; }
+  .todo-item.level-C { border-left-color: #2d6ca6; }
+  .todo-item.todo-done { opacity: .55; }
+  .todo-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .todo-author { font-weight: 700; color: var(--dark); font-size: .86rem; }
+  .todo-date, .todo-likes { font-size: .75rem; color: var(--text-muted); }
+  .todo-excerpt { font-size: .85rem; color: var(--text); line-height: 1.7; margin-bottom: 10px; font-family: 'Noto Serif TC', serif; }
+  .todo-draft-label { font-size: .74rem; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+  .todo-draft { background: var(--cream); border-radius: 8px; padding: 10px 14px; font-size: .85rem; line-height: 1.8; color: var(--text); margin-bottom: 6px; }
+  .todo-follow { font-size: .74rem; color: var(--text-muted); margin-bottom: 10px; }
+  .todo-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .todo-actions .post-link { font-size: .78rem; }
+  .todo-copy-btn { background: var(--gold); color: var(--dark); border: none; border-radius: 8px; padding: 5px 12px; font-size: .78rem; font-weight: 700; cursor: pointer; font-family: 'Noto Sans TC', sans-serif; }
+  .todo-copy-btn:hover { background: var(--gold-light); }
+  .todo-done-toggle { font-size: .8rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px; cursor: pointer; margin-left: auto; }
   .tab-divider { width: 1px; background: var(--border); margin: 10px 4px; }
 
   .main { padding: 32px 40px; max-width: 1300px; }
@@ -221,8 +240,9 @@
 <div class="output-pill"><div class="num" id="outAuth">0</div><div class="lbl">權威互動數</div></div>
 </div>
 <div class="tabs">
+<div class="tab todo-tab active" onclick="switchTab('todo', this)">🎯 待辦回應 <span class="count" id="todoTabCount">0</span></div>
 <div class="tab week-tab" onclick="switchTab('week', this)">📅 本週戰情室 <span class="count" id="weekTabCount">0</span></div>
-<div class="tab active" onclick="switchTab('comms', this)">🚨 溝通與翻車焦慮 <span class="count">20</span></div>
+<div class="tab" onclick="switchTab('comms', this)">🚨 溝通與翻車焦慮 <span class="count">20</span></div>
 <div class="tab" onclick="switchTab('daily', this)">🌿 日常佩戴與體感 <span class="count">26</span></div>
 <div class="tab" onclick="switchTab('budget', this)">💸 預算與審美拉扯 <span class="count">40</span></div>
 <div class="tab" onclick="switchTab('heritage', this)">💛 傳承與情感重塑 <span class="count">21</span></div>
@@ -275,7 +295,7 @@
 <div class="posts-grid" id="searchGrid"></div>
 </div>
 <!-- ══ 溝通與翻車焦慮 ══ -->
-<div class="category-panel active" id="panel-comms">
+<div class="category-panel" id="panel-comms">
 <div class="cat-header">
 <div class="cat-emoji">🚨</div>
 <div>
@@ -2423,6 +2443,23 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 </div>
 </div>
+<!-- ══ 待辦回應（Jessica 每日海巡行動清單）══ -->
+<div class="category-panel active" id="panel-todo">
+<div class="cat-header">
+<div class="cat-emoji">🎯</div>
+<div>
+<div class="cat-title">待辦回應</div>
+<div class="cat-subtitle">瀏覽完新貼文後，先看這裡 · 依 A→B→C 排序，每則都附建議留言，回應完打勾即可從清單移除</div>
+</div>
+<div class="cat-line"></div>
+</div>
+<div id="todoSummaryBanner" class="week-summary-banner">計算中…</div>
+<div id="todoPendingBody"></div>
+<div id="todoDoneSection" style="margin-top:34px;display:none">
+<div class="section-title">✅ 已回應（<span id="todoDoneCount">0</span>）</div>
+<div id="todoDoneBody"></div>
+</div>
+</div>
 <!-- ══ 本週戰情室 ══ -->
 <div class="category-panel" id="panel-week">
 <div class="cat-header">
@@ -3215,9 +3252,141 @@ Harry Winston Ribbon疊戴Tiffany6爪
     });
   }
 
+  /* ===== 待辦回應：從既有 jessica-insight 抽出留言草稿／追蹤動作，產生每日行動清單（2026-07-26 新增）===== */
+  function extractField(card, keyword){
+    var insight = card.querySelector('.jessica-insight');
+    if(!insight) return '';
+    var children = Array.prototype.slice.call(insight.children);
+    for(var i=0;i<children.length;i++){
+      if(children[i].classList.contains('jessica-drawer') && children[i].textContent.indexOf(keyword) >= 0){
+        var next = children[i+1];
+        if(next && next.classList.contains('jessica-text')) return next.innerHTML;
+      }
+    }
+    return '';
+  }
+  var TODO_STORAGE_KEY = 'trumi_todo_done_v1';
+  function readTodoDoneMap(){
+    try{ return JSON.parse(localStorage.getItem(TODO_STORAGE_KEY) || '{}'); }catch(e){ return {}; }
+  }
+  function writeTodoDoneMap(map){
+    try{ localStorage.setItem(TODO_STORAGE_KEY, JSON.stringify(map)); }catch(e){}
+  }
+  function buildTodoItem(entry, isDone){
+    var card = entry.card;
+    var authorLink = card.querySelector('.post-author a');
+    var author = authorLink ? authorLink.textContent : '';
+    var dateEl = card.querySelector('.post-date');
+    var dateTxt = dateEl ? (dateEl.childNodes[0] ? dateEl.childNodes[0].textContent : dateEl.textContent) : entry.date;
+    var likesEl = card.querySelector('.post-likes');
+    var likesTxt = likesEl ? likesEl.textContent : '';
+    var contentEl = card.querySelector('.post-content');
+    var contentTxt = contentEl ? contentEl.textContent : '';
+    var excerpt = contentTxt.length > 90 ? contentTxt.slice(0,90) + '…' : contentTxt;
+    var draftHtml = extractField(card, '留言草稿') || '（此則無建議留言，請人工判斷是否回應）';
+    var followHtml = extractField(card, '追蹤動作');
+    var weekDiff = daysDiffFromToday(entry.date);
+    var isWeek = (weekDiff !== null && weekDiff >= 0 && weekDiff <= 6);
+
+    var levelLabel = {A:'🔴 A', B:'🟠 B', C:'🔵 C'}[entry.level] || entry.level;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'todo-item level-' + entry.level + (isDone ? ' todo-done' : '');
+    wrap.innerHTML =
+      '<div class="todo-top">' +
+        '<span class="level-tag level-' + entry.level + '">' + levelLabel + '</span>' +
+        (isWeek ? '<span class="new-week-badge">🆕 本週</span>' : '') +
+        '<span class="todo-author">' + author + '</span>' +
+        '<span class="todo-date">' + dateTxt + '</span>' +
+        '<span class="todo-likes">' + likesTxt + '</span>' +
+      '</div>' +
+      '<div class="todo-excerpt">' + excerpt + '</div>' +
+      '<div class="todo-draft-label">💬 建議留言（可直接複製使用）</div>' +
+      '<div class="todo-draft">' + draftHtml + '</div>' +
+      (followHtml ? '<div class="todo-follow">📌 ' + followHtml + '</div>' : '') +
+      '<div class="todo-actions">' +
+        '<a class="post-link" href="' + entry.href + '" target="_blank">🔗 查看原始貼文</a>' +
+        '<button class="todo-copy-btn" type="button">📋 複製留言</button>' +
+        '<label class="todo-done-toggle"><input type="checkbox"' + (isDone ? ' checked' : '') + ' /> 已回應</label>' +
+      '</div>';
+
+    var checkbox = wrap.querySelector('input[type="checkbox"]');
+    checkbox.addEventListener('change', function(){
+      var map = readTodoDoneMap();
+      if(checkbox.checked) map[entry.href] = true; else delete map[entry.href];
+      writeTodoDoneMap(map);
+      renderTodoQueue();
+    });
+    var copyBtn = wrap.querySelector('.todo-copy-btn');
+    copyBtn.addEventListener('click', function(){
+      var tmp = document.createElement('div');
+      tmp.innerHTML = draftHtml;
+      var text = tmp.textContent || '';
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(function(){
+          copyBtn.textContent = '✅ 已複製';
+          setTimeout(function(){ copyBtn.textContent = '📋 複製留言'; }, 1500);
+        }).catch(function(){});
+      }
+    });
+    return wrap;
+  }
+  function renderTodoQueue(){
+    var doneMap = readTodoDoneMap();
+    var candidates = [];
+    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-week):not(#panel-todo):not(#panel-strategy) .post-card[data-level]').forEach(function(card){
+      var lvl = card.getAttribute('data-level');
+      if(lvl !== 'A' && lvl !== 'B' && lvl !== 'C') return; // D／風險 不需主動回應
+      var linkEl = card.querySelector('.post-link');
+      var href = linkEl ? linkEl.getAttribute('href') : null;
+      if(!href) return;
+      candidates.push({card: card, level: lvl, date: card.getAttribute('data-post-date') || '', href: href});
+    });
+    var order = {A:0,B:1,C:2};
+    candidates.sort(function(a,b){
+      var wa = daysDiffFromToday(a.date), wb = daysDiffFromToday(b.date);
+      var aw = (wa !== null && wa >= 0 && wa <= 6) ? 0 : 1;
+      var bw = (wb !== null && wb >= 0 && wb <= 6) ? 0 : 1;
+      if(aw !== bw) return aw - bw;
+      if(order[a.level] !== order[b.level]) return order[a.level] - order[b.level];
+      return (b.date || '').localeCompare(a.date || '');
+    });
+    var pending = candidates.filter(function(c){ return !doneMap[c.href]; });
+    var done = candidates.filter(function(c){ return !!doneMap[c.href]; });
+
+    var counts = {A:0,B:0,C:0};
+    pending.forEach(function(c){ counts[c.level] = (counts[c.level] || 0) + 1; });
+    document.getElementById('todoTabCount').textContent = pending.length;
+    if(!pending.length && !candidates.length){
+      document.getElementById('todoSummaryBanner').innerHTML = '🎯 目前沒有 A／B／C 級貼文，暫無待回應項目。';
+    } else if(!pending.length){
+      document.getElementById('todoSummaryBanner').innerHTML = '🎯 待回應項目已全部處理完畢 🎉（共 ' + done.length + ' 則已回應）';
+    } else {
+      document.getElementById('todoSummaryBanner').innerHTML = '🎯 待回應 <b>' + pending.length + '</b> 則：🔴A ' + counts.A + '｜🟠B ' + counts.B + '｜🔵C ' + counts.C + '　·　建議優先處理 A 級，24 小時內回覆效果最好';
+    }
+
+    var pendingBody = document.getElementById('todoPendingBody');
+    pendingBody.innerHTML = '';
+    if(!pending.length){
+      var empty = document.createElement('div');
+      empty.className = 'week-level-empty';
+      empty.textContent = candidates.length ? '待回應項目已全部處理完畢 🎉' : '目前沒有 A／B／C 級貼文';
+      pendingBody.appendChild(empty);
+    } else {
+      pending.forEach(function(c){ pendingBody.appendChild(buildTodoItem(c, false)); });
+    }
+
+    var doneBody = document.getElementById('todoDoneBody');
+    doneBody.innerHTML = '';
+    done.forEach(function(c){ doneBody.appendChild(buildTodoItem(c, true)); });
+    document.getElementById('todoDoneCount').textContent = done.length;
+    document.getElementById('todoDoneSection').style.display = done.length ? 'block' : 'none';
+  }
+
   computeLevelCounts();
   annotatePostDates();
   renderWeekRoom();
+  renderTodoQueue();
 
   /* ===== 關鍵字查詢：跨分頁篩選（Theo 優化 2026-07-24）===== */
   var currentKw = null;
