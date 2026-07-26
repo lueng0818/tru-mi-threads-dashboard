@@ -59,6 +59,10 @@
   .tab:hover { color: var(--dark); }
   .tab.active { color: var(--dark); border-bottom-color: var(--gold); }
   .tab .count { display: inline-flex; align-items: center; justify-content: center; background: var(--gold); color: var(--dark); font-size: .65rem; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; margin-left: 6px; font-family: 'Noto Sans TC', sans-serif; }
+  .tab.week-tab { color: var(--dark); font-weight: 700; }
+  .tab.week-tab .count { background: #c0392b; color: #fff; }
+  .week-summary-banner { background: var(--cream); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; margin-bottom: 22px; font-size: .88rem; color: var(--text); font-family: 'Noto Sans TC', sans-serif; line-height: 1.8; }
+  .week-level-empty { font-size: .82rem; color: var(--text-muted); padding: 4px 2px 4px; font-family: 'Noto Sans TC', sans-serif; }
   .tab-divider { width: 1px; background: var(--border); margin: 10px 4px; }
 
   .main { padding: 32px 40px; max-width: 1300px; }
@@ -98,6 +102,7 @@
   .post-author a { color: inherit; text-decoration: none; }
   .post-author a:hover { text-decoration: underline; opacity: .75; }
   .post-date { font-size: .72rem; color: var(--text-muted); font-family: 'Noto Sans TC', sans-serif; margin-top: 2px; }
+  .new-week-badge { display:inline-block; margin-left:6px; font-size:.62rem; font-weight:700; padding:1px 7px; border-radius:9px; background:var(--gold); color:var(--dark); font-family:'Noto Sans TC',sans-serif; vertical-align:middle; }
   .post-likes { background: rgba(226,179,87,.15); color: var(--dark); font-size: .78rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; font-family: 'Noto Sans TC', sans-serif; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
   .post-likes.viral { background: var(--gold); color: var(--dark); }
   .post-content { font-size: .88rem; color: var(--text); line-height: 1.65; margin-bottom: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
@@ -216,6 +221,7 @@
 <div class="output-pill"><div class="num" id="outAuth">0</div><div class="lbl">權威互動數</div></div>
 </div>
 <div class="tabs">
+<div class="tab week-tab" onclick="switchTab('week', this)">📅 本週戰情室 <span class="count" id="weekTabCount">0</span></div>
 <div class="tab active" onclick="switchTab('comms', this)">🚨 溝通與翻車焦慮 <span class="count">20</span></div>
 <div class="tab" onclick="switchTab('daily', this)">🌿 日常佩戴與體感 <span class="count">26</span></div>
 <div class="tab" onclick="switchTab('budget', this)">💸 預算與審美拉扯 <span class="count">40</span></div>
@@ -224,14 +230,14 @@
 </div>
 <div class="level-bar">
 <div class="level-summary">
-<span class="level-chip chip-A" onclick="filterLevel('A', this)">🔴 A 高意圖 <b id="levelCountA">0</b></span>
-<span class="level-chip chip-B" onclick="filterLevel('B', this)">🟠 B 問題意圖 <b id="levelCountB">0</b></span>
-<span class="level-chip chip-C" onclick="filterLevel('C', this)">🔵 C 情緒共鳴 <b id="levelCountC">0</b></span>
-<span class="level-chip chip-D" onclick="filterLevel('D', this)">⚪ D 低對頻 <b id="levelCountD">0</b></span>
-<span class="level-chip chip-RISK" onclick="filterLevel('RISK', this)">⚫ 風險 <b id="levelCountRISK">0</b></span>
+<span class="level-chip chip-A" onclick="showLevelCross('A', this)">🔴 A 高意圖 <b id="levelCountA">0</b></span>
+<span class="level-chip chip-B" onclick="showLevelCross('B', this)">🟠 B 問題意圖 <b id="levelCountB">0</b></span>
+<span class="level-chip chip-C" onclick="showLevelCross('C', this)">🔵 C 情緒共鳴 <b id="levelCountC">0</b></span>
+<span class="level-chip chip-D" onclick="showLevelCross('D', this)">⚪ D 低對頻 <b id="levelCountD">0</b></span>
+<span class="level-chip chip-RISK" onclick="showLevelCross('RISK', this)">⚫ 風險 <b id="levelCountRISK">0</b></span>
 </div>
 <div class="level-filter">
-<button class="level-filter-btn active" onclick="filterLevel('ALL', this)">顯示全部</button>
+<button class="level-filter-btn active" onclick="clearLevelCross()">顯示全部</button>
 </div>
 </div>
 <!-- ===== 關鍵字查詢列（Theo 優化 2026-07-24）===== -->
@@ -2417,6 +2423,19 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 </div>
 </div>
+<!-- ══ 本週戰情室 ══ -->
+<div class="category-panel" id="panel-week">
+<div class="cat-header">
+<div class="cat-emoji">📅</div>
+<div>
+<div class="cat-title">本週戰情室</div>
+<div class="cat-subtitle">近 7 天新增貼文 · 依 A／B／C／D／風險 即時彙整，最新貼文排在最前面</div>
+</div>
+<div class="cat-line"></div>
+</div>
+<div id="weekSummaryBanner" class="week-summary-banner">計算中…</div>
+<div id="weekRoomBody"></div>
+</div>
 <!-- ══ 品牌策略室 ══ -->
 <div class="category-panel" id="panel-strategy">
 <div class="cat-header">
@@ -3023,6 +3042,7 @@ Harry Winston Ribbon疊戴Tiffany6爪
   const now = new Date();
   const pad = n => String(n).padStart(2,'0');
   document.getElementById('lastUpdate').textContent = '最後更新：' + now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   function computeLevelCounts() {
     const counts = {A:0,B:0,C:0,D:0,RISK:0};
@@ -3052,7 +3072,152 @@ Harry Winston Ribbon疊戴Tiffany6爪
       c.style.display = (level === 'ALL' || lvl === level) ? '' : 'none';
     });
   }
+
+  /* ===== 日期解析／本週徽章／即時 ABCD 跨分頁檢視／本週戰情室（2026-07-26 新增）===== */
+  function parsePostDate(str){
+    var m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(str || '');
+    if(!m) return null;
+    return new Date(parseInt(m[1],10), parseInt(m[2],10)-1, parseInt(m[3],10));
+  }
+  function daysDiffFromToday(dateStr){
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateStr || '');
+    if(!m) return null;
+    var d = new Date(parseInt(m[1],10), parseInt(m[2],10)-1, parseInt(m[3],10));
+    return Math.round((todayMidnight - d) / 86400000);
+  }
+  function annotatePostDates(){
+    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-week) .post-card[data-level]').forEach(function(card){
+      var dateEl = card.querySelector('.post-date');
+      if(!dateEl) return;
+      var d = parsePostDate(dateEl.textContent);
+      if(!d) return;
+      var iso = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+      card.setAttribute('data-post-date', iso);
+      var diffDays = Math.round((todayMidnight - d) / 86400000);
+      if(diffDays >= 0 && diffDays <= 6 && !dateEl.querySelector('.new-week-badge')){
+        var badge = document.createElement('span');
+        badge.className = 'new-week-badge';
+        badge.textContent = '🆕 本週';
+        dateEl.appendChild(badge);
+      }
+    });
+  }
+
+  var currentLevelCross = null;
+  var LEVEL_NAMES = {A:'🔴 A 高意圖', B:'🟠 B 問題意圖', C:'🔵 C 情緒共鳴', D:'⚪ D 低對頻', RISK:'⚫ 風險'};
+  function showLevelCross(level, el){
+    if(currentLevelCross === level){ clearLevelCross(); return; }
+    currentLevelCross = level;
+    currentKw = null;
+    document.querySelectorAll('.kw-chip').forEach(function(k){ k.classList.remove('active'); });
+    document.querySelectorAll('.level-filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.level-chip').forEach(function(c){ c.classList.remove('active'); });
+    if(el) el.classList.add('active');
+
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-week) .post-card[data-level="'+level+'"]'));
+    cards.sort(function(a,b){
+      var da = a.getAttribute('data-post-date') || '';
+      var db = b.getAttribute('data-post-date') || '';
+      return db.localeCompare(da);
+    });
+    var grid = document.getElementById('searchGrid');
+    grid.innerHTML = '';
+    var weekCount = 0;
+    cards.forEach(function(card){
+      var diff = daysDiffFromToday(card.getAttribute('data-post-date'));
+      if(diff !== null && diff >= 0 && diff <= 6) weekCount++;
+      var clone = card.cloneNode(true);
+      clone.classList.remove('expanded');
+      var h = clone.querySelector('.expand-hint'); if(h) h.textContent = '▼ 點擊展開';
+      grid.appendChild(clone);
+    });
+    document.getElementById('searchKwLabel').textContent = (LEVEL_NAMES[level] || level) + '（依貼文日期新到舊排序 · 本週新增 ' + weekCount + ' 則）';
+    document.getElementById('searchCount').textContent = cards.length;
+    document.getElementById('searchEmpty').style.display = cards.length ? 'none' : 'block';
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    document.querySelectorAll('.category-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById('panel-search').classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  function clearLevelCross(){
+    currentLevelCross = null;
+    document.querySelectorAll('.level-chip').forEach(function(c){ c.classList.remove('active'); });
+    var lb = document.querySelector('.level-filter-btn'); if(lb) lb.classList.add('active');
+    document.querySelectorAll('.post-card[data-level]').forEach(function(c){ c.style.display = ''; });
+    document.getElementById('panel-search').classList.remove('active');
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    var firstTab = document.querySelector('.tab.week-tab'); if(firstTab) firstTab.classList.add('active');
+    document.querySelectorAll('.category-panel').forEach(function(p){ p.classList.remove('active'); });
+    var pw = document.getElementById('panel-week'); if(pw) pw.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  var PANEL_NAMES = {comms:'🚨 溝通與翻車焦慮', daily:'🌿 日常佩戴與體感', budget:'💸 預算與審美拉扯', heritage:'💛 傳承與情感重塑'};
+  function renderWeekRoom(){
+    var weekCards = [];
+    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-week):not(#panel-strategy) .post-card[data-level]').forEach(function(card){
+      var dateStr = card.getAttribute('data-post-date');
+      var diff = daysDiffFromToday(dateStr);
+      if(diff !== null && diff >= 0 && diff <= 6){
+        var panelEl = card.closest('.category-panel');
+        var panelId = panelEl ? panelEl.id.replace('panel-','') : '';
+        weekCards.push({card: card, level: card.getAttribute('data-level'), date: dateStr, panel: panelId});
+      }
+    });
+    weekCards.sort(function(a,b){ return b.date.localeCompare(a.date); });
+
+    var counts = {A:0,B:0,C:0,D:0,RISK:0};
+    var panelCounts = {};
+    weekCards.forEach(function(w){
+      counts[w.level] = (counts[w.level] || 0) + 1;
+      panelCounts[w.panel] = (panelCounts[w.panel] || 0) + 1;
+    });
+    document.getElementById('weekTabCount').textContent = weekCards.length;
+
+    var banner;
+    if(!weekCards.length){
+      banner = '📅 近 7 天尚無新增貼文，以下為既有存量資料，僅供參考。';
+    } else {
+      var topPanel = Object.keys(panelCounts).sort(function(a,b){ return panelCounts[b]-panelCounts[a]; })[0];
+      banner = '📅 近 7 天共新增 <b>' + weekCards.length + '</b> 則貼文：🔴A ' + counts.A + '｜🟠B ' + counts.B + '｜🔵C ' + counts.C + '｜⚪D ' + counts.D + '｜⚫風險 ' + counts.RISK;
+      if(topPanel){ banner += '　·　本週焦點：' + (PANEL_NAMES[topPanel] || topPanel) + '（' + panelCounts[topPanel] + ' 則）'; }
+      if(counts.A > 0){ banner += '　·　高意圖（A）貼文請優先追蹤留言與轉發'; }
+    }
+    document.getElementById('weekSummaryBanner').innerHTML = banner;
+
+    var body = document.getElementById('weekRoomBody');
+    body.innerHTML = '';
+    ['A','B','C','D','RISK'].forEach(function(lvl){
+      var items = weekCards.filter(function(w){ return w.level === lvl; });
+      var sec = document.createElement('div');
+      sec.style.marginBottom = '30px';
+      var head = document.createElement('div');
+      head.className = 'section-title';
+      head.textContent = LEVEL_NAMES[lvl] + '（本週 ' + items.length + ' 則）';
+      sec.appendChild(head);
+      if(!items.length){
+        var empty = document.createElement('div');
+        empty.className = 'week-level-empty';
+        empty.textContent = '本週無新增此等級貼文';
+        sec.appendChild(empty);
+      } else {
+        var grid = document.createElement('div');
+        grid.className = 'posts-grid';
+        items.forEach(function(w){
+          var clone = w.card.cloneNode(true);
+          clone.classList.remove('expanded');
+          var h = clone.querySelector('.expand-hint'); if(h) h.textContent = '▼ 點擊展開';
+          grid.appendChild(clone);
+        });
+        sec.appendChild(grid);
+      }
+      body.appendChild(sec);
+    });
+  }
+
   computeLevelCounts();
+  annotatePostDates();
+  renderWeekRoom();
 
   /* ===== 關鍵字查詢：跨分頁篩選（Theo 優化 2026-07-24）===== */
   var currentKw = null;
