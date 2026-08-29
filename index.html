@@ -211,6 +211,20 @@
   @media (max-width: 900px) {
     .level-bar { padding: 12px 20px; }
   }
+
+  /* ===== 每日提醒重點（2026-08-29 新增，僅使用既有 CSS 變數）===== */
+  .daily-brief { background: var(--card-bg); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 12px; margin: 0 40px 22px; padding: 20px 24px; }
+  .daily-brief .db-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .daily-brief .db-title { font-size: .95rem; font-weight: 700; color: var(--dark); font-family: 'Noto Sans TC', sans-serif; letter-spacing: .04em; }
+  .daily-brief .db-date { background: var(--cream); color: var(--dark); font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; font-family: 'Noto Sans TC', sans-serif; }
+  .daily-brief .db-sub { font-size: .74rem; color: var(--text-muted); font-family: 'Noto Sans TC', sans-serif; }
+  .daily-brief .db-list { list-style: none; display: grid; gap: 9px; }
+  .daily-brief .db-list li { font-size: .855rem; line-height: 1.85; color: var(--text); padding-left: 22px; position: relative; }
+  .daily-brief .db-list li::before { content: '◆'; position: absolute; left: 0; top: 0; color: var(--gold); font-size: .7rem; }
+  .daily-brief .db-list li strong { color: var(--dark); font-weight: 700; }
+  .daily-brief .db-list li em { font-style: normal; color: var(--gold); font-weight: 700; }
+  .daily-brief .db-foot { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: .76rem; color: var(--text-muted); font-family: 'Noto Sans TC', sans-serif; line-height: 1.8; }
+  @media (max-width: 768px) { .daily-brief { margin: 0 20px 18px; padding: 16px 18px; } }
 </style>
 </head>
 <body>
@@ -225,11 +239,11 @@
 </div>
 </div>
 <div class="summary-bar">
-<div class="stat-pill"><div class="num">204</div><div class="lbl">蒐集貼文數</div></div>
-<div class="stat-pill"><div class="num">31,000</div><div class="lbl">最高單篇讚數</div></div>
-<div class="stat-pill"><div class="num">12,127+</div><div class="lbl">總留言數</div></div>
+<div class="stat-pill"><div class="num">207</div><div class="lbl">蒐集貼文數</div></div>
+<div class="stat-pill"><div class="num">42,000</div><div class="lbl">最高單篇讚數</div></div>
+<div class="stat-pill"><div class="num">13,527+</div><div class="lbl">總留言數</div></div>
 <div class="stat-pill"><div class="num">4</div><div class="lbl">分析維度</div></div>
-<div class="stat-pill clickable" onclick="filterKeyword('硌手|戒圍|改圍|遺失|舊戒|重做|傳家','戒圍與舊戒',null)" title="點擊查詢相關貼文"><div class="num">戒圍與舊戒</div><div class="lbl">本週最熱關鍵字 🔎</div></div>
+<div class="stat-pill clickable" onclick="filterKeyword('對戒|疊戴|不同款|素一點|遺失|戒圍|舊戒','對戒與疊戴',null)" title="點擊查詢相關貼文"><div class="num">對戒與疊戴</div><div class="lbl">本週最熱關鍵字 🔎</div></div>
 </div>
 <!-- ===== Tru-Mi 產出成效摘要條（Theo 優化）===== -->
 <div class="output-bar">
@@ -239,12 +253,28 @@
 <div class="output-pill"><div class="num" id="outBest">—</div><div class="lbl">最佳單則觸及</div></div>
 <div class="output-pill"><div class="num" id="outAuth">0</div><div class="lbl">權威互動數</div></div>
 </div>
+<!-- ===== 🔔 每日提醒重點（每日自動更新）===== -->
+<div class="daily-brief" id="dailyBrief">
+<div class="db-head">
+<div class="db-title">🔔 今日提醒重點</div>
+<div class="db-date">2026-08-29</div>
+<div class="db-sub">每日自動更新 · 只列今天真的要做的事</div>
+</div>
+<ul class="db-list">
+<li><strong>今日主打草稿</strong>：<em>對戒不必一模一樣，該一致的是那條線</em>（靈感 @goat.00321）。這是今天唯一可直接發的素材，建議 <em>20:00–22:00</em> 發，發完 1 小時內回填追蹤欄。</li>
+<li><strong>今天要留的言只有 2 則</strong>：@goat.00321（B級，回「不同款也能成套」＋鑲石高度提醒）、@mayylis_10（C級，先接住她的疊戴經驗再補一句接觸面判斷）。兩則都<em>不放連結、不自薦、不評論她們提到的品牌</em>。</li>
+<li><strong>今天不要碰的</strong>：台中戒指協尋事件（@bearrjn 原始貼文 4.2 萬讚）。事件進行中、當事人可辨識、媒體已介入，<em>不留言不轉發不蹭聲量</em>，也不要發「戒指的價值不在價格」這類看似無關的觀點文。</li>
+<li><strong>本週浮出的新缺口</strong>：<em>男女戒可不同款</em>。今天這則的三筆留言有兩筆自己給出「一人一隻」的答案，代表市場已有需求但沒人講清楚。官網目前只有規格說明、沒有解法頁，建議本週補上。</li>
+<li><strong>還沒關掉的內部待辦</strong>：確認交件後<em>設計檔與尺寸紀錄的保存政策</em>（保存多久、能否復刻、是否另計費用）。確認前不可對外寫明，這條已連續掛著兩天。</li>
+</ul>
+<div class="db-foot">📌 本區每日隨爬蟲更新一次，只保留當天的判斷結論。完整判讀請往下切換四大分頁；效益回填請至「🚀 品牌策略室 → 產出效益追蹤」。</div>
+</div>
 <div class="tabs">
 <div class="tab todo-tab active" onclick="switchTab('todo', this)">🎯 待辦回應 <span class="count" id="todoTabCount">0</span></div>
 <div class="tab week-tab" onclick="switchTab('week', this)">📅 本週戰情室 <span class="count" id="weekTabCount">0</span></div>
 <div class="tab" onclick="switchTab('comms', this)">🚨 溝通與翻車焦慮 <span class="count">33</span></div>
-<div class="tab" onclick="switchTab('daily', this)">🌿 日常佩戴與體感 <span class="count">51</span></div>
-<div class="tab" onclick="switchTab('budget', this)">💸 預算與審美拉扯 <span class="count">75</span></div>
+<div class="tab" onclick="switchTab('daily', this)">🌿 日常佩戴與體感 <span class="count">53</span></div>
+<div class="tab" onclick="switchTab('budget', this)">💸 預算與審美拉扯 <span class="count">76</span></div>
 <div class="tab" onclick="switchTab('heritage', this)">💛 傳承與情感重塑 <span class="count">45</span></div>
 <div class="tab" onclick="switchTab('strategy', this)">🚀 品牌策略室</div>
 </div>
@@ -1715,6 +1745,22 @@
 </div>
 </div>
 <div class="posts-grid">
+<div class="post-card" data-level="B" data-keywords="對戒 男女審美衝突 素一點 有鑽不方便 品牌現成款 希望能多戴著 一人一款 疊戴" onclick="toggleCard(this, event)">
+<div class="post-top">
+<div><div class="post-author"><a href="https://www.threads.com/@goat.00321" target="_blank">@goat.00321</a></div><div class="post-date">2026-08-28</div></div>
+<div class="post-right"><div class="post-likes">❤️ 12</div><span class="level-tag level-B">🟠 B</span></div>
+</div>
+<div class="post-content">想跟男友用潘朵拉的這兩個戒指當對戒 但男友感覺比較喜歡素一點的 而且我也覺得有鑽可能對他來說不太方便 但我真的很喜歡這兩個😭 但又不希望男友不喜歡 畢竟是希望能多戴著</div>
+<div class="post-stats"><span>💬 3則留言</span><span>↗ 7次分享</span></div>
+<div class="expand-hint">▼ 點擊展開</div>
+<div class="comments-section">
+<div class="comments-title">🏆 熱門留言</div>
+<div class="comment"><div class="comment-meta"><span class="comment-author">@rosalindlii（15小時・1讚）</span></div><div class="comment-text">對戒不需要一模一樣ㄚ</div></div><div class="comment"><div class="comment-meta"><span class="comment-author">@goat.00321（作者・10分鐘）</span></div><div class="comment-text">一開始是想說男友帶第一張 我帶第二張圖片的</div></div><div class="comment"><div class="comment-meta"><span class="comment-author">@lam.ying（18小時）</span></div><div class="comment-text">2個都好看 。每款一人一隻</div></div><div class="comment"><div class="comment-meta"><span class="comment-author">（觀察備註）</span></div><div class="comment-text">3,098 次瀏覽、12 讚、3 則留言。三則留言裡有兩則給了同一個答案：不必一模一樣、一人一隻。作者自己也接著補充她原本就想這樣分配——代表她其實已經走到解法門口，卡住的不是款式，是「這樣算不算對戒」的自我懷疑。</div></div>
+<a class="post-link" href="https://www.threads.com/@goat.00321/post/DclB0lIFI77" target="_blank">🔗 查看原始貼文</a>
+<div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>想用某品牌的兩枚現成戒指當對戒，但男友偏好素面，而且鑲鑽對他的日常不方便<br><strong>深層焦慮：</strong>她真正說出口的關鍵句是最後一句——「畢竟是希望能多戴著」。她要的不是一組好看的照片，是兩個人都願意每天戴的東西。而她之所以卡住，是因為她把「對戒」預設成「同一款買兩個」，於是喜好差異就變成了必須有人退讓的題目。當現成款只能二選一，讓步的通常是那個比較不在意的人，最後結果是他把戒指收起來<br><strong>預算／時程：</strong>未揭露預算與婚期，屬於決定前的比較階段；發文 19 小時 12 讚 3 留言 7 分享 3,098 瀏覽</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>3 兩人審美衝突（男女對款式偏好不同，且牽涉男方佩戴便利性）｜<strong>等級：</strong>B 問題意圖（困擾明確、已在看實體款式，但未提婚期與預算，尚未進入購買決策期。給一個立刻可用的判斷即可）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">對戒其實不用同一款，真正需要一致的是「那條線」——弧度、收邊、內圈的處理方式一樣，看起來就會是一對。他那枚做素面、窄一點，妳那枚保留鑲石，兩隻放在一起還是成套的。另外他覺得有鑽不方便通常是真的，鑲石的高度會勾東西，這點在挑之前先確認他平常的工作情境會比較準。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">有個女生說她很喜歡某個品牌的兩枚戒指，想拿來當對戒，但男友偏好素一點，覺得有鑽石不太方便。她說怕男友不喜歡，因為希望能多戴著。這句「希望能多戴著」才是整段話的重點。我做對戒從來不要求兩枚長得一樣，真正該一致的是那條線：同樣的弧度、同樣的收邊、同樣的內圈刻字，然後各自照兩個人的手去調整寬窄與要不要鑲石。他手上戴得住，她手上戴得開心，這對戒指才會真的每天都在。一模一樣是最容易的做法，卻常常是最少人戴滿一年的做法。完整故事看 IG @trumi_jewelryofficial</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>輪播「對戒不必一模一樣的四種做法」——共用線條、共用收邊、共用內圈刻字、共用材質但寬窄不同，每張各配一組實拍<br><strong>Reels：</strong>公式C（雙人對照）：同一條設計線延伸出的男戒與女戒並排，鏡頭從兩隻手切換，證明不同款也能成套<br><strong>限動：</strong>二選一貼紙——妳希望對戒一模一樣，還是各自合手？看看比例<br><strong>LINE／官網：</strong>訂製頁新增「男女戒可不同款」段落，導入關鍵字「男女戒不同款」；LINE 自動回覆補上一組不同款成套的實例圖</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">「對戒＝同款兩枚」是市場預設值，而現成品牌的貨架邏輯強化了這個預設。這正是訂製最容易說清楚的價值點，但目前官網把它寫成規格說明而不是解法。建議改寫成一句問句式的入口：「你們兩個喜歡的不一樣，是不是就只能有人讓步？」再用實例回答。另外「男方覺得鑲石不方便」應納入需求釐清必問題組，與職業情境三題並列。</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">B 級。留言先回答她的問題（不同款也能成套＋鑲石高度的實務提醒），不放連結不自薦不批評品牌。納入 IG 輪播與 SEO 題庫「男女戒不同款」。若她後續出現婚期或預算訊息，升級為 A 級追蹤。</div></div>
+</div>
+</div>
+
 <div class="post-card" data-level="D" data-keywords="黃金男戒 尾戒 預算一萬 台中 銀樓 戒圍 可調節" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@caoo_8812m" target="_blank">@caoo_8812m</a></div><div class="post-date">2026-08-28</div></div>
@@ -3118,6 +3164,37 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 </div>
 <div class="posts-grid">
+<div class="post-card" data-level="C" data-keywords="疊戴 求婚鑽戒 婚戒 一起戴 儀式感 版型 手型 鑽石等級 預算範圍 使用率" onclick="toggleCard(this, event)">
+<div class="post-top">
+<div><div class="post-author"><a href="https://www.threads.com/@mayylis_10" target="_blank">@mayylis_10</a></div><div class="post-date">2026-08-29</div></div>
+<div class="post-right"><div class="post-likes">❤️ —</div><span class="level-tag level-C">🔵 C</span></div>
+</div>
+<div class="post-content">小朋友才做選擇啊我全都要🤣我平常都會戴婚戒，但出去逛街或是想要有點儀式感的時候，就是求婚鑽戒跟婚戒會搭配著戴～不過我是在某家買的喔，給他們你預算範圍，會幫忙規劃鑽石等級或是金屬材質做法，給的建議都蠻中肯的，而且還特別教我不同版型的戒指跟手型可以怎麼疊戴，整個過程心情都很好（依不評論同業原則，原文品牌名不引用）</div>
+<div class="post-stats"><span>💬 尚無回覆</span><span>↗ 0次分享</span></div>
+<div class="expand-hint">▼ 點擊展開</div>
+<div class="comments-section">
+<div class="comments-title">🏆 熱門留言</div>
+<div class="comment"><div class="comment-meta"><span class="comment-author">（脈絡備註）</span></div><div class="comment-text">此則為 @aixiangni60「鑽戒是用來拍照的，婚戒才是拿來生活的／預算 8 萬想一次搞定三顆」貼文（367 讚・140 留言）下的回覆，本身有獨立貼文連結。原貼文已收錄於「💸 預算與審美拉扯」。</div></div><div class="comment"><div class="comment-meta"><span class="comment-author">（觀察備註）</span></div><div class="comment-text">發文 44 分鐘、1 次瀏覽、尚無回覆，擴散近乎為零。但內容價值不在互動數：她直接反駁了「求婚鑽戒買了不會戴」這個近期高頻論述，而且說出了原因——不是每天戴，是分場合戴。這是一個被整串討論忽略的第三選項。</div></div><div class="comment"><div class="comment-meta"><span class="comment-author">（市場訊號）</span></div><div class="comment-text">她最有記憶點的一句是「還特別教我不同版型的戒指跟手型可以怎麼疊戴」。讓她心情好的不是價格，是有人把她的手當成前提在規劃。這正是無門市、無業績壓力的一對一諮詢最容易做到、卻最少被寫出來的部分。</div></div>
+<a class="post-link" href="https://www.threads.com/@mayylis_10/post/DcnBKbpCZ38" target="_blank">🔗 查看原始貼文</a>
+<div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>回應「婚後還會不會戴求婚鑽戒」，分享自己平日戴婚戒、有儀式感的場合則兩枚疊戴<br><strong>深層焦慮：</strong>她沒有焦慮，她是已經解決完的人。真正的訊號在她描述諮詢過程的方式——她記得的不是鑽石規格，是「教我不同版型跟手型可以怎麼疊戴」。也就是說，讓一個客人事後主動替品牌說話的，往往不是成品，是那段有人把她的手放在心上的過程。同時她也提供了一個對抗「鑽戒買了不會戴」論述的反例：問題不在鑽戒，在沒有人教她怎麼把兩枚放進同一種生活裡<br><strong>預算／時程：</strong>已完成購買，未揭露金額；發文 44 分鐘 1 次瀏覽、尚無回覆，屬低擴散高訊號</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題（配戴習慣與疊戴場合），並延伸回應 2 預算明確求解的原始討論｜<strong>等級：</strong>C 情緒共鳴（分享已完成的使用經驗，非詢問階段，先接住經驗再補一句觀點）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">分場合戴這個做法其實很實際，比「只能選一個」合理多了。有一個小提醒可以讓疊戴更順：兩枚要疊在同一指節上時，接觸面盡量選一平一弧，兩枚都做圓弧會互相滑動、都做平面又會夾皮膚。妳說有人教妳看版型跟手型，這一步做對了，之後戴起來的差別會比想像中大。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">最近很多人在講「求婚鑽戒是拍照用的，婚戒才是生活用的」。今天看到一位女生給了第三個答案：她平常戴婚戒，想有儀式感的日子就兩枚一起戴。這句話我看了很久。因為問題從來不是鑽戒該不該留，是沒有人教過她怎麼把兩枚放進同一種生活裡。疊戴其實有可以講的細節：兩枚貼在一起時，接觸面最好一平一弧，兩個都是圓弧會互相滑，兩個都是平面又會夾到皮膚。這件事在下訂之前十秒就能講完，卻決定了那枚鑽戒接下來十年會不會被戴出門。完整故事看 IG @trumi_jewelryofficial</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>輪播「疊戴不打架的三個條件」——接觸面一平一弧、總厚度上限、鑲爪高度差；每張附手部實拍<br><strong>Reels：</strong>公式D（配戴日常紀實）：同一隻手在上班日與外出日的兩種戴法對照，無旁白只有環境音<br><strong>限動：</strong>問答貼紙——妳的求婚鑽戒現在還會戴嗎？多久戴一次<br><strong>LINE／官網：</strong>訂製頁補「求婚戒與婚戒的搭配關係」段落，導入關鍵字「婚戒疊戴」；諮詢表單新增一題「未來會不會想跟求婚戒一起戴」</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">「求婚戒買了會不會戴」在本週已第二次出現（另見 @aixiangni60 的 8 萬預算討論）。目前 Tru-Mi 的訂製流程把求婚戒與對戒視為兩件獨立商品，沒有處理它們之間的搭配關係。建議在需求釐清階段固定加問一題：未來這兩枚會不會想一起戴？只要答案是會，女戒的接觸面與厚度就要在設計時預留，這是事後改不回來的決定。這一題同時也是免費鑽戒租借服務最自然的接續入口。</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">C 級。留言先肯定她的做法，再補一句疊戴接觸面的實務判斷，不放連結不自薦不評論她提到的品牌。列入「疊戴案例庫」，累積至三則後製作 IG 輪播與 SEO 文章「求婚戒和婚戒可以一起戴嗎」。不列入成交追蹤。</div></div>
+</div>
+</div>
+<div class="post-card" data-level="RISK" data-keywords="遺失 戒指 懸賞10萬 台中 大誠街 興民街 協尋 當事人原始貼文 意外遺失" onclick="toggleCard(this, event)">
+<div class="post-top">
+<div><div class="post-author"><a href="https://www.threads.com/@bearrjn" target="_blank">@bearrjn</a></div><div class="post-date">2026-08-27</div></div>
+<div class="post-right"><div class="post-likes">❤️ 4.2萬</div><span class="level-tag level-RISK">⚫ 風險</span></div>
+</div>
+<div class="post-content">急尋戒指 懸賞10萬‼️ 時間：8/26下午16:00左右遺失。地點：台中市中區大誠街49巷與興民街路口。照片中的這款女生戒指不見了，遺失地點應該是在下方圖2、3（紅點的位置）。若有看到或撿到，麻煩聯絡我，拜託各位了，感謝🙏</div>
+<div class="post-stats"><span>💬 1,397則留言</span><span>↗ 925次分享</span></div>
+<div class="expand-hint">▼ 點擊展開</div>
+<div class="comments-section">
+<div class="comments-title">🏆 熱門留言</div>
+<div class="comment"><div class="comment-meta"><span class="comment-author">@evanphototw（1天・39讚）</span></div><div class="comment-text">這個戒指市價多少錢</div></div><div class="comment"><div class="comment-meta"><span class="comment-author">（脈絡備註）</span></div><div class="comment-text">這是當事人本人的原始協尋貼文。同一事件已收錄兩則轉述視角（@setnews 媒體轉發、@kelianla_87 社群擴散），本則補上事件源頭與真實量級：4.2 萬讚、1,397 留言、925 轉發、2.8 萬分享。</div></div><div class="comment"><div class="comment-meta"><span class="comment-author">（觀察備註）</span></div><div class="comment-text">留言區出現的第一個高讚提問是「這個戒指市價多少錢」，而當事人開的懸賞金額是 10 萬。無論戒指本身值多少，這兩個數字之間的落差就是答案：對持有者而言，這枚戒指的價格與價值早已不是同一件事。</div></div><div class="comment"><div class="comment-meta"><span class="comment-author">（分工提醒）</span></div><div class="comment-text">協尋事件進行中、當事人可辨識、媒體已介入。一律不留言、不轉發、不自薦、不蹭聲量，僅內部記錄市場訊號。</div></div>
+<a class="post-link" href="https://www.threads.com/@bearrjn/post/Dcie9XOCfYn" target="_blank">🔗 查看原始貼文</a>
+<div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>戒指於路口遺失，當事人祭出 10 萬元懸賞公開協尋<br><strong>深層焦慮：</strong>她在貼文裡沒有寫這枚戒指多少錢，只寫了時間、地點、紅點位置和一句拜託各位。整篇沒有一個字在解釋價值，因為對她來說不需要解釋。而留言區第一則高讚提問卻是「這個戒指市價多少錢」——這兩種語言的落差，就是整起事件最值得記錄的地方。旁觀者用價格理解，持有者用意義承擔<br><strong>預算／時程：</strong>不適用。懸賞金額 10 萬元為當事人自訂，非商品定價；發文 1 天 4.2 萬讚、1,397 留言、925 轉發、2.8 萬分享，為本週互動最高的一則</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>6 日常佩戴問題（意外遺失）＋非標準八類的社群協尋事件｜<strong>等級：</strong>風險（協尋進行中、當事人可辨識、媒體已介入洽談，一律只觀察不介入）</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">（風險類。當事人正在協尋中，任何品牌帳號現身都會被解讀為蹭事件。不留言、不轉發、不自薦，僅內部記錄。）</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（不轉為貼文。事件未落幕前不碰，包含不做「戒指的價值不等於價格」這類看似無關但時機敏感的觀點文。此觀點可保留，至少冷卻一個月後再獨立成篇，且不得指涉本事件、不得引用任何當事人語句。）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG：</strong>暫不製作<br><strong>Reels：</strong>公式E（純製程紀錄）：交件時的尺寸量測與設計檔封存流程實拍，無旁白、不連結任何事件<br><strong>限動：</strong>不使用<br><strong>LINE／官網：</strong>不做行銷動作。僅在確認保存政策後，於訂製流程頁補一行服務事實陳述</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">同一事件三則貼文（媒體、社群擴散、當事人本人）合計超過 30 萬次曝光，反覆驗證同一件事：婚戒的價值在使用者心中完全脫離售價。這應該直接反映在文案順序上——先講故事怎麼進到戒指裡，價格放後面。另一項待辦仍未關閉：確認 Tru-Mi 交件後設計檔與尺寸紀錄的實際保存政策（保存多久、能否復刻、是否另計費用），確認前不可對外寫明。</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">風險級。不留言不追蹤當事人。內部待辦沿用：確認設計檔保存與復刻政策。一個月後回看事件是否落幕，再評估「戒指的價值不在標價」是否可獨立成篇。</div></div>
+</div>
+</div>
+
 <div class="post-card" data-level="RISK" data-keywords="遺失 婚戒 懸賞 水溝 台中 新婚 掉戒指 協尋" onclick="toggleCard(this, event)">
 <div class="post-top">
 <div><div class="post-author"><a href="https://www.threads.com/@setnews" target="_blank">@setnews</a></div><div class="post-date">2026-08-28</div></div>
@@ -4050,9 +4127,9 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div style="margin-bottom:36px">
 <div class="section-title">✍️ 今日 Jessica 發文草稿推薦</div>
 <div class="draft-card">
-<div class="draft-badge">🚨 溝通與翻車焦慮｜@xm_feng.999</div>
-<div class="draft-meta">📅 2026年08月28日 · 今日新增 5 則貼文（B級1／C級1／D級1／風險2）；取今日互動最高（❤️108＋💬62）且非 A 級、非風險類之可用素材 · 靈感來源：@xm_feng.999</div>
-<div class="draft-body">有位準新娘寫，離婚宴只剩兩個月，但她感覺不到另一半的雀躍。她列了一張籌備清單，婚戒那一項是打勾的——打勾的方式是她找品牌、他陪著試戴，最後定案的還是她挑的那家。做這行十幾年，這個組合我看太多次了。不是他不在乎，是「你喜歡哪個款式」這種問題，他真的答不出來。所以我後來不問款式，我問三件事：你工作會不會戴手套、你打字多不多、你介不介意手上有東西的存在感。這三題沒有標準答案，但只要他開始回答，那對戒指就從「她挑的」變成「我們的」。婚禮是一天，戒指是每一天，值得兩個人都在場。完整故事看 IG @trumi_jewelryofficial</div>
+<div class="draft-badge">💸 預算與審美拉扯｜@goat.00321</div>
+<div class="draft-meta">📅 2026年08月29日 · 今日新增 3 則貼文（B級1／C級1／風險1）；取今日互動最高（❤️12＋💬3＋3,098 次瀏覽）且非 A 級、非風險類之可用素材 · 靈感來源：@goat.00321</div>
+<div class="draft-body">有個女生說她很喜歡某個品牌的兩枚戒指，想拿來當對戒，但男友偏好素一點，覺得有鑽石不太方便。她說怕男友不喜歡，因為希望能多戴著。這句「希望能多戴著」才是整段話的重點。我做對戒從來不要求兩枚長得一樣，真正該一致的是那條線：同樣的弧度、同樣的收邊、同樣的內圈刻字，然後各自照兩個人的手去調整寬窄與要不要鑲石。他手上戴得住，她手上戴得開心，這對戒指才會真的每天都在。一模一樣是最容易的做法，卻常常是最少人戴滿一年的做法。完整故事看 IG @trumi_jewelryofficial</div>
 </div>
 <!-- ===== 效益追蹤欄（Theo 優化 2026-07-24）===== -->
 <div class="track-wrap">
@@ -4063,6 +4140,16 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <tr><th>日期</th><th>平台</th><th>草稿主題／靈感</th><th>發布時間</th><th>1hr 讚數</th><th>權威互動</th><th>最終觸及</th><th>備註</th></tr>
 </thead>
 <tbody id="trackBody">
+<tr>
+<td>2026-08-29</td>
+<td>Threads</td>
+<td>對戒不必一模一樣，該一致的是那條線｜@goat.00321</td>
+<td class="editable col-fill" contenteditable="true" data-metric="time">待回填</td>
+<td class="editable col-fill" contenteditable="true" data-metric="likes1hr">待回填</td>
+<td class="editable col-fill" contenteditable="true" data-metric="auth">待回填</td>
+<td class="editable col-fill" contenteditable="true" data-metric="reach">待回填</td>
+<td class="editable" contenteditable="true">—</td>
+</tr>
 <tr>
 <td>2026-08-28</td>
 <td>Threads</td>
