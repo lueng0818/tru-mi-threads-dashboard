@@ -381,15 +381,45 @@ private key／JWT／URL userinfo 等），**一律用 `_j()` 組裝，不要寫�
 ## 7. 憑證現況（SECURITY ACTION）
 
 ```
-.github_token   sha256 91094b0353cc2124   93B / 1 行   mtime 2026-08-07
-                🔴 命中 github_pat  HIGH_CONFIDENCE
-                撤銷狀態：尚未撤銷
+.github_token   ✅ CLOSED 2026-09-11
+
+                sha256 91094b0353cc2124   93B / 1 行   mtime 2026-08-07
+                分類    REVOKED SECRET / FILE RESIDUAL
+                撤銷    已撤銷（2026-09-07 事故紀錄；2026-09-11 於
+                        GitHub fine-grained PAT 列表確認不存在）
+                刪除    已刪除（2026-09-11）
+                repo    從未進入（remote 查詢 404）
 ```
 
-**系統已不依賴它**：`gh auth status` 顯示走 keyring 的 `gho_` OAuth token。
-**且它不在任何同步腳本的複製範圍內**（已靜態分析確認），remote 查詢回 404。
+> ⚠️ **2026-09-11 更正**：本節初版寫「尚未撤銷」，那是**錯的**——
+> 撰寫時未先讀 `incident-2026-09-07-concurrency.md` 與
+> `incident-2026-09-07-meta-credential.md`，兩份都已將其分類為
+> `REVOKED SECRET / FILE RESIDUAL`。
+> **教訓**：憑證狀態要先查既有事故紀錄，不要只看掃描器的 HIGH_CONFIDENCE 就宣稱未處理。
+> 掃描器判斷的是**格式**，不是**有效性**。
 
-→ 剩下的只有**撤銷與清除**：請到 GitHub 設定撤銷該 PAT 再刪檔。
+**系統不依賴它**：`gh auth status` 走 keyring 的 `gho_` OAuth token。
+**不在任何腳本的讀取或複製範圍內**（2026-09-11 全專案 grep 確認：
+15 處命中全為文件中的禁止宣告或掃描指令，無實際讀取）。
+remote 查詢回 404，未進 repo。
+
+**處置紀錄（2026-09-11 完成）**
+
+```powershell
+Start-Process "https://github.com/settings/tokens?type=beta"   # 確認列表中已不存在
+Remove-Item .github_token -Force
+python tools\secret_scan.py                                     # 驗證 HIGH_CONFIDENCE 歸零
+```
+
+**本案結案。** 專案根目錄不再有 HIGH_CONFIDENCE 明碼憑證檔。
+
+### 7.1 未結案的兩個檔（不是憑證）
+
+`token.txt`（8 行）與 `meta tmp pw.txt`（20 行）**僅檔名命中提示規則**，
+內容未命中任何憑證格式。**不是憑證，不要刪**——可能是有用的筆記。
+檔名有誤導性，建議改名，例如 `notes-token-usage.txt`、`notes-meta-setup.txt`。
+
+改名後 `secret_scan` 的檔名提示規則就不會再命中，掃描結果會乾淨到可以直接判讀。
 
 同目錄另有 `token.txt`（8 行）與 `meta tmp pw.txt`（20 行），
 僅檔名命中提示規則、內容未命中憑證格式，建議一併改名。
