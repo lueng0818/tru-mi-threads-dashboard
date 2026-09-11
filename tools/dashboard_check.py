@@ -25,6 +25,18 @@ TAB_KEY = {"comms": "panel-comms", "daily": "panel-daily",
            "budget": "panel-budget", "heritage": "panel-heritage"}
 VALID_LEVELS = {"A", "B", "C", "D", "RISK"}
 
+# ---------- P1 schema（2026-09-11 新增）----------
+# 規格正本：references/dashboard-spec.md §8、§9
+#
+# ⚠️ 這批驗證**只套用在遷移日之後收錄的卡片**（data-collected >= MIGRATION_DATE）。
+# 既有 229 張舊卡沒有 P1 欄位，依 ia-migration-plan.md 決策 A 採 forward-only，
+# 不回填。若對全部卡片套用，健檢會一次噴 229 個 FAIL，等於把閘門變成雜訊。
+MIGRATION_DATE = "2026-09-12"
+
+VALID_TOPICS = {"婚戒", "戒圍佩戴", "客製設計", "感情婚姻", "籌備婚禮", "新發現", "待分類"}
+VALID_INTENTS = {"分享方法", "實際困擾", "求助", "不同觀點", "閒聊", "認同", "想知道後續"}
+LISTENER_KEYS = ("他在說什麼", "建議怎麼接", "可以怎麼回")
+
 errors, warns, notes = [], [], []
 
 
@@ -51,6 +63,110 @@ def scan_divs(s):
     for pos, attrs in stack:
         errors.append("未關閉的 <div%s>，位置 offset=%d" % (attrs[:60], pos))
     return out
+
+
+def split_cards(s):
+    """把 HTML 切成一張張 post-card 的原始片段。
+
+    卡片在檔案裡是一整串（含換行），用下一個 post-card 的起點當切點即可，
+    不需要完整 DOM 解析——這裡只要抓欄位，不需要知道巢狀結構。
+    """
+    starts = [m.start() for m in re.finditer(r'<div class="post-card"', s)]
+    out = []
+    for i, a in enumerate(starts):
+        b = starts[i + 1] if i + 1 < len(starts) else len(s)
+        out.append(s[a:b])
+    return out
+
+
+def attr(chunk, name):
+    m = re.search(r'\b%s="([^"]*)"' % re.escape(name), chunk)
+    return m.group(1) if m else None
+
+
+def check_p1_schema(s):
+    """P1 欄位驗證。規格：dashboard-spec.md §8／§9。
+
+    只驗 data-collected >= MIGRATION_DATE 的卡片（forward-only，見檔頭說明）。
+    舊卡缺欄位不算錯，那是預期狀態。
+    """
+    new_cards = []
+    for chunk in split_cards(s):
+        collected = attr(chunk, "data-collected")
+        if collected and collected >= MIGRATION_DATE:
+            new_cards.append(chunk)
+
+    if not new_cards:
+        notes.append("P1 schema：尚無遷移日（%s）之後的新卡，本節略過" % MIGRATION_DATE)
+        return
+
+    who = lambda c: (re.search(r'post-author"><a[^>]*>(@[^<]+)</a>', c) or [None, "?"])[1] \
+        if re.search(r'post-author"><a[^>]*>(@[^<]+)</a>', c) else "?"
+
+    bad = 0
+    for c in new_cards:
+        tag = who(c)
+
+        # ① data-topic 合法（含「待分類」——證據不足時的正確答案，不是錯誤）
+        topic = attr(c, "data-topic")
+        if topic is None:
+            errors.append("P1 %s 缺 data-topic" % tag); bad += 1
+        elif topic not in VALID_TOPICS:
+            errors.append("P1 %s data-topic 值不合法：%s" % (tag, topic)); bad += 1
+
+        # ②③ 關鍵留言數量 1-5，且與 data-count 相符
+        kc_box = re.search(r'<div class="key-comments"([^>]*)>(.*?)</div>\s*(?=<div class="listener-analysis")',
+                           c, re.S)
+        if not kc_box:
+            errors.append("P1 %s 缺 .key-comments 區塊" % tag); bad += 1
+        else:
+            n_kc = len(re.findall(r'<div class="key-comment"', kc_box.group(2)))
+            declared = attr(kc_box.group(1), "data-count")
+            if not (1 <= n_kc <= 5):
+                errors.append("P1 %s 關鍵留言 %d 則（必須 1-5；不得為 0，也不得硬湊超過 5）"
+                              % (tag, n_kc)); bad += 1
+            if declared is None or not declared.isdigit() or int(declared) != n_kc:
+                errors.append("P1 %s data-count=%s 與實際 %d 則不符" % (tag, declared, n_kc)); bad += 1
+            # ⑥ 少於 5 則要說明理由（WARN）——防止「湊不到就默默少寫」
+            if n_kc < 5 and not attr(kc_box.group(1), "data-short-reason"):
+                warns.append("P1 %s 只有 %d 則關鍵留言但未填 data-short-reason" % (tag, n_kc))
+
+            # ④ 每則必帶合法 primary intent
+            for m in re.finditer(r'<div class="key-comment"([^>]*)>', kc_box.group(2)):
+                pi = attr(m.group(1), "data-intent-primary")
+                if pi is None:
+                    errors.append("P1 %s 有 .key-comment 缺 data-intent-primary" % tag); bad += 1
+                elif pi not in VALID_INTENTS:
+                    errors.append("P1 %s data-intent-primary 不合法：%s" % (tag, pi)); bad += 1
+            # secondary signals 與 uncertainty 刻意不驗完整性：
+            # 一則留言可以只有一種意圖，強制填會逼 AI 虛構（dashboard-spec §8.3）
+
+        # ⑤ listener-analysis 三層齊全
+        la = re.search(r'<div class="listener-analysis">(.*?)</div>\s*(?=<div class="convo-thread"|'
+                       r'<div class="selection-evidence"|<div class="jessica-insight")', c, re.S)
+        if not la:
+            errors.append("P1 %s 缺 .listener-analysis" % tag); bad += 1
+        else:
+            missing = [k for k in LISTENER_KEYS if k not in la.group(1)]
+            if missing:
+                errors.append("P1 %s listener-analysis 缺：%s" % (tag, "、".join(missing))); bad += 1
+
+        # ⑦ selection-evidence 的入選筆數要對得上
+        se = re.search(r'<div class="selection-evidence">(.*?)</div>\s*(?=<div class="jessica-insight")',
+                       c, re.S)
+        if se and kc_box:
+            picked = len(re.findall(r'data-picked="yes"', se.group(1)))
+            n_kc = len(re.findall(r'<div class="key-comment"', kc_box.group(2)))
+            if picked != n_kc:
+                errors.append("P1 %s selection-evidence 入選 %d 筆，關鍵留言 %d 則，對不上"
+                              % (tag, picked, n_kc)); bad += 1
+
+        # ⑧ 有對話串就不能標 none
+        if '<div class="convo-thread"' in c and attr(c, "data-convo") == "none":
+            errors.append("P1 %s 有 .convo-thread 但 data-convo=none" % tag); bad += 1
+
+    notes.append("P1 schema：檢查 %d 張新卡（遷移日 %s 起），%s"
+                 % (len(new_cards), MIGRATION_DATE, "全部通過" if bad == 0 else "%d 項不合格" % bad))
 
 
 def main():
@@ -128,6 +244,9 @@ def main():
             errors.append("data-level 值不合法：%s" % lv.group(1))
     kw = len(re.findall(r"data-keywords=", s))
     notes.append("data-keywords 覆蓋率 %d/%d（%.0f%%）" % (kw, n_cards, 100.0 * kw / max(n_cards, 1)))
+
+    # ---------- 4.5 P1 schema（僅驗遷移日之後的新卡）----------
+    check_p1_schema(s)
 
     # ---------- 5. 表格欄數固定 8 ----------
     for tid in ("trackBody", "commentLogBody"):

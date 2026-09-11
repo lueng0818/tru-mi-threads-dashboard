@@ -995,8 +995,72 @@ Brand Voice 的判斷要包含「Jessica 如何跟人互動」，
   見 **`references/dashboard-spec.md` §8.4**（2026-09-11 relocation，內容未改寫）。
   重點一句：**不要為了衝覆蓋率補與原文重複的詞，那對搜尋結果零影響。**
 - 必帶 `<div class="post-date">YYYY-MM-DD</div>`，**零位補齊**（`2026-03-10` 不是 `2026-3-10`）
-- 建議帶 `data-collected="YYYY-MM-DD"`（今天的日期）——這是未來要做卡片汰舊的唯一依據
+- **必帶** `data-collected="YYYY-MM-DD"`（今天的日期）——卡片汰舊的唯一依據，
+  也是 P1 schema 驗證的開關（`dashboard_check.py` 靠它判斷要不要驗新欄位）
 - 內文用「jessica-insight 八段抽屜」完整格式（📊二/🔍三/💬四/📝五/🔀六/🔧七/📌八）
+
+#### P1 schema — 2026-09-12 起的新卡必帶（2026-09-11 新增）
+
+> 規格正本：`references/dashboard-spec.md` §8。
+> **只適用新卡**，既有 229 張舊卡採 forward-only 不回填
+> （`ia-migration-plan.md` 決策 A）。
+
+**卡片屬性再加三個**
+
+```html
+data-topic="婚戒|戒圍佩戴|客製設計|感情婚姻|籌備婚禮|新發現|待分類"
+data-convo="active|inactive|none"
+data-convo-last="YYYY-MM-DD"     <!-- 有對話才需要 -->
+```
+
+⛔ 證據不足時 `data-topic` 一律填 **`待分類`**。硬分類比留空更糟。
+
+**`comments-section` 內新增三個區塊，順序固定**
+
+```html
+<div class="key-comments" data-count="3" data-short-reason="僅 3 則具代表性">
+  <div class="key-comment"
+       data-intent-primary="分享方法"
+       data-intent-signals="自身經驗 想知道後續">
+    <div class="kc-text">留言原文</div>
+    <div class="kc-sum">一句摘要</div>
+    <div class="kc-next">Jessica 可以怎麼回</div>
+  </div>
+</div>
+
+<div class="listener-analysis">
+  <b>他在說什麼</b>：一句話<br>
+  <b>建議怎麼接</b>：接住／追問／共聊／回答／專業補充／先確認<br>
+  <b>可以怎麼回</b>：最自然的下一句
+</div>
+
+<div class="convo-thread">…有對話往返才需要…</div>
+
+<div class="selection-evidence">
+  <div data-picked="yes">#12｜高互動＋不同方法｜代表「處理方式」</div>
+  <div data-picked="no">#03｜高讚但與 #12 高度重複</div>
+</div>
+```
+
+**健檢會擋的八件事**（`dashboard_check.py` §4.5）
+
+| # | 驗什麼 | 級別 |
+|---|---|---|
+| 1 | `data-topic` 存在且值合法 | FAIL |
+| 2 | `.key-comment` 數量 **1–5**（0 不行，>5 也不行） | FAIL |
+| 3 | `data-count` 與實際則數相符 | FAIL |
+| 4 | 每則帶合法 `data-intent-primary` | FAIL |
+| 5 | `.listener-analysis` 三層齊全 | FAIL |
+| 6 | 少於 5 則時必須填 `data-short-reason` | WARN |
+| 7 | `selection-evidence` 的 `data-picked="yes"` 筆數 == `data-count` | FAIL |
+| 8 | 有 `.convo-thread` 時 `data-convo` 不得為 `none` | FAIL |
+
+⚠️ **第 2 與第 6 條是一組**：關鍵留言**不是固定五則**。
+只有 2–3 則真正有代表性就寫 2–3 則，但要在 `data-short-reason` 說明為什麼。
+⛔ 不得為了填滿而補低價值、重複或無關的留言（`dashboard-spec.md` §3.3）。
+
+⚠️ `data-intent-signals` 與 `data-intent-uncertainty` **刻意不驗完整性**——
+一則留言可以只有一種意圖，強制填會逼 AI 虛構。
 
 **收尾 `</div>`**：每張卡片 jessica-insight 後依序恰好 3 個 `</div>`
 （①關 jessica-insight ②關 comments-section ③關 post-card——第③最常漏）。
