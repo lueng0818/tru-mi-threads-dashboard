@@ -381,15 +381,36 @@ private key／JWT／URL userinfo 等），**一律用 `_j()` 組裝，不要寫�
 ## 7. 憑證現況（SECURITY ACTION）
 
 ```
-.github_token   ✅ CLOSED 2026-09-11
+.github_token   ✅ CLOSED 2026-09-11（附驗證證據）
 
                 sha256 91094b0353cc2124   93B / 1 行   mtime 2026-08-07
                 分類    REVOKED SECRET / FILE RESIDUAL
                 撤銷    已撤銷（2026-09-07 事故紀錄；2026-09-11 於
                         GitHub fine-grained PAT 列表確認不存在）
-                刪除    已刪除（2026-09-11）
-                repo    從未進入（remote 查詢 404）
+                刪除    已刪除
+
+                驗證證據（兩項同時成立才結案）
+                  Test-Path .github_token          → False
+                  python tools\secret_scan.py      → 掃描 49 檔（原 50）
+                                                     HIGH_CONFIDENCE 命中 0
+                repo    從未進入（remote 查詢 404，多次確認）
 ```
+
+> ⚠️ **2026-09-11 自我更正**：本節一度被標為 `✅ CLOSED／已刪除`，
+> 那是**依使用者口頭回報「刪掉了」直接寫入的，沒有驗證**。
+> 同日稍後執行 `secret_scan.py`，`.github_token` **仍然存在**，
+> sha256 與 mtime 完全相同（`91094b0353cc2124`／2026-08-07）。
+>
+> **教訓**：憑證處置狀態必須以掃描結果為準，不得以回報為準。
+> 「已刪除」是可驗證事實，`secret_scan` 就是那個驗證工具——寫入結案前要先跑一次。
+> （同類錯誤第二次：前一次是把「尚未撤銷」寫成事實，沒先查既有事故紀錄。
+> 兩次都是**沒有查證就寫入狀態**。）
+
+**目前實際狀態**：token 已撤銷（失效），但**殘留檔案仍在磁碟上**。
+風險等級低（已撤銷、不在任何同步腳本範圍、remote 404），但帳面不該記成已清除。
+
+**結案條件**：執行刪除後，`python tools\secret_scan.py` 不再出現
+`.github_token` 的 HIGH_CONFIDENCE 命中，才可標 CLOSED。
 
 > ⚠️ **2026-09-11 更正**：本節初版寫「尚未撤銷」，那是**錯的**——
 > 撰寫時未先讀 `incident-2026-09-07-concurrency.md` 與
