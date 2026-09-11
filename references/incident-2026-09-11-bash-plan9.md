@@ -171,26 +171,73 @@ working directory 造成｜某一支 script 造成。
 
 **已知有效的處置順序**：重啟應用程式 → 重新開機 → 若仍失敗，改人機分工繼續工作。
 
+### 10.1 復發紀錄
+
+| # | 時間 | 簽名 | 當時工作 | 處置 |
+|---|---|---|---|---|
+| R1 | 2026-09-11（本次事故） | Plan9 + stale user | Dashboard IA v2 | 重開機後恢復 |
+| R2 | 2026-09-11 稍後（同日第二次） | **完全相同**：Plan9 share "c" not mounted ＋ uid=1183 already exists，attempt 3 of 5 | 準備重跑 218 段 | 依簽名判定為同一事故，**不重試**；canonical `.md` 編輯改用 file tools 完成；218 段因 `dashboard_check.py` 無法執行（Step 5.9 閘門）而**停在 Execution Boundary**，未對 HTML 做任何未經健檢的批次修改 |
+
+| R2b | R2 之後、canonical 修正完成時 | 相同；`echo ok` 亦失敗（依 §10 只試一次）；錯誤訊息附帶廠商聲明（見 §11） | 準備重跑 218 段 | 停止重試；218 段維持 BLOCKED |
+
+| R3 | 2026-09-11 13:13（Cowork session，同日第三次） | 相同簽名，訊息為 `sandbox-helper: no Plan9 drive shares mounted under /mnt/.virtiofs-root/shared`，並附帶與 R2b 相同的廠商聲明；依 §10 只試一次 | 依 `handoff-2026-09-11-claude-code-218.md` 重跑 218 段（自 Step 1 起） | 停止重試；218 段維持 BLOCKED，**未取鎖、未對 HTML 做任何寫入** |
+
+R3 的三項新資訊（與 R2／R2b 的差別，診斷用）：
+
+1. **閘門本身沒有壞，壞的是 Windows 端執行通道。**
+   R2 停在「`dashboard_check.py` 無法執行」；R3 以完全相同的來源檔在雲端容器執行
+   `dashboard_check.py`，回 **PASS／exit 0**（1.24 MB／6350 行／229 張卡，
+   分佈 溝通35 日常61 預算84 傳承49），與事故前 baseline 的卡數一致。
+   → 故障範圍可再收斂為 **workspace 檔案掛載層**，不含驗證邏輯、不含專案內容。
+
+2. **第二條迂迴路徑（GUI 代打指令）經查證亦不可用。**
+   computer-use 對終端機／IDE 類應用程式只給 `click` 層級（可見、可左鍵點擊，
+   **不可輸入文字、不可按鍵、不可貼上**）。`Windows PowerShell` 解析結果為
+   `tier: click`。→ 事故期間 AI 端沒有任何可用的 Windows 指令執行通道。
+
+3. **由 1＋2 得到的工作方式結論（與 §11 一致，非新歸因）：**
+   人機分工不是應急而是此事故期間的唯一可行模式——
+   AI 端可做到內容與本機驗證（CONTENT_COMPLETE）為止；
+   取鎖／commit／push／remote verification 一律必須在 Windows 端執行。
+
+⛔ R3 不改寫 §11：Root Cause 仍為 `PARTIALLY IDENTIFIED ＋ EXTERNAL ATTRIBUTION`，
+不因「換到雲端容器就能跑健檢」而改寫成「Plan9 故障已定位於 X」——
+那只是證明另一台機器正常，不是本機故障原因的證據。
+
+R2 的重要性：**同一天同一 session 復發**，加強「session-scoped、非專案指令問題」的判斷；
+R2b 取得第一筆 EXTERNAL EVIDENCE。Root Cause Status 更新見 §11。
+
 ---
 
 ## 11. Root Cause Status
 
 ```
-PARTIALLY IDENTIFIED
+PARTIALLY IDENTIFIED ＋ EXTERNAL ATTRIBUTION（2026-09-11 R2 更新）
 
 已確認：
   · failure layer 為 sandbox lifecycle
   · VM service 曾中止
   · 故障範圍為 session-scoped
 
+EXTERNAL EVIDENCE（R2 的 bash 錯誤訊息末尾，由平台附帶）：
+  「A Windows update released September 8 prevents Claude's workspace
+    from reaching your files. We're tracking this issue. Claude Code is unaffected.」
+  → 廠商歸因為 2026-09-08 Windows 更新與 workspace 檔案掛載的相容性問題
+  → 與本事故簽名（Plan9 share 未掛載）一致
+  → 這是廠商陳述，不是本機獨立驗證；不升格為 CONFIRMED
+
 未確認：
-  · VM service 為何中止
-  · Plan9 share 為何消失
+  · 哪一個 KB 更新、是否能回滾
+  · 為何上午重開機後曾短暫恢復（若為更新所致，恢復期應為 0）
   · stale user record 為何未被清理
 ```
 
 ⛔ **不得**因為換環境後正常，就把 root cause 寫成「stale sandbox」或「Plan9 故障已修復」。
-取得 host-level evidence 之前，維持 `UNCONFIRMED`。
+⛔ 也**不得**因廠商一句話就寫「Windows 更新所致」——只能寫 EXTERNAL ATTRIBUTION。
+
+**對工作方式的影響**：若廠商歸因成立，重啟／重開機**不會**修好它；
+人機分工（file tools 編輯、Windows 端跑驗證與派送）是本事故期間的常態模式，不是應急。
+「Claude Code is unaffected」是一條可行的替代路徑，由使用者決定是否採用。
 
 ---
 

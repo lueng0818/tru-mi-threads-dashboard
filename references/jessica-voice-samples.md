@@ -21,6 +21,26 @@
 **分層強制**：每一筆都要分開記「原文」與「推論」。
 原文是事實，推論是我們的解讀，兩者不得混寫成同一段。
 
+## 樣本分級（2026-09-11 新增）
+
+每一筆語料必須帶等級標記。位階規則在 `jessica-voice.md §0.3`，本節只記等級歸屬。
+
+| 等級 | 定義 | 目前歸屬 |
+|---|---|---|
+| **GROUND TRUTH** | Jessica 真實說過／實際送出 | S-001、S-002（含「有成功嗎→我們試試看⋯⋯⋯」）、S-003、S-004、C-001、C-002 |
+| **AUTHORED DRAFT** | Jessica 本人原始撰寫、尚未發布／送出。可作口語證據，不代表已通過互動驗證 | S-005（使用者 2026-09-11 定級） |
+| **APPROVED REFERENCE** | Jessica／使用者明確確認可作後續生成參考 | 目前 0 筆 |
+| **GENERATED CANDIDATE** | AI 生成，永遠不得成為 Voice Evidence | 2026-09-11 交叉測試：第一輪 A／B／C（AI Wording FAIL）；第二輪 A（VOICE REVIEW）、C（Automated PASS、Positive Validation NOT TESTED）——**均只是測試輸出，不得作示範** |
+
+```
+⛔ GENERATED CANDIDATE 不得寫進本檔的 S-／C- 編號序列
+⛔ GENERATED CANDIDATE 不得作為下一批生成的 Voice Evidence
+⛔ 自動 Gate 全 PASS 不會使任何一段升格；升格只有「她真的講了」或「使用者明確核准」兩條路
+```
+
+交叉測試 D（「我們試試看⋯⋯⋯」）不是新樣本——它就是 S-002 既有的 GROUND TRUTH，
+系統產出收斂到它，只能證明「這次沒漂」，不能反過來當成系統很像她的證據。
+
 ---
 
 ## S-001｜開話題（自己發文）

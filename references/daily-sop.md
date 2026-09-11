@@ -312,45 +312,107 @@ python tools/dashboard_prep.py --check "@候選帳號" "貼文連結" ...
 
 **禁用詞**：高CP值、物超所值、划算、優惠、限時。留言先回答問題，不先證明品牌厲害。
 
-### 4.3 文字產出流程（2026-09-11 定版｜留言與延伸貼文都適用）
+### 4.3 文字產出流程（2026-09-11 v3 定版｜留言與延伸貼文都適用）
+
+> **v3 淘汰的流程**：`生文 → human write → 大眾語氣 → Jessica 語氣 → 大眾語氣複檢`
+> 它的錯誤前提是「先生一段合理答案，再改得像 Jessica」。
+> 那是在翻修 AI 文；AI 味在第一版形成時就已經進去了。
+> 根因與生成規則的正本在 `jessica-voice.md §2.6 Jessica-First Generation`。
 
 ```
-生文
- → human write 檢查      通用 AI 痕跡
- → 大眾語氣檢查          這句中文成不成立
- → Jessica 語氣檢查      逐句比對語氣資料庫（最大幅度重寫）
- → 大眾語氣複檢          ⭐ 改寫可能生出新的不通順
- → 正式確認
+原始貼文／留言
+ → Conversation Intent           對方在幹嘛（分享／自嘲／求助／追問…）
+ → Listener Analysis             §4.9
+ → Evidence Gate                 FACT／OBSERVATION／INFERENCE／UNKNOWN
+ → 決定「這一輪要接什麼、講到哪裡」  Reply Depth ＋ 停止點
+ → 讀取相同／相近情境的 Jessica Ground Truth   依情境取樣，不混用
+ → 【直接用 Jessica 口語生成第一版】           ⭐ Jessica-first，不是 style transfer
+ → Structure Gate                初稿有沒有長成小文章？
+     ├─ 結構自然 → 保留
+     └─ 不自然   → 重建
+ → AI Wording Audit              每一句是不是 AI 在整理／命名／安慰／總結？
+ → Human Write                   標點、台灣用語、破折號
+ → 大眾語氣檢查                   這句中文成不成立
+ → Reply Necessity Test          這一輪是不是又多講了？
+ → Jessica Voice Verification    逐句能否回到 Ground Truth／Approved Reference／Tendency
+                                 ⛔ 只驗證，只有 FAIL 才修，不是第二次 Jessica 化
+ → 大眾語氣複檢
+ → AI Pattern Audit              整批是不是又長成相同公式？
+ → 正式確認                       Automated：PASS/FAIL｜Positive Validation：PASS/FAIL/NOT TESTED
 ```
 
 **順序不可對調。** 「四、非推銷式留言草稿」與「五、Threads 延伸貼文草稿」
 兩者都要走完整流程。
 
-三個檢查層問的是**三個不同的問題**，不可互相取代：
+各 Gate 的責任定義、AI Wording Audit 三群、Corpus-level Audit 與 Generation-Origin Audit，
+正本都在 `jessica-voice.md`（§2.6.4、§7.3、§7.4、§2.6.5）。本節只定順序。
+
+#### 為什麼是這個順序（v3）
+
+**① Jessica Voice 移到最前面生成，後面只驗證** ——
+v2 把 Jessica 語氣放倒數第二做「最大幅度重寫」，結果它自己產出的錯
+（`保固保鬆掉`、`比款式更決定`、`多半`）連續被退三次；
+更根本的是，即使重寫得再好，仍然是在改一段 AI 先寫好的答案。
+**Jessica Voice 只生成一次；之後是驗證，不是第二次重新 Jessica 化。**
+
+**② AI Wording Audit 緊接 Structure Gate，在 Human Write 之前** ——
+它抓的是「摘要分類腔／操作手冊腔／不是 A 是 B」這類論述手勢，
+要在標點與用語清理之前抓，否則會被通用清理蓋掉痕跡。
+
+**③ `human write` 不放最後** —— 它是**通用**工具，不認識 Jessica。
+放最後會把她的特徵當成問題砍掉：`！！` 連用、`欸／呢／唷`、句尾 emoji。
+
+**④ 複檢只跑大眾語氣，不重跑 human write** —— 避免最後一步又把她的語氣特徵洗掉。
+
+**⑤ 正式確認兩個狀態分開記** —— Automated PASS ≠ Jessica PASS；NOT TESTED 不得顯示為 PASS。
+
+#### ①a Structure Gate（前置，2026-09-11 新增）
+
+**不是所有段落都要重建結構。** 先判斷：
 
 ```
-human write    有沒有 AI 痕跡？          通用 AI 標記掃描
-大眾語氣       這句中文「成不成立」？     比對真人語料＋中文語感
-Jessica 語氣   這是不是「她」會說的話？   逐句比對 jessica-voice-samples.md
+這段的溝通任務是什麼？
+這個結構本身像真人回話嗎？
+  ├─ YES → 不重建，只處理必要問題
+  └─ NO  → 重建結構
 ```
 
-#### 為什麼是這個順序（2026-09-11 定版，兩次調整）
+⚠️ **marker 待檢數 ≠ 結構錯誤數。**
+2026-09-11 的 218 是 marker 命中段，**不是 218 段都證實結構有問題**。
+不得因一次 Positive Validation FAIL 就反向宣布 218 段全部大改——
+那是從一種過度反應換成另一種。
 
-**① `human write` 不放最後** —— 它是**通用**工具，不認識 Jessica。
-放最後會把她的特徵當成問題砍掉：`！！` 連用、`欸／呢／唷`、句尾 emoji，
-在通用標準裡都像「過度口語」。**通用工具不該對一個人的聲音下最後判斷。**
+#### ①b 逐段分流（既有段落批次處理時必用）
 
-**② `Jessica 語氣` 放倒數第二，後面接複檢** ——
-它負責最大幅度的重寫（句型、結構、斷行），而**跑最後的那一關，
-它自己的產出沒有人檢查**。
-2026-09-11 實例：最後三個錯誤（`保固保鬆掉`、`比款式更決定`、`多半`）
-全部是在 Jessica 改寫階段自己產生的，連續被退三次。
+批次處理的核心**不是「把 AI 感全部改掉」**，是逐段分流成五種結果之一：
 
-**③ 複檢只跑大眾語氣，不重跑 human write** ——
-避免最後一步又把她的語氣特徵洗掉。
+```
+KEEP               結構與用詞都像人，不動
+LIGHT FIX          結構自然，只修 1–2 處用詞或標點；不重生
+REBUILD            結構不自然 → 丟掉原文，回到 原始留言＋Conversation Intent＋對應真實語料 重新 Jessica-first 生成
+EVIDENCE BOUNDARY  需要 Jessica 本人經驗／立場才能回，系統沒有 → 寫「這題適合 Jessica 補一個自己的經驗再回」
+VOICE REVIEW       生得出來，但沒有足夠 Voice Evidence 確認她會這樣講 → 標記，不放行、不美化
+```
 
-#### ① 生文
-依 §4.9 Listener Analysis 判斷對方需要什麼，再依 §4.4／§4.7 產出初稿。
+⛔ REBUILD 時**不得參考上一輪的 AI 產物**（含交叉測試輸出），只能從原始留言與真實語料開始
+（`jessica-voice.md §2.6.6`）。
+
+⛔ EVIDENCE BOUNDARY 與 VOICE REVIEW 是**合法的完成狀態**。
+寧可卡片上寫「不知道」，也不要為了每張卡都有答案再生一批看似口語的新 AI 文。
+
+批次結束時回報五類各幾段，作為 Corpus-level Audit（`jessica-voice.md §7.4`）的輸入。
+
+#### ① 生文（Jessica-First）
+
+⛔ **不得先問**「Jessica 對這篇可以提供什麼專業價值？」
+✅ **先問**「依現有真實語料，Jessica 在這個時間點最可能怎麼接？」
+
+生成第一個字之前必做：Conversation Intent 七題（`jessica-voice.md §2.5.2`）、
+依情境取 Ground Truth（§2.6.3）、決定 Reply Depth 與停止點（§2.5.4）。
+Listener Analysis（本檔 §4.9）判斷對方需要什麼；§4.4／§4.7 只作護欄。
+
+每段產出必須留下**生成起點紀錄**（情境類型＋引用的 S-編號＋Reply Depth），
+供 Generation-Origin Audit（§2.6.5）查核。沒有紀錄不得標 PASS。
 
 #### ② human write 檢查（`speak-human-tw`）
 通用 AI 痕跡：破折號密度、中國用語、半形標點、emoji 數量、
@@ -359,18 +421,22 @@ Jessica 語氣   這是不是「她」會說的話？   逐句比對 jessica-voi
 #### ③ 大眾語氣檢查
 見下方 §「大眾語氣檢查」的四項。
 
-#### ④ Jessica 語氣檢查（**比對語氣資料庫**）
+#### ④ Jessica Voice Verification（**比對語氣資料庫｜只驗證不重寫**）
 
 > ⚠️ **這一關指的是逐句比對 `references/jessica-voice-samples.md` 的真實樣本，
 > 不是套用 `jessica-voice.md` 的規則。**
 > 規則是我對樣本的詮釋，會漂移；樣本是正本。衝突時以樣本為準。
+>
+> ⚠️ v3 起這一關**不是「改寫成 Jessica」**——初稿已是 Jessica-first 生成，
+> 這裡只驗證有沒有漂掉。只有 FAIL 才修，且修的是漂掉的那一句，不是全面 Style Rewrite。
 
 ```
-逐句問：這個句型，在 S-001～S-005 裡找得到對應嗎？
+逐句問：這個句型，在 GROUND TRUTH／APPROVED REFERENCE／已成立 Tendency 裡找得到對應嗎？
+（位階見 jessica-voice.md §0.3；GENERATED CANDIDATE 不算對應）
 
 找得到              → ✅ 標註對應哪一筆
 找不到但是白話       → ⚠️ 標記「無樣本對應」，交人工判斷，不得自行放行
-找不到又是「寫出來的」 → ⛔ 砍掉重寫
+找不到又是「寫出來的」 → ⛔ 砍掉重寫（回到 Jessica-first 重生，不是就地修飾）
 ```
 
 **交付時要附對應表**，列出每個句型對應哪一筆樣本、哪些無對應。
@@ -464,9 +530,40 @@ marker 命中數  ≠  待檢則數  ≠  實際修改則數
 
 **通則**：任何修正手法如果在一批產出中重複出現，就要回頭檢查它是不是變成新模板。
 
+#### ⑤a AI Pattern Audit（2026-09-11 新增｜放在最後）
+
+> **這一關不是再改一次 Jessica Voice**，是檢查「**這次重寫有沒有製造出新模板**」。
+
+⛔ 不要問「有沒有 Jessica 元素」。
+✅ 先問「**這段話是不是又可以看出固定生成公式？**」
+
+```
+1. 拿掉換行後，骨架是不是仍像顧問文章？
+2. 是否固定：身分 → 共鳴 → 專業解釋 → 結論 → 問句？
+3. 是否每篇都先下結論，再列理由？
+4. 是否每篇最後都需要一句漂亮總結？
+5. 是否為了像 Jessica，刻意補 ～／欸／呢／⋯／emoji？
+6. 是否沒有真實需要，卻固定加入「婚戒設計師路過」？
+7. 是否把「朋友聊天」誤解成短句＋語助詞？
+8. 同一批內容若遮掉主題，是否仍能看出幾乎相同的句型骨架？
+```
+
+**核心判準**
+
+```
+「她現在是在回這個人，
+  還是在藉這個人發表一篇完整的小文章？」
+```
+
+**發現模板時**：⛔ 不得自動無限重寫。
+回到**該段的溝通任務**做一次針對性修正，再驗證一次。
+
+第 8 題是批次專用——單看每則都合格，但**整批骨架一致**就是模板化。
+表面特徵不是必要條件，見 `jessica-voice.md §7.0.0`。
+
 #### ⑥ 正式確認
 
-前四關全部 PASS 才可標記為正式可用版本：
+前五關全部 PASS 才可標記為正式可用版本：
 
 ```
 Human Write PASS
@@ -941,19 +1038,14 @@ Brand Voice 的判斷要包含「Jessica 如何跟人互動」，
 ```
 若牽涉戒圍調整、身體狀況或其他專業判斷，**要有足夠資訊後再回答，不自行診斷**。
 
-### 4.9.6 生成流程（定版）
+### 4.9.6 生成流程
 
-```
-留言原文
-  ↓ 理解對方說了什麼
-  ↓ 區分「明確資訊」與「AI 推測」
-  ↓ 判斷對方此刻的需求
-  ↓ 選擇互動策略（4.9.2 A-F）
-  ↓ 套 Jessica Voice Reference（4.8.6）
-  ↓ 判斷是否需要設計師專業
-  ↓ 產生「最自然的下一句」
-  ↓ 檢查：過度回答？過度推銷？過度腦補？
-```
+本節在 v3 之後**不再另列流程**——完整順序的正本是 §4.3。
+Listener Analysis 的位置是 §4.3 的第二步（Conversation Intent 之後、Evidence Gate 之前），
+互動策略（4.9.2 A–F）在「決定這一輪要接什麼」那一步選定。
+
+⛔ 舊版「套 Jessica Voice Reference → 產生最自然的下一句」的順序已淘汰：
+那仍是先產答案再套語氣。改為 `jessica-voice.md §2.6` 的 Jessica-First。
 
 ---
 
