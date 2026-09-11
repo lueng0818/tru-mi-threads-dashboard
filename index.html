@@ -238,6 +238,99 @@
 <div class="last-update" id="lastUpdate">最後更新：載入中</div>
 </div>
 </div>
+<!-- ===== IA v2（2026-09-11）：頂部常駐搜尋 ＋ 今天 ＋ 底部主導覽 =====
+     規格正本：references/dashboard-spec.md
+     數量規則：所有數字來自真實資料，不得出現每日配額／完成率／進度條 -->
+<style>
+.ia2-search{position:sticky;top:0;z-index:60;background:var(--dark);padding:10px 40px;display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--border)}
+.ia2-search input{flex:1;background:var(--card-bg);border:1px solid var(--border);border-radius:999px;padding:10px 18px;color:var(--text);font-size:.9rem;font-family:'Noto Sans TC',sans-serif}
+.ia2-search input:focus{outline:none;border-color:var(--gold)}
+.ia2-search .ia2-mag{font-size:1rem;opacity:.7}
+.ia2-home{background:var(--dark);padding:26px 40px 10px}
+.ia2-h{font-family:'Noto Serif TC',serif;font-size:1.35rem;color:var(--gold-light);margin:0 0 4px}
+.ia2-sub{font-size:.8rem;opacity:.6;margin-bottom:20px}
+.ia2-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:22px}
+.ia2-card{background:var(--card-bg);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:12px;padding:16px 18px;cursor:pointer;transition:.15s}
+.ia2-card:hover{transform:translateY(-2px)}
+.ia2-card .k{font-size:.75rem;opacity:.65;letter-spacing:.05em}
+.ia2-card .v{font-family:'Noto Serif TC',serif;font-size:1.7rem;color:var(--gold-light);line-height:1.3;margin-top:2px}
+.ia2-card .v small{font-size:.85rem;opacity:.7;margin-left:3px}
+.ia2-card .d{font-size:.78rem;opacity:.7;margin-top:5px;line-height:1.5}
+.ia2-pri{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.ia2-pri h4{margin:0 0 12px;font-size:.85rem;color:var(--gold-light);font-weight:600}
+.ia2-pri ol{margin:0;padding-left:22px}
+.ia2-pri li{font-size:.85rem;line-height:1.85;cursor:pointer}
+.ia2-pri li:hover{color:var(--gold-light)}
+.ia2-why{margin-top:12px;font-size:.78rem;opacity:.6;cursor:pointer;user-select:none}
+.ia2-why:hover{opacity:.95}
+.ia2-whybody{display:none;margin-top:10px;font-size:.78rem;line-height:1.8;opacity:.85;border-left:2px solid var(--border);padding-left:12px}
+.ia2-whybody.open{display:block}
+.ia2-all{display:inline-block;margin-top:6px;font-size:.82rem;color:var(--gold-light);cursor:pointer}
+.ia2-shelf{margin:0 40px 14px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.ia2-shelf>summary{cursor:pointer;padding:10px 16px;font-size:.8rem;opacity:.7;list-style:none;background:var(--card-bg)}
+.ia2-shelf>summary::-webkit-details-marker{display:none}
+.ia2-shelf>summary:hover{opacity:1}
+.ia2-nav{position:sticky;bottom:0;z-index:70;display:flex;background:var(--dark);border-top:1px solid var(--border)}
+.ia2-nav button{flex:1;background:none;border:none;color:var(--text);padding:13px 4px 15px;font-size:.82rem;cursor:pointer;opacity:.55;font-family:'Noto Sans TC',sans-serif;border-top:2px solid transparent}
+.ia2-nav button.on{opacity:1;color:var(--gold-light);border-top-color:var(--gold)}
+.ia2-nav .badge{display:inline-block;min-width:17px;padding:0 5px;margin-left:4px;border-radius:9px;background:var(--gold);color:#1a1a1a;font-size:.68rem;line-height:17px}
+.ia2-note{margin:0 40px 18px;font-size:.78rem;line-height:1.8;opacity:.68;border-left:2px solid var(--border);padding-left:12px}
+@media(max-width:768px){
+ .ia2-search{padding:8px 16px}.ia2-home{padding:18px 16px 8px}
+ .ia2-shelf,.ia2-note{margin-left:16px;margin-right:16px}
+ .ia2-grid{grid-template-columns:1fr 1fr;gap:10px}
+ .ia2-card .v{font-size:1.4rem}
+}
+</style>
+
+<div class="ia2-search">
+<span class="ia2-mag">🔍</span>
+<input id="ia2q" type="search" placeholder="搜尋題目、貼文、留言" onkeydown="if(event.key==='Enter')ia2Search()">
+</div>
+
+<div class="ia2-home" id="ia2-home">
+<h2 class="ia2-h">今天</h2>
+<div class="ia2-sub">系統負責找和排序，要不要聊由你決定</div>
+
+<div class="ia2-grid">
+  <div class="ia2-card" onclick="ia2Go('draft')">
+    <div class="k">今天可以發</div>
+    <div class="v" id="ia2Draft">—</div>
+    <div class="d" id="ia2DraftTopic">讀取中</div>
+  </div>
+  <div class="ia2-card" onclick="ia2Go('reply')">
+    <div class="k">今天值得互動</div>
+    <div class="v"><span id="ia2Worth">0</span><small>則</small></div>
+    <div class="d">回幾則由你決定，沒有配額</div>
+  </div>
+  <div class="ia2-card" onclick="ia2Go('follow')">
+    <div class="k">有後續</div>
+    <div class="v"><span id="ia2Follow">0</span><small>則</small></div>
+    <div class="d" id="ia2FollowNote">對方在你回覆後又回了</div>
+  </div>
+  <div class="ia2-card" onclick="ia2Go('topic')">
+    <div class="k">今天已互動</div>
+    <div class="v"><span id="ia2Done">0</span><small>則</small></div>
+    <div class="d">這是已完成的互動，不是待辦</div>
+  </div>
+</div>
+
+<div class="ia2-pri">
+  <h4>優先看看</h4>
+  <ol id="ia2PriList"><li>讀取中⋯</li></ol>
+  <span class="ia2-all" id="ia2AllLink" onclick="ia2Go('reply')">查看全部 ▸</span>
+  <div class="ia2-why" onclick="var b=document.getElementById('ia2Why');b.classList.toggle('open')">為什麼先看這幾則？ ▸</div>
+  <div class="ia2-whybody" id="ia2Why">
+    排序依據：<b>意圖等級</b>（A 高意圖 &gt; B 問題意圖 &gt; C 情緒共鳴）、<b>收錄新鮮度</b>、<b>是否仍在討論中</b>。<br>
+    這裡選的是「最有助於判斷值得跟誰聊」的幾則，<b>不是讚數排行</b>。<br>
+    風險類一律不進此清單，依 SOP Step 6.9 走 L3 只觀察不留言。<br>
+    <span style="opacity:.7">完整候選／入選／未入選理由：見各卡片的「為什麼挑這則留言？」</span>
+  </div>
+</div>
+</div>
+
+<details class="ia2-shelf">
+<summary>📊 數據與成效（平常不用看）</summary>
 <div class="summary-bar">
 <div class="stat-pill"><div class="num">229</div><div class="lbl">蒐集貼文數</div></div>
 <div class="stat-pill"><div class="num">42,000</div><div class="lbl">最高單篇讚數</div></div>
@@ -253,7 +346,10 @@
 <div class="output-pill"><div class="num" id="outBest">—</div><div class="lbl">最佳單則觸及</div></div>
 <div class="output-pill"><div class="num" id="outAuth">0</div><div class="lbl">權威互動數</div></div>
 </div>
+</details>
 <!-- ===== 🔔 每日提醒重點（每日自動更新）===== -->
+<details class="ia2-shelf">
+<summary>🔔 今日提醒重點全文（「今天」四張卡已摘出重點，想看完整判斷才展開）</summary>
 <div class="daily-brief" id="dailyBrief">
 <div class="db-head">
 <div class="db-title">🔔 今日提醒重點</div>
@@ -272,6 +368,7 @@
 </ul>
 <div class="db-foot">📌 本區每日隨爬蟲更新一次，只保留當天的判斷結論。完整判讀請往下切換四大分頁；效益回填請至「🚀 品牌策略室 → 產出效益追蹤」。</div>
 </div>
+</details>
 <div class="tabs">
 <div class="tab todo-tab active" onclick="switchTab('todo', this)">🎯 待辦回應 <span class="count" id="todoTabCount">0</span></div>
 <div class="tab week-tab" onclick="switchTab('week', this)">📅 本週戰情室 <span class="count" id="weekTabCount">0</span></div>
@@ -281,6 +378,8 @@
 <div class="tab" onclick="switchTab('heritage', this)">💛 傳承與情感重塑 <span class="count">49</span></div>
 <div class="tab" onclick="switchTab('strategy', this)">🚀 品牌策略室</div>
 </div>
+<details class="ia2-shelf">
+<summary>🔬 分級與關鍵字篩選（需要時才展開）</summary>
 <div class="level-bar">
 <div class="level-summary">
 <span class="level-chip chip-A" onclick="showLevelCross('A', this)">🔴 A 高意圖 <b id="levelCountA">0</b></span>
@@ -312,6 +411,7 @@
 <span class="kw-chip" data-kw="長輩|家人|父母|婆|媽媽|爸媽" onclick="filterKeyword('長輩|家人|父母|婆|媽媽|爸媽','長輩介入',this)">長輩介入</span>
 <span class="kw-chip" data-kw="審美|款式|設計感|撞款|客製|訂製" onclick="filterKeyword('審美|款式|設計感|撞款|客製|訂製','審美客製',this)">審美客製</span>
 </div>
+</details>
 <div class="main">
 <!-- ===== 關鍵字查詢結果面板（Theo 優化 2026-07-24）===== -->
 <div class="category-panel" id="panel-search">
@@ -5937,6 +6037,168 @@ Harry Winston Ribbon疊戴Tiffany6爪
     }
     recompute();
   })();
+</script>
+
+<!-- ===== IA v2 底部主導覽（2026-09-11）===== -->
+<div class="ia2-nav" id="ia2Nav">
+  <button class="on" data-v="today"  onclick="ia2Go('today')">今天</button>
+  <button          data-v="reply"  onclick="ia2Go('reply')">回留言<span class="badge" id="ia2BadgeReply">0</span></button>
+  <button          data-v="follow" onclick="ia2Go('follow')">有後續<span class="badge" id="ia2BadgeFollow">0</span></button>
+  <button          data-v="topic"  onclick="ia2Go('topic')">找題目</button>
+</div>
+
+<script>
+/* IA v2 — 規格正本 references/dashboard-spec.md
+   硬規則：
+   · 所有數字來自真實 DOM，不得寫死、不得補滿
+   · 不得出現每日配額／完成率／進度條
+   · 「今天值得回」與「回留言」刻意重複，不得去重
+   · 風險類不進互動清單（依 daily-sop.md Step 6.9 走 L3 OBSERVE_ONLY） */
+(function(){
+  var LEVEL_ORDER = { A:0, B:1, C:2, D:3 };      // RISK 不入列
+  var HOME = document.getElementById('ia2-home');
+  var MAIN = document.querySelector('.main');
+
+  function allCards(){
+    return Array.prototype.slice.call(document.querySelectorAll(
+      '.category-panel:not(#panel-search):not(#panel-week):not(#panel-todo):not(#panel-strategy) .post-card[data-level]'));
+  }
+  function today(){
+    var d = new Date(), p = function(n){ return (n<10?'0':'')+n; };
+    return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+  }
+  function txt(el, sel){ var e = el.querySelector(sel); return e ? e.textContent.trim() : ''; }
+
+  /* 值得互動 = 非風險、且為 A/B/C。D 低對頻與 RISK 都不列入。
+     這是「系統找到多少」，不是「今天應該回幾則」。 */
+  function worthList(){
+    return allCards().filter(function(c){
+      var lv = c.getAttribute('data-level');
+      return lv in LEVEL_ORDER && lv !== 'D';
+    }).sort(function(a,b){
+      var la = LEVEL_ORDER[a.getAttribute('data-level')],
+          lb = LEVEL_ORDER[b.getAttribute('data-level')];
+      if (la !== lb) return la - lb;
+      var da = a.getAttribute('data-collected') || txt(a,'.post-date'),
+          db = b.getAttribute('data-collected') || txt(b,'.post-date');
+      return (db||'').localeCompare(da||'');
+    });
+  }
+
+  /* 有後續：只收「Jessica 已回覆後，對方又有 NEW reply 且 Jessica 尚未回」的對話。
+     依賴 data-convo（P1 schema）。尚未導入前必然為 0——
+     這是誠實的 0，不是壞掉，見 dashboard-spec.md §1.3 / §11。 */
+  function followList(){
+    return Array.prototype.slice.call(
+      document.querySelectorAll('.post-card[data-convo="active"]'));
+  }
+
+  function render(){
+    var worth = worthList(), follow = followList();
+
+    var set = function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
+    set('ia2Worth',  worth.length);
+    set('ia2Follow', follow.length);
+    set('ia2BadgeReply',  worth.length);
+    set('ia2BadgeFollow', follow.length);
+
+    if (!follow.length) {
+      set('ia2FollowNote','目前沒有人在等你回。此欄位需要對話追蹤資料（P1）才會有內容');
+    }
+
+    /* 今天已互動：讀留言行銷紀錄當日「實際送出」的筆數。
+       只計今天那一列，且零產出列不計。 */
+    var done = 0, t = today();
+    var rows = document.querySelectorAll('#commentLogBody tr');
+    for (var i=0;i<rows.length;i++){
+      var td = rows[i].querySelectorAll('td');
+      if (td.length>=7 && td[0].textContent.trim()===t){
+        var n = parseInt((td[6].textContent||'').replace(/[^\d]/g,''),10);
+        done = isNaN(n) ? 0 : n;
+        break;
+      }
+    }
+    set('ia2Done', done);
+
+    /* 今天可以發：讀今日草稿卡。draft-body 寫「暫緩發文」時如實顯示。 */
+    var badge = document.querySelector('.draft-card .draft-badge');
+    var meta  = document.querySelector('.draft-card .draft-meta');
+    var body  = document.querySelector('.draft-card .draft-body');
+    if (body){
+      var hold = /暫緩發文|素材不足/.test(body.textContent||'');
+      set('ia2Draft', hold ? '暫緩' : '1 則');
+      var first = (body.textContent||'').trim().split('\n')[0].slice(0,34);
+      set('ia2DraftTopic', hold
+        ? ((badge?badge.textContent.replace(/^[^一-龥]+/,''):'今日暫緩發文'))
+        : first + '⋯');
+    } else {
+      set('ia2Draft','—'); set('ia2DraftTopic','今日尚無草稿');
+    }
+
+    /* 優先看看：預覽少量，總數在上方卡片。預覽數 ≠ 上限。 */
+    var ol = document.getElementById('ia2PriList');
+    if (ol){
+      ol.innerHTML = '';
+      var preview = worth.slice(0, Math.min(5, worth.length));
+      if (!preview.length){
+        ol.innerHTML = '<li style="opacity:.6">今天沒有找到值得互動的貼文</li>';
+      } else {
+        preview.forEach(function(c){
+          var li = document.createElement('li');
+          var lv = c.getAttribute('data-level');
+          var mark = lv==='A' ? '🔴' : (lv==='B' ? '🟠' : '🔵');
+          var who  = txt(c,'.post-author');
+          var what = txt(c,'.post-content').slice(0,30);
+          li.textContent = mark + ' ' + what + '⋯　' + who;
+          li.onclick = function(){
+            ia2Go('reply');
+            c.scrollIntoView({behavior:'smooth', block:'center'});
+            if (!c.classList.contains('expanded') && typeof toggleCard==='function'){
+              toggleCard(c, {target:c});
+            }
+          };
+          ol.appendChild(li);
+        });
+      }
+      var link = document.getElementById('ia2AllLink');
+      if (link) link.textContent = '查看全部 ' + worth.length + ' 則 ▸';
+    }
+  }
+
+  window.ia2Go = function(view){
+    document.querySelectorAll('#ia2Nav button').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-v') === (view==='draft'?'today':view));
+    });
+    if (view === 'today' || view === 'draft'){
+      if (HOME) HOME.style.display = '';
+      if (view === 'draft'){
+        var sp = document.querySelector('.tab[onclick*="strategy"]');
+        if (sp) sp.click();
+        var dc = document.querySelector('.draft-card');
+        if (dc) dc.scrollIntoView({behavior:'smooth', block:'center'});
+      } else {
+        window.scrollTo({top:0, behavior:'smooth'});
+      }
+      return;
+    }
+    if (HOME) HOME.style.display = 'none';
+    var map = { reply:'todo', follow:'todo', topic:'daily' };
+    var tab = document.querySelector('.tab[onclick*="\'' + map[view] + '\'"]');
+    if (tab) tab.click();
+    if (MAIN) MAIN.scrollIntoView({behavior:'smooth', block:'start'});
+  };
+
+  window.ia2Search = function(){
+    var q = (document.getElementById('ia2q')||{}).value || '';
+    q = q.trim();
+    if (!q) return;
+    if (HOME) HOME.style.display = 'none';
+    if (typeof filterKeyword === 'function') filterKeyword(q, q, null);
+  };
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
+  else render();
+})();
 </script>
 </body>
 </html>
