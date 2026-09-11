@@ -275,6 +275,16 @@
 .ia2-nav button.on{opacity:1;color:var(--gold-light);border-top-color:var(--gold)}
 .ia2-nav .badge{display:inline-block;min-width:17px;padding:0 5px;margin-left:4px;border-radius:9px;background:var(--gold);color:#1a1a1a;font-size:.68rem;line-height:17px}
 .ia2-note{margin:0 40px 18px;font-size:.78rem;line-height:1.8;opacity:.68;border-left:2px solid var(--border);padding-left:12px}
+.ia2-reply{border-left:3px solid var(--gold)!important;padding-left:12px!important;margin-top:0!important}
+.ia2-copy{display:inline-block;margin:8px 0 2px 12px;padding:6px 14px;border:1px solid var(--gold);border-radius:999px;background:none;color:var(--gold-light);font-size:.78rem;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:.15s}
+.ia2-copy:hover{background:var(--gold);color:#1a1a1a}
+.ia2-copy.done{background:var(--gold);color:#1a1a1a}
+.ia2-nocopy{display:inline-block;margin:8px 0 2px 12px;font-size:.76rem;opacity:.5}
+.ia2-deep{margin-top:14px;border-top:1px solid var(--border);padding-top:10px}
+.ia2-deep>summary{cursor:pointer;font-size:.78rem;opacity:.55;list-style:none;padding:4px 0}
+.ia2-deep>summary::-webkit-details-marker{display:none}
+.ia2-deep>summary:hover{opacity:.9}
+.ia2-deep[open]>summary{opacity:.8;margin-bottom:8px}
 @media(max-width:768px){
  .ia2-search{padding:8px 16px}.ia2-home{padding:18px 16px 8px}
  .ia2-shelf,.ia2-note{margin-left:16px;margin-right:16px}
@@ -6230,8 +6240,110 @@ Harry Winston Ribbon疊戴Tiffany6爪
     if (typeof filterKeyword === 'function') filterKeyword(q, q, null);
   };
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
-  else render();
+  /* ===== 海巡卡片資訊重排（規格：dashboard-spec.md §1.45）=====
+     原則：系統多想，Jessica 少讀。
+     回覆是主要工作產物，把「四、留言草稿」提到最前面並改標示；
+     其餘判讀收進「為什麼這樣建議？」預設收起。
+     ⚠️ 這是 Presentation Layer，不刪任何分析內容，也不動 HTML 原始順序。 */
+  /* 舊瀏覽器或非安全來源沒有 navigator.clipboard，用 textarea 退路 */
+  function fallback(text, done){
+    try{
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      done();
+    }catch(err){ /* 複製失敗就不改按鈕文字，不要騙使用者說已複製 */ }
+  }
+
+  function reflowInsight(root){
+    (root || document).querySelectorAll('.jessica-insight').forEach(function(box){
+      if (box.getAttribute('data-ia2') === '1') return;
+      var kids = Array.prototype.slice.call(box.children);
+      var pairs = [];
+      for (var i = 0; i < kids.length; i++){
+        if (kids[i].classList && kids[i].classList.contains('jessica-drawer')){
+          var nxt = kids[i+1];
+          pairs.push({
+            d: kids[i],
+            t: (nxt && nxt.classList && nxt.classList.contains('jessica-text')) ? nxt : null
+          });
+        }
+      }
+      var reply = null;
+      for (var j = 0; j < pairs.length; j++){
+        if (/四、/.test(pairs[j].d.textContent)) { reply = pairs[j]; break; }
+      }
+      if (!reply || !reply.t) { box.setAttribute('data-ia2','1'); return; }
+
+      reply.d.textContent = '💬 Jessica 可以怎麼回';
+      reply.d.classList.add('ia2-reply');
+      reply.t.classList.add('ia2-reply');
+
+      var det = document.createElement('details');
+      det.className = 'ia2-deep';
+      var sum = document.createElement('summary');
+      sum.textContent = '為什麼這樣建議？完整判讀 ▸';
+      /* 卡片本身有 onclick=toggleCard，展開分析不該連帶收合整張卡 */
+      det.addEventListener('click', function(e){ e.stopPropagation(); });
+      det.appendChild(sum);
+
+      pairs.forEach(function(p){
+        if (p === reply) return;
+        det.appendChild(p.d);
+        if (p.t) det.appendChild(p.t);
+      });
+
+      box.insertBefore(reply.d, box.firstChild);
+      box.insertBefore(reply.t, reply.d.nextSibling);
+
+      /* 一鍵複製。風險類／D 級的草稿欄寫的是「不留言」的判斷，
+         那種不給複製鈕——避免 Jessica 誤把判斷說明貼到 Threads 上。 */
+      var txt = (reply.t.textContent || '').trim();
+      var noReply = /^（|不留言|不寫留言|暫緩|素材不足/.test(txt);
+      if (noReply){
+        var tagEl = document.createElement('span');
+        tagEl.className = 'ia2-nocopy';
+        tagEl.textContent = '⚫ 這則不留言';
+        box.insertBefore(tagEl, reply.t.nextSibling);
+      } else {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ia2-copy';
+        btn.textContent = '📋 複製留言';
+        btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          var t = (reply.t.textContent || '').trim();
+          var done = function(){
+            btn.textContent = '✓ 已複製';
+            btn.classList.add('done');
+            setTimeout(function(){
+              btn.textContent = '📋 複製留言';
+              btn.classList.remove('done');
+            }, 1500);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(t).then(done, function(){ fallback(t, done); });
+          } else {
+            fallback(t, done);
+          }
+        });
+        box.insertBefore(btn, reply.t.nextSibling);
+      }
+
+      box.appendChild(det);
+      box.setAttribute('data-ia2','1');
+    });
+  }
+  window.ia2Reflow = reflowInsight;
+
+  function boot(){ render(); reflowInsight(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
 </script>
 </body>
