@@ -2,7 +2,12 @@
 
 > 這份檔案是每日排程的**規格正本**。Cowork 排程的 prompt 只留「開跑指令」，
 > 規則一律寫在這裡——改規則改這個檔，不用去動排程 UI，而且改動會進 git 有版本可回溯。
-> 最後更新：2026-09-11（新增 **4.9 Listener Analysis（本章最上位：先聽懂再回話）**、
+> 最新更新：2026-09-11 下午（建立 6 份 canonical 文件並完成 relocation：
+>   4.8.6 語料 → `jessica-voice-samples.md`；Step 6.5 Windows 操作 → `runbook-windows-deploy.md`；
+>   Step 5 `data-keywords` JS 行為 → `dashboard-spec.md`。**本輪只搬移，未改寫規則語意。**
+>   §4.4／§4.7／§4.8／§4.9 全部保留在本檔。）
+>
+> 前次更新：2026-09-11（新增 **4.9 Listener Analysis（本章最上位：先聽懂再回話）**、
 >   **4.8 Conversation Loop**（唯一有完整行為鏈證據的一節）；
 >   並降級 4.8.1 原本「不要急著把話講完＝上位原則」的過度概括；
 >   4.4.0 依真實樣本把留言拆成社群互動／海巡兩型；
@@ -37,6 +42,20 @@ Canonical control references:
 以 canonical standard 為準。
 本 SOP 不複製或重新定義其狀態機與授權語意。
 ```
+
+**專案內 canonical ownership（2026-09-11 建立）**
+
+| 檔案 | 唯一負責 |
+|---|---|
+| `references/daily-sop.md` | 每日 Step 0–8、何時套用哪個規則（**本檔**） |
+| `references/jessica-voice.md` | Voice 穩定規則、Rule Generalization Gate、四條品質 Gate |
+| `references/jessica-voice-samples.md` | 真實語料、上下文、來源、外部確認、AI 寫偏反例 |
+| `references/dashboard-spec.md` | Dashboard 產品規格、schema、`data-*`、JS 行為、UI 驗收 |
+| `references/ia-migration-plan.md` | IA 重整與 P0–P5 migration |
+| `references/runbook-windows-deploy.md` | Windows 部署操作、故障排除、技術債 |
+| `references/incident-2026-09-11-bash-plan9.md` | 2026-09-11 環境事故 |
+
+**一份規則只能有一個 owner。** 本檔引用，不複製。
 
 正確的分層是：
 
@@ -583,19 +602,21 @@ Brand Voice 的判斷要包含「Jessica 如何跟人互動」，
 
 ### 4.8.6 Jessica Voice Reference（真實語料）
 
-目前可觀察到的樣本：
+> **2026-09-11 relocation：語料本體已移出本檔。**
+> 理由：真實樣本會持續增加，留在 SOP 會讓每次新增樣本都變更 SOP。
+> 這一輪只搬移，未改寫任何內容。
 
-```
-好方法呢！！
-肥皂洗手是好方法欸！
-喔喔喔～～～好
-好的😃😃
-```
+| 要什麼 | 去哪裡 |
+|---|---|
+| 真實原句、情境、日期、外部確認、AI 寫偏反例 | **`references/jessica-voice-samples.md`** |
+| 從樣本歸納出的穩定 Voice Rule、Rule Generalization Gate | **`references/jessica-voice.md`** |
 
-⚠️ **這些是真實樣本，不是要求機械模仿。**
-**不得**因此規定每句都要用「欸／呢／唷／～～～／！！／emoji」。
-要學的是她的**互動節奏與自然程度**，不是複製表面語助詞。
-照抄語助詞會產生另一種假——那是模仿，不是聲音。
+⚠️ **樣本不因新增就自動升格為規則**，升格須通過
+`jessica-voice.md` §0 Rule Generalization Gate。
+
+⚠️ 真實樣本**不是要求機械模仿**。不得規定每句都要用
+「欸／呢／唷／～～～／！！／emoji」。要學的是**互動節奏與自然程度**，
+不是複製表面語助詞——照抄語助詞會產生另一種假。
 
 ### 4.8.7 發文策略：「先聊、後整理」（選項，非強制）
 
@@ -764,14 +785,10 @@ Brand Voice 的判斷要包含「Jessica 如何跟人互動」，
 
 **卡片規格**
 - 開頭 div 必帶 `data-level`（A/B/C/D/RISK）
-- 必帶 `data-keywords="關鍵字1 關鍵字2"`（**理由已更正，2026-09-11 實際讀 JS 核對**）
-  舊敘述「省略會讓 JS 退回全文比對，搜尋品質變差」**是錯的**。
-  `cardMatchesKw()` 的判斷是 `dk.indexOf(t) >= 0 || txt.indexOf(t) >= 0`——
-  **data-keywords 與貼文原文／留言是 OR 關係，不是 fallback**，全文比對一直都在跑。
-  所以省略它不會降低既有 recall，它的作用是**加分**：讓卡片能被「原文裡沒有literal出現、
-  但主題相關」的詞找到（例如通篇在講勾衣服卻沒寫「硌手」二字的卡片）。
-  → 仍然必帶，但目的是補召回，不是防退化。**不要**為了衝覆蓋率去補一堆與原文重複的詞，
-  那對搜尋結果零影響。有效的補法只有一種：補**原文沒有、但使用者會拿來查**的同義詞與上位詞。
+- 必帶 `data-keywords="關鍵字1 關鍵字2"`
+  → 目的是**補召回**不是防退化；`cardMatchesKw()` 的實作行為與有效補法
+  見 **`references/dashboard-spec.md` §8.4**（2026-09-11 relocation，內容未改寫）。
+  重點一句：**不要為了衝覆蓋率補與原文重複的詞，那對搜尋結果零影響。**
 - 必帶 `<div class="post-date">YYYY-MM-DD</div>`，**零位補齊**（`2026-03-10` 不是 `2026-3-10`）
 - 建議帶 `data-collected="YYYY-MM-DD"`（今天的日期）——這是未來要做卡片汰舊的唯一依據
 - 內文用「jessica-insight 八段抽屜」完整格式（📊二/🔍三/💬四/📝五/🔀六/🔧七/📌八）
@@ -825,53 +842,32 @@ exit 0 = PASS 才可進 Step 6；exit 1 = FAIL，先修好，**禁止推送**。
 
 ## Step 6.5：推送（**Windows-only，容器不執行**）
 
-### ⚠️ Windows 上的 `bash` 不是 Git Bash（2026-09-10 實測）
+### ⚠️ Windows 端的實際呼叫方式 → 見 Runbook
 
-這台機器上 PATH 的 `bash` 指向 `wsl.exe`，而系統**沒有安裝任何 WSL 發佈**。
-所以在 PowerShell 直接打 `bash github_push.sh`，得到的是
-「Windows 子系統 Linux 版 沒有已安裝的發佈」——腳本根本沒有被執行。
+> **2026-09-11 relocation：操作細節已移出本檔，內容未改寫。**
+> Canonical owner：**`references/runbook-windows-deploy.md`**
 
-這個失敗模式很危險，因為它**不會回任何一個表定的 exit code**：
-不是 `OK`、不是 `FAIL`、也不是 `DEPLOYMENT_NOT_AVAILABLE_IN_THIS_RUNTIME`，
-而是連 `github_push.sh` 都沒跑到。若照舊寫法把它記成「推送失敗」會誤導，
-正確判讀是 **interpreter 選錯，不是部署失敗**。
+必須知道的一句：**Windows 上 PATH 的 `bash` 指向 `wsl.exe`，不是 Git Bash。**
+直接打 `bash github_push.sh` 會讓腳本**根本沒有被執行**，而且
+**不回任何表定的 exit code**——不是 `OK`、不是 `FAIL`、也不是
+`DEPLOYMENT_NOT_AVAILABLE_IN_THIS_RUNTIME`。
+記成「推送失敗」會誤導，正確判讀是 **interpreter 選錯，不是部署失敗**。
 
-→ **Windows 端一律用下面這段呼叫，不要直接打 `bash`。**
+| 要什麼 | 去哪裡 |
+|---|---|
+| `& $gitBash` 標準呼叫段、LF/CRLF 判讀、Auth Gate 操作 | `runbook-windows-deploy.md` §1–§2 |
+| Git 認證原則、禁止 PAT fallback | `GITHUB-AUTH-STANDARD.md`（canonical） |
+| 技術債（Markdown verifier 缺口、`2>/dev/null` 吞錯誤等） | `runbook-windows-deploy.md` §5 |
 
-```powershell
-cd "$env:USERPROFILE\Documents\Claude專區\Tru-Mi專區"
+⚠️ 換 interpreter **不是改腳本**。`github_push.sh` 與 `tools/deploy_verify.sh`
+不得修改（Execution Boundary Standard Rule ①②）。
+也**不要**在 PowerShell 重寫等價實作——那會變成第二份部署邏輯，正是本 SOP 在防的 drift。
 
-$gitBash = @(
-  "$env:ProgramFiles\Git\bin\bash.exe",
-  "${env:ProgramFiles(x86)}\Git\bin\bash.exe",
-  "$env:LOCALAPPDATA\Programs\Git\bin\bash.exe"
-) | Where-Object { Test-Path $_ } | Select-Object -First 1
+⚠️ `DEPLOY_READY.json` 的 `deploy_command` 仍是 `bash github_push.sh`
+（欄位形狀依派送 schema 固定）。**未來的 Windows watcher 不得照字面執行它**，
+須由 payload adapter 轉換。
 
-if (-not $gitBash) { "找不到 Git Bash，請先安裝 Git for Windows" }
-else {
-  & $gitBash github_push.sh
-  "push exit = $LASTEXITCODE"
-  & $gitBash tools/deploy_verify.sh
-  "verify exit = $LASTEXITCODE"
-}
-```
-
-規格文件同步（`repo_sync_docs.sh`）同樣 Windows-only，也要用 `& $gitBash` 呼叫。
-
-⚠️ 這只是換 interpreter，**不是改腳本**。`github_push.sh` 與 `tools/deploy_verify.sh`
-的內容不得修改（見「注意事項」與 Execution Boundary Standard Rule ①②）。
-也**不要**為了避開這件事而在 PowerShell 裡重寫一份 clone／commit／push 的等價實作——
-那會變成第二份部署邏輯，正是本 SOP 開頭在防的 drift。
-
-出現 `LF will be replaced by CRLF` 是 Git for Windows 的常態提示，不是錯誤；
-以 `deploy_verify.sh` 的 hash 逐檔比對結果為準（2026-09-10 實測：有此提示但 hash 相符）。
-
-⚠️ `DEPLOY_READY.json` 的 `deploy_command` 欄位目前仍是 `bash github_push.sh`
-（欄位形狀依派送 schema 固定，不自行改名或改值）。**未來的 Windows watcher 不得照字面執行它**，
-否則會踩到同一個 WSL 陷阱；watcher 的 input contract 定稿時，
-要由 payload adapter 負責把它轉成上面的 `& $gitBash` 呼叫。
-
-認證走 `gh auth setup-git` 設定的 credential helper，從 Windows Credential Store 提供。
+認證走 `gh auth setup-git` 設定的 credential helper，從系統 keyring 提供。
 **嚴禁印出 token；不得改回明碼 token 檔**（Execution Boundary Standard Rule ②）。
 
 回傳語意：
