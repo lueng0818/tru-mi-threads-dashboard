@@ -4592,13 +4592,22 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <!-- 今日 Jessica 發文草稿 -->
 <div style="margin-bottom:36px">
 <div class="section-title">✍️ 今日 Jessica 發文草稿推薦</div>
+<div class="track-note" style="margin-bottom:14px">📡 2026-09-12：<strong>執行環境 DEGRADED，但 Discovery 正常。</strong>Linux 沙箱掛載失敗（Plan9 share 未掛載，即 <code>incident-2026-09-11-bash-plan9</code> 第四次復發），依該事故 §10 只做一次最小 probe 後停止重試，<strong>全程未取鎖</strong>（<code>runlock.py</code> 需 Python，容器內無法執行；鎖檔狀態為 released，前次持有者 <code>trumi_daily-20260912-065113-dada</code> 已於 06:53:50 正常釋放，故無並行風險但<strong>本次寫入不在鎖的保護範圍內</strong>）。改走 Grep／Read／內建瀏覽器（未登入）路徑。<strong>三 surface：</strong>A 搜尋端點<strong>正常</strong>，輪替 8 組關鍵字（婚戒／婚戒推薦／婚戒預算／對戒／舊戒重製／求婚戒指／婚戒戒圍／結婚戒指），其中「婚戒預算」「舊戒重製」「婚戒戒圍」回傳訪客版正常空頁「查無結果」，屬<strong>無結果非錯誤頁</strong>，不計入失敗；C 個人檔案回覆分頁<strong>正常</strong>，兩帳號皆讀取成功。B hashtag 端點<strong>本日判定為 UNKNOWN 而非失效</strong>——<code>/tag/婚戒</code> 的中文查詢字串未被頁面解碼（標題顯示原始百分比編碼），回傳的是對字面字串的搜尋結果，這是<strong>工具端編碼問題，不是端點故障</strong>，與 09-10 記錄的「回傳無關內容」屬不同原因，不得合併判讀。<code>filter=recent</code> 參數本日仍未生效（排序維持「最相關」），新鮮度改以逐則檢視發文時間篩選。<strong>查重 2 組帳號／貼文，全部 NEW</strong>（以 Grep 全檔比對帳號名與 post id，為 <code>dashboard_prep.py --check</code> 的等效替代）。<strong>但本日新增卡片 0 張</strong>，原因是兩則候選都卡在 4.5 素材四格而不是卡在查重：@kk029_（新竹「有沒有人推薦的婚戒店」）原文 10 字無具體物件細節、留言區 5 則賣方自薦，<strong>命中 09-10 @goose.58181463 那張卡寫下的負向篩選規則</strong>，依規跳過；@karencici_156（桃園、預算 10000-30000、2,277 次瀏覽、11 留言）矛盾與物件細節兩格成立，但<strong>第一人稱來源填不滿</strong>——C-001～C-009 沒有任何低預算案例，Jessica 對此價帶無可引用的真實經驗，若只用材質事實回覆會與 09-08 @myworld_1025 那張卡的留言幾乎同骨架，觸犯 4.5 去重與 NEVER #1，故不建卡、不寫留言。<strong>這是「候選通過查重但未通過素材關卡」的首例，與「今日無新貼文」不同，分開記錄以免日後被誤讀成爬取失敗。</strong><br><strong>本日最重要的發現不在海巡，在自家帳號：</strong>@trumi_jessica 當天發了一則「大家覺得結婚對戒，一定要長得很像嗎？」，並在底下<strong>實際送出至少 7 則回覆</strong>，中止連續三天零產出（明細見下方留言行銷紀錄）。其中回 @sy520.66 那則為「哇～黃金戒指很有傳統婚戒的儀式感欸🥹／好奇是因為習俗，還是喜歡黃金戒指呢？」，<strong>含問句</strong>——這直接影響 <code>jessica-voice-samples.md</code> 目前登記的「回覆不以問句收尾 8/8」TENDENCY CANDIDATE，該候選<strong>已被新證據推翻，需重跑 Rule Generalization Gate</strong>。另 <code>THREADS-TRUMI-JESSICA-REPLIES</code> 在該檔標記為「FULLY EXTRACTED 2026-09-12：4 則，無新增」，但本日查核時該頁已有 7 則以上新回覆，<strong>該「FULLY EXTRACTED」狀態已過期</strong>。以上三項為語料庫維護事項，<strong>本次未寫入 <code>jessica-voice-samples.md</code></strong>（無鎖、且樣本升格須經 Gate），列為待辦。</div>
 <div class="track-note" style="margin-bottom:14px">📡 2026-09-10：<strong>Discovery OK（三 surface 未全部失敗，未進入 DEGRADED），但 B surface 實質失效。</strong>A 搜尋端點<strong>可用但嚴重節流</strong>——輪替 9 組關鍵字（婚戒／結婚戒指／婚戒預算／舊戒重製／對戒／婚戒推薦／求婚戒指／備婚日記／婚戒改圍／婚戒實品），每組間隔 25-60 秒並反覆捲動到底，其中只有「婚戒預算」與「婚戒改圍」回傳完整清單（各約 20 筆），其餘各只回 1 筆，屬 SOP 記載的節流症狀。B hashtag 端點 <code>/tag/婚戒</code> <strong>行為異常</strong>：頁面標題顯示標籤未被解析，回傳內容與婚戒完全無關（社宅、租屋、法拍屋、ETF、葡萄牙文貼文），判定為端點失效而非結果稀少，已記錄不重試。C 個人檔案回覆分頁<strong>正常</strong>，@trumi_jewelryofficial 與 @trumi_jessica 皆讀取成功。<strong>技術紀錄：</strong>搜尋網址帶 <code>filter=recent</code> 參數會讓分頁永遠停在載入中（連續三次重試皆同，須另開分頁復原），改由 UI 點擊「最近」分頁才可用；已寫入本註記避免明日重踩。<strong>本輪查重 3 組帳號／貼文，1 組為 DUP</strong>（@ashllleyy_xx 帳號已收錄，雖有 1 天內新貼文仍依 SOP 跳過）。通過收錄標準且落在 24-48 小時窗內者 <strong>2 則</strong>：@peggylee0831（15 小時、131 讚、85 轉發、2.5 萬瀏覽，判 B 級，寫入 🌿 日常佩戴與體感）與 @goose.58181463（11 小時、5 讚，互動未達門檻但帶明確需求訊號，依收錄標準第二款收錄，判 D 級，寫入 💸 預算與審美拉扯）。本日共寫入 2 張卡片。<strong>官方與個人帳號「回覆」分頁均已查核，本日實際送出留言 0 則，連續第三天零產出。</strong></div>
 <div class="track-note" style="margin-bottom:14px">📡 2026-09-09：<strong>Discovery OK（三 surface 全部有回應，未進入 DEGRADED）。</strong>A 搜尋端點<strong>正常</strong>——輪替 5 組關鍵字（婚戒／婚戒預算／舊戒重製／備婚／對戒），每組間隔 20-30 秒並反覆捲動到底；「舊戒重製」回 0 筆、「對戒」首次查詢回 0 筆但捲動後恢復 15 筆，屬 SOP 記載的節流症狀，非端點失效。B hashtag 端點 <code>serp_type=tags</code> <strong>有回應但極稀</strong>，只回 1 筆且為 2024 年舊文。C 個人檔案回覆分頁<strong>正常</strong>，兩個帳號皆讀取成功。<strong>工具面：</strong>Claude in Chrome 擴充功能未連線，改以 Kapture（已登入）負責發現、內建瀏覽器（未登入）負責讀取單篇貼文，混合完成，已如實記錄。<strong>本輪最大問題是新鮮度不是可用性：</strong>「最相關」排序回傳的幾乎都是 2024-2026 上半年舊文，「最近」排序則被同字噪音灌爆——「婚戒」「對戒」的最近結果大量混入戒斷／戒煙／遊戲戒指，逐則開啟檢視後<strong>零則沾到婚戒</strong>。共查重 23 組帳號／貼文，其中 9 組為 DUP。通過收錄標準且落在 24-48 小時窗內者<strong>僅 1 則</strong>：@ososososos6（婚戒協尋，發文 11 小時）——互動僅 3 讚，但帶明確日期、地點與需求訊號，依收錄標準第二款收錄，判為<strong>風險類</strong>。本日共寫入 1 張卡片，寫入 🌿 日常佩戴與體感分頁。<strong>今日唯一新貼文屬風險觀察類，依 SOP Step 5 暫緩發文、沿用昨日草稿，故本日不新增效益追蹤列。</strong><strong>官方與個人帳號「回覆」分頁均已查核，本日實際送出留言 0 則。</strong></div>
 <div class="track-note" style="margin-bottom:14px">🔁 2026-09-09 補跑（Claude in Chrome 連線後以登入身分重跑，同一把鎖 <code>trumi_daily-20260909-114745-ef3a</code>）：<strong>沒有新增卡片，但拿到一組容器端看不到的資料。</strong>登入狀態下的搜尋頁會顯示「其他人也搜尋了」，這是 Threads 自己吐出來的相關搜尋詞，等於免費的需求訊號。實測兩組：<br>· 搜尋「婚戒」→ <em>找婚戒、婚戒懸賞、婚戒遺失、對戒、婚戒10萬、婚戒推薦、婚戒 10萬、10萬、harry winston、找戒指</em><br>· 搜尋「求婚戒指」→ <em>戒指、求婚、飾品、禮物、網紅黃牛、租求婚戒指、尾戒、弘爺漢堡、手機殼、戒指50</em><br>三件事值得記下。<strong>第一，「婚戒」的相關搜尋有一半直接跟遺失、懸賞、找有關</strong>——08-27 台中懸賞 10 萬那起事件已經把整個關鍵字的搜尋意圖帶偏了。這也解釋了今天唯一收得到的新貼文為什麼同樣是協尋類：不是巧合，是搜尋池目前被那起事件佔住。<strong>第二，「婚戒10萬」與「10萬」重複出現兩次，但這個 10 萬幾乎可以確定是懸賞金額、不是預算帶</strong>——先寫在這裡，避免日後被誤讀成「10 萬預算婚戒」的需求訊號。<strong>第三，「租求婚戒指」出現在求婚戒指的相關搜尋裡。</strong>這條正好對上 Tru-Mi 既有的免費鑽戒租借，但官網目前完全沒有承接這個字，是本日唯一可以立刻動手、且不需要等任何內部確認的缺口。<br>⚠️ 補跑後段 Threads 進入節流：連續請求後搜尋端點卡在載入中，「戒圍」「婚戒推薦」「舊戒」三組關鍵字均無法取得回應（間隔 45～100 秒重試三次仍然卡住）。依 SOP 不以擴大關鍵字硬撐，如實記錄後結束本輪，<strong>本次補跑未新增任何卡片、未改動任何既有卡片。</strong></div>
 <div class="draft-card">
-<div class="draft-badge">🟠 今日主打草稿｜B 級・日常佩戴與體感</div>
-<div class="draft-meta">📅 2026年09月10日 · 今日寫入 2 則貼文（B 級 1、D 級 1）· 靈感來源 @peggylee0831（15 小時、131 讚、85 轉發、2.5 萬瀏覽）· 素材四格已過</div>
-<div class="draft-body">今天看到一則討論，有人剛發現求婚鑽戒和結婚對戒是兩件事。底下的回覆分成四種：兩隻疊著戴、只戴婚戒、鑽戒收進盒子、上班完全不戴。四種都有人做，沒有一種是多數。
+<div class="draft-badge">⚪ 今日暫緩發文｜素材四格未過</div>
+<div class="draft-meta">📅 2026年09月12日 · 今日寫入 0 則貼文 · 海巡候選 2 則皆未通過 4.5 素材四格 · 下方沿用 09-10 草稿</div>
+<div class="draft-body">素材不足，今日暫緩發文。
+
+兩則候選都卡在「第一人稱來源」這一格。@karencici_156（桃園、預算 10000-30000）矛盾與具體物件細節都有，但 Jessica 對 1-3 萬這個價帶沒有可引用的真實經驗，C-001～C-009 也沒有任何低預算案例；只用材質事實寫，會跟 09-08 @myworld_1025 那張卡的留言長成同一個骨架。@kk029_（新竹）原文十個字、無具體物件細節，留言區已有五則賣方自薦，命中 09-10 寫下的負向篩選規則。
+
+依 4.5 不用形容詞撐字數，也不換一個舊案例來套。今日沿用 09-10 草稿如下。
+
+───── 沿用：2026-09-10 草稿 ─────
+
+今天看到一則討論，有人剛發現求婚鑽戒和結婚對戒是兩件事。底下的回覆分成四種：兩隻疊著戴、只戴婚戒、鑽戒收進盒子、上班完全不戴。四種都有人做，沒有一種是多數。
 
 我自己在做的時候，會把這兩隻當成兩種工作。一顆負責被看見，出現在照片和特別的日子；一隻負責被使用，要陪著洗手、打字、拎袋子。
 
@@ -4621,6 +4630,16 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <tr><th>日期</th><th>平台</th><th>帳號</th><th>留言對象</th><th>留言類型</th><th>意圖等級</th><th>成效（讚／回覆）</th><th>備註</th></tr>
 </thead>
 <tbody id="commentLogBody">
+<tr>
+<td>2026-09-12</td>
+<td>Threads</td>
+<td>@trumi_jessica</td>
+<td>@herley_jewelry／@adam069769／@sy520.66／@may_metamon／@ccc_sn1a／@ru___lin／@emilia__liu</td>
+<td>社群互動（回自己貼文下的留言者）</td>
+<td>🟢 實際送出 7 則</td>
+<td>待回填</td>
+<td>今日查核：官方帳號 @trumi_jewelryofficial「回覆」分頁仍顯示「尚無回覆」、粉絲數 3（<strong>未登入視角，無法完全確認</strong>）。個人帳號 @trumi_jessica（161 位粉絲）本日<strong>實際送出 7 則留言</strong>，全部集中在自己當天那則「大家覺得結婚對戒，一定要長得很像嗎？」貼文底下，屬<strong>社群互動型（OWN-POST REPLY），不是海巡留言</strong>——兩者不可混記。<strong>連續三天零產出中止</strong>，但<strong>海巡留言仍為 0 則</strong>，09-07 回 @lucia_____liu 那則依舊是最後一則海巡留言，缺口沒有被補上，只是換了一個場地累積互動。查核時 Jessica 仍在持續回覆（最新一則距查核僅 7 分鐘），故 7 則是<strong>下限不是總數</strong>，且未登入視角只顯示最近數則，更早的可能未計入。絕對時間（TPE）：@herley_jewelry 17:43:14、@ccc_sn1a 21:22:32、@ru___lin 21:52:29、@emilia__liu 21:55:17，其餘三則僅取得相對時間，依語料庫規則不反推絕對日期。⚠️ <strong>09-11 因執行環境故障未產生紀錄列</strong>，本表 09-10 與 09-12 之間有一日空缺，該日<strong>既非零產出也非已查核</strong>，不得事後補記。今日新備妥可送出留言 <strong>0 則</strong>：兩則海巡候選（@karencici_156 桃園預算 1-3 萬、@kk029_ 新竹求推薦）均未通過 4.5 素材四格，依 SOP 不硬寫、不換舊案例套用。</td>
+</tr>
 <tr>
 <td>2026-09-10</td>
 <td>Threads</td>
