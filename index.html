@@ -6339,12 +6339,23 @@ Harry Winston Ribbon疊戴Tiffany6爪
     var h = clone.querySelector('.expand-hint'); if(h) h.textContent = '▼ 點擊展開';
     g.appendChild(clone);
   }
-  /* 從一張卡裡取出「四、非推銷式留言草稿」那一段。取不到就回 null，⛔ 不編造。 */
+  /* 從一張卡裡取出建議留言那一段。取不到就回 null，⛔ 不編造。
+     ⚠️ 2026-09-13 修正：初版只找「留言草稿」這四個字，但 IA2 改版後
+     全部 232 張卡的抽屜標題其實是「💬 Jessica 可以怎麼回」，
+     所以整個海巡留言建議區在線上是空的、而且不會報錯——是靜默失效。
+     現在改成先認 .ia2-reply 這個 class（最穩定），再退回文字比對。 */
   function searchDraftOf(card){
     try{
+      var direct = card.querySelector('.jessica-text.ia2-reply');
+      if(direct){
+        var ds0 = (direct.textContent || '').trim();
+        if(ds0 && ds0.indexOf('暫緩') === -1 && ds0.indexOf('不產生') === -1) return ds0;
+        return null;
+      }
       var ds = card.querySelectorAll('.jessica-drawer');
       for(var i=0;i<ds.length;i++){
-        if((ds[i].textContent || '').indexOf('留言草稿') > -1){
+        var label = ds[i].textContent || '';
+        if(label.indexOf('可以怎麼回') > -1 || label.indexOf('留言草稿') > -1){
           var t = ds[i].nextElementSibling;
           if(t && t.classList && t.classList.contains('jessica-text')){
             var s = (t.textContent || '').trim();
