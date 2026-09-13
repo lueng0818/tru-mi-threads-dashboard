@@ -342,7 +342,7 @@
 <details class="ia2-shelf">
 <summary>📊 數據與成效（平常不用看）</summary>
 <div class="summary-bar">
-<div class="stat-pill"><div class="num">231</div><div class="lbl">蒐集貼文數</div></div>
+<div class="stat-pill"><div class="num">232</div><div class="lbl">蒐集貼文數</div></div>
 <div class="stat-pill"><div class="num">42,000</div><div class="lbl">最高單篇讚數</div></div>
 <div class="stat-pill"><div class="num">13,876+</div><div class="lbl">總留言數</div></div>
 <div class="stat-pill"><div class="num">4</div><div class="lbl">分析維度</div></div>
@@ -380,24 +380,32 @@
 </div>
 </details>
 <div class="tabs">
+<!-- 導覽列（2026-09-13 owner 裁定改版）
+     ⛔ 舊的四個主題分類頁籤（panel-comms／panel-daily／panel-budget／panel-heritage）
+        已從導覽列移除，⛔ 不得復原為可見頁籤。
+     ⚠️ 對應的四個 panel 仍留在 DOM 裡當資料容器（卡片實體都在裡面），
+        只是不再有入口——這樣才能不刪卡、不改總數。可見分組一律走 A／B／C／D。
+     ⚫ RISK 併入 D 顯示，卡片上的風險標記保留，⛔ 但不再是第五個等級。 -->
 <div class="tab active" onclick="switchTab('patrol', this)">🧭 Jessica｜Threads 海巡參考</div>
 <div class="tab todo-tab" onclick="switchTab('todo', this)">🎯 待辦回應 <span class="count" id="todoTabCount">0</span></div>
 <div class="tab week-tab" onclick="switchTab('week', this)">📅 本週戰情室 <span class="count" id="weekTabCount">0</span></div>
-<div class="tab" onclick="switchTab('comms', this)">🚨 溝通與翻車焦慮 <span class="count">35</span></div>
-<div class="tab" onclick="switchTab('daily', this)">🌿 日常佩戴與體感 <span class="count">61</span></div>
-<div class="tab" onclick="switchTab('budget', this)">💸 預算與審美拉扯 <span class="count">84</span></div>
-<div class="tab" onclick="switchTab('heritage', this)">💛 傳承與情感重塑 <span class="count">51</span></div>
-<div class="tab" onclick="switchTab('strategy', this)">🚀 品牌策略室</div>
+<div class="tab" onclick="openLevelTab('A', this)">🔴 A 級｜立即處理 <span class="count" id="tabCountA">0</span></div>
+<div class="tab" onclick="openLevelTab('B', this)">🟠 B 級｜確認後回覆 <span class="count" id="tabCountB">0</span></div>
+<div class="tab" onclick="openLevelTab('C', this)">🔵 C 級｜觀察與延伸 <span class="count" id="tabCountC">0</span></div>
+<div class="tab" onclick="openLevelTab('D', this)">⚪ D 級｜跳過 <span class="count" id="tabCountD">0</span></div>
+<div class="tab" onclick="switchTab('strategy', this)">📚 素材與紀錄</div>
 </div>
 <details class="ia2-shelf">
 <summary>🔬 分級與關鍵字篩選（需要時才展開）</summary>
 <div class="level-bar">
 <div class="level-summary">
-<span class="level-chip chip-A" onclick="showLevelCross('A', this)">🔴 A 高意圖 <b id="levelCountA">0</b></span>
-<span class="level-chip chip-B" onclick="showLevelCross('B', this)">🟠 B 問題意圖 <b id="levelCountB">0</b></span>
-<span class="level-chip chip-C" onclick="showLevelCross('C', this)">🔵 C 情緒共鳴 <b id="levelCountC">0</b></span>
-<span class="level-chip chip-D" onclick="showLevelCross('D', this)">⚪ D 低對頻 <b id="levelCountD">0</b></span>
-<span class="level-chip chip-RISK" onclick="showLevelCross('RISK', this)">⚫ 風險 <b id="levelCountRISK">0</b></span>
+<span class="level-chip chip-A" onclick="openLevelTab('A', null)">🔴 A 高意圖 <b id="levelCountA">0</b></span>
+<span class="level-chip chip-B" onclick="openLevelTab('B', null)">🟠 B 問題意圖 <b id="levelCountB">0</b></span>
+<span class="level-chip chip-C" onclick="openLevelTab('C', null)">🔵 C 情緒共鳴 <b id="levelCountC">0</b></span>
+<span class="level-chip chip-D" onclick="openLevelTab('D', null)">⚪ D 低對頻（含 ⚫ 風險） <b id="levelCountD">0</b></span>
+<!-- ⚫ 風險不再是第五個等級，已併入 D。卡片本身的風險標記（data-level="RISK"、
+     ⚫ 分級色）完全保留，⛔ 沒有任何一張卡被改判。 -->
+<span class="level-chip chip-RISK" style="display:none"><b id="levelCountRISK">0</b></span>
 </div>
 <div class="level-filter">
 <button class="level-filter-btn active" onclick="clearLevelCross()">顯示全部</button>
@@ -429,14 +437,40 @@
 <div class="cat-header">
 <div class="cat-emoji">🔎</div>
 <div>
-<div class="cat-title">關鍵字查詢結果</div>
-<div class="cat-subtitle">跨全部分頁 · 依你點擊的關鍵字即時篩選</div>
+<div class="cat-title">搜尋結果</div>
+<div class="cat-subtitle">跨全部分頁 · 依 A／B／C／D 分組</div>
 </div>
 <div class="cat-line"></div>
 </div>
-<div class="kw-result-banner">🔍 關鍵字查詢：<b id="searchKwLabel">—</b> · 跨全部分頁共 <b id="searchCount">0</b> 則結果<span class="kw-clear" onclick="clearKeyword()">✕ 清除查詢</span></div>
+<div class="kw-result-banner">🔍 搜尋條件：<b id="searchKwLabel">—</b> · 共 <b id="searchCount">0</b> 則結果<span class="kw-clear" onclick="clearKeyword()">✕ 清除查詢</span></div>
 <div id="searchEmpty" class="kw-empty" style="display:none">這個關鍵字目前沒有符合的貼文，換一個關鍵字試試。</div>
-<div class="posts-grid" id="searchGrid"></div>
+
+<div id="searchSecA" style="display:none">
+<div class="section-title">🔴 A 級｜立即處理 <span id="searchNA">0</span></div>
+<div class="posts-grid" id="searchGridA"></div>
+</div>
+
+<div id="searchSecB" style="display:none">
+<div class="section-title">🟠 B 級｜確認後回覆 <span id="searchNB">0</span></div>
+<div class="posts-grid" id="searchGridB"></div>
+</div>
+
+<div id="searchSecC" style="display:none">
+<div class="section-title">🔵 C 級｜觀察與延伸 <span id="searchNC">0</span></div>
+<div class="posts-grid" id="searchGridC"></div>
+</div>
+
+<div id="searchSecD" style="display:none">
+<div class="section-title">⚪ D 級｜跳過 <span id="searchND">0</span></div>
+<div class="track-note">D 級不產生留言草稿。標為 ⚫ 風險的貼文（避雷點名、消費糾紛、敏感家庭、協尋）一併列在這一區，只觀察、不留言、不自薦——它們的 <code>data-level</code> 仍是 <code>RISK</code>，⛔ 沒有被改判成 D。</div>
+<div class="posts-grid" id="searchGridD"></div>
+</div>
+
+<div id="searchSecReply" style="display:none">
+<div class="section-title">💬 海巡留言建議 <span id="searchNReply">0</span></div>
+<div class="track-note">只列出本次結果中<strong>已備妥留言草稿</strong>的貼文。⛔ 草稿不等於已送出，送出與否一律以留言行銷紀錄為準。送出前請再開一次原文確認貼文還在、且 Tru-Mi 尚未回覆。</div>
+<div id="searchReplyList"></div>
+</div>
 </div>
 <!-- ══ 溝通與翻車焦慮 ══ -->
 <div class="category-panel" id="panel-comms">
@@ -1099,6 +1133,23 @@
 <div class="selection-evidence">入選 0 筆。原因：頁面顯示 10 則留言但內容無法取得（2026-09-13 09:12），狀態為 unavailable 而非 none。⛔ 不得據此推論留言區為空，也不得推論已被充分回答。依 dashboard-spec §0.4，留言資料缺漏不影響建卡；本卡以貼文原文的需求訊號建立，並標記需回看。</div>
 <div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>想找鼻紋戒指，查過但分不出各家差別<br><strong>深層焦慮：</strong>這是替媽媽問的，而媽媽自己查到「霧煞煞」——代表資訊量不是問題，是沒有一個可以拿來比較的軸。她開出「手作＋帶我一起去」，顯示她要的不只是成品，是參與過程這件事本身<br><strong>預算／時程：</strong>⛔ 均未提及，不得推測</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>1 無方向求推薦（品項已確定、做法未確定）｜<strong>等級：</strong>A 高意圖——明確訂製需求、主動邀請店家自薦<br><strong>⚠️ 適配度與意圖不一致：</strong>意圖是 A，但條件（手作＋陪同）依經營指南 §5 不是 Tru-Mi 的主要方向，且 Tru-Mi 是否承作鼻紋戒指本檔未查核。因此<strong>本卡列為 A 級但不自薦</strong>——等級記錄的是對方的意圖，不是我們的合適度，兩者分開記<br><strong>優先級：</strong>今日第四順位。降級原因是⑤無法判定（留言取不到）與適配度扣分，⛔ 不是因為留言數</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">鼻紋戒指差最多的其實是第一步：鼻紋是直接翻模，還是先描成圖再刻。<br>翻模會留下原本的紋路，描圖會經過人手整理，出來的感覺不一樣。<br>問的時候先問這一步怎麼做，再看要不要自己參與。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（暫不轉貼文。要談「紀錄怎麼變成線條」這個主題，需要 Jessica 本人確認 Tru-Mi 實際的處理方式與可公開範圍；⛔ 現有素材不足以支撐一篇對外發文，不以通則代替自家流程。）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG／Reels／限動：</strong>待 Jessica 確認承作範圍後再評估<br><strong>LINE／官網：</strong>若確認承作紀念類客製（鼻紋、指紋、手寫字），官網目前沒有承接這類關鍵字，是可補的缺口；⛔ 確認前不得上架任何說明</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">⛔ 暫不進漏斗。需先由 Jessica 確認兩件事：Tru-Mi 是否承作鼻紋戒指、是否提供陪同手作。⛔ 未確認前不得自薦、不得私訊、不得引導至任何入口。</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">卡片狀態：<strong>待互動（interaction_pending）</strong>，同時待回看留言區。下次回看時優先重取那 10 則留言，確認問題是否已被充分回答；取得後更新 data-comments-status 與 data-count，⛔ 更新原卡，不重複建立。</div></div>
 <a class="post-link" href="https://www.threads.com/@dai.chien__/post/DdHMGryiRdJ" target="_blank">🔗 查看原始貼文</a>
+</div>
+</div>
+<div class="post-card" data-level="B" data-keywords="送自己 鑽戒 培育鑽 天然鑽 怕後悔 保值 黃金 金飾 日常佩戴 重生層" data-collected="2026-09-13" data-topic="新發現" data-convo="none" data-enriched="2026-09-13" data-comments-status="collected" data-comments-checked="2026-09-13" data-card-state="interaction_pending" data-value-basis="①有明確猶豫與具體條件（想買鑽戒送自己、怕太超過、不喜歡金飾款式、已有一枚培育鑽、現在看中天然鑽價差大）②屬客訂製珠寶鄰接方向的選購決策③Jessica 對「兩枚戒指怎麼分配戴法」有具體可說的設計觀點④貼文 9 小時、作者本人 21:00 TPE 仍在回覆，正在討論中⑤留言 38 則但沒有一則回到她最後那句具體猶豫，多數是『喜歡就買』與同業自薦⑥非敏感爭議，惟涉及保值話題，⛔ 不得給任何投資或保值判斷。留言數 38 僅為背景欄位，未因數字高而升級；本卡的價值來自『留言很多但問題沒被回答』這個缺口。" onclick="toggleCard(this, event)">
+<div class="post-top">
+<div><div class="post-author"><a href="https://www.threads.com/@elk.18987503" target="_blank">@elk.18987503</a></div><div class="post-date">2026-09-13</div></div>
+<div class="post-right"><div class="post-likes">❤️ 31</div><span class="level-tag level-B">🟠 B</span></div>
+</div>
+<div class="post-content">買給自己一枚鑽戒當禮物會不會很誇張啊⋯ 在思考會不會太超過了。 想說不然買保值的黃金，但可能是我的偏好，看了好幾家覺得不喜歡金飾（作者於留言區兩次補充：「雖然很愛，就是怕後悔而已」「培育鑽有一枚了，但現在看中一枚天然鑽所以價格大躍進，超猶豫。但好喜歡」）</div>
+<div class="post-stats"><span>💬 38則留言</span><span>↗ 0次分享</span><span>🕘 待互動</span></div>
+<div class="expand-hint">▼ 點擊展開</div>
+<div class="comments-section">
+<div class="comments-title">🏆 熱門留言</div>
+<div class="key-comments" data-count="5" data-short-reason="2026-09-13 21:02 TPE 登入視角實際開啟原文並捲動到底，取得 20 個留言時間戳（含作者本人回覆）。入選 5 則為與她真正卡住的那一題最相關者；未入選者多為單句鼓勵與同業自薦報價（至少 6 個帳號），對判讀無新增資訊。⛔ 未補寫、未推測、未以其他貼文留言代替。"><div class="key-comment" data-intent-primary="實際困擾"><div class="comment-meta"><span class="comment-author">@elk.18987503（作者・09-13 20:59 TPE）</span></div><div class="comment-text">培育鑽有一枚了，但現在看中一枚天然鑽所以價格大躍進，超猶豫。但好喜歡</div></div><div class="key-comment" data-intent-primary="實際困擾"><div class="comment-meta"><span class="comment-author">@elk.18987503（作者・09-13 18:37 TPE）</span></div><div class="comment-text">哇，好大一顆這是多少克拉啊？雖然很愛，就是怕後悔而已</div></div><div class="key-comment" data-intent-primary="分享方法"><div class="comment-meta"><span class="comment-author">@lead_bl（09-13 13:34 TPE・1讚）</span></div><div class="comment-text">現在有培育鑽了～ 我個人是完全不考慮保不保值 就喜歡他閃亮亮的樣子 培育鑽價格香很多哈哈哈</div></div><div class="key-comment" data-intent-primary="認同"><div class="comment-meta"><span class="comment-author">@an.i.person（09-13 14:34 TPE・5讚）</span></div><div class="comment-text">喜歡就買不會太超過啊！我單純喜歡鑽石閃閃發亮的感覺 覺得戴起來很好看 不會考慮保值的問題 若擔心保值問題就買黃金就好 但金飾的款式都有點俗</div></div><div class="key-comment" data-intent-primary="分享方法"><div class="comment-meta"><span class="comment-author">@yaokikiki（09-13 12:12 TPE・4讚）</span></div><div class="comment-text">買鑽戒就不要考慮保值了 黃金除非買金條，不然幾乎都是花在工錢 所以考慮自己喜歡就好</div></div></div>
+<div class="listener-analysis">他在說什麼：表面問的是「買給自己會不會太誇張」，但那一題底下已經有二十幾個人給了同一個答案（喜歡就買）。她真正還卡著的是後來自己補的兩句：怕後悔，以及「培育鑽有一枚了，現在看中天然鑽、價格大躍進」。她要的不是許可，是一個能拿來判斷的軸。｜建議怎麼接：回到「兩枚會怎麼戴」這一層——這是設計師才會先問的事，也是整串裡沒有人講到的角度。⛔ 不要再講一次「喜歡就買」，那已經被講滿了；⛔ 不要談保值、增值、投資，那不是我們該給的建議，她也已經自己排除了黃金；⛔ 不要自薦、不報價、不貼入口——留言區已經有六家在做這件事，再多一家只會被歸成同一類。｜可以怎麼回：給她一個比克拉數更好判斷的問法，講完就停。⛔ 不追問預算、不問克拉數。</div>
+<div class="selection-evidence">入選 5 筆（自 2026-09-13 21:02 TPE 取得的 20 個留言時間戳中挑選）。<span data-picked="yes">①@elk.18987503 20:59</span>、<span data-picked="yes">②@elk.18987503 18:37</span>：作者本人的兩則補充是整串最新也最具體的需求訊號，直接決定留言該接哪一層。<span data-picked="yes">③@lead_bl</span>：她就是回了這則之後才說出「培育鑽有一枚了」，是那句話的觸發點。<span data-picked="yes">④@an.i.person</span>、<span data-picked="yes">⑤@yaokikiki</span>：代表留言區的兩種主流答案（喜歡就買／不要考慮保值），用來界定「已經被回答的部分」與「還沒被回答的部分」分別是什麼。未入選者多為同業自薦報價與單句鼓勵，對判讀無新增資訊。依 dashboard-spec §0.4，留言數 38 不作為本卡的價值依據；本卡的價值來自留言多但問題沒被回答這個缺口。</div>
+<div class="jessica-insight"><div class="jessica-drawer">📊 二、消費者訊號</div><div class="jessica-text"><strong>表層問題：</strong>買一枚鑽戒送自己，會不會太誇張<br><strong>深層訊號：</strong>她已經排除黃金（看過好幾家、不喜歡款式），也已經有一枚培育鑽。所以真正的問題不是「要不要買鑽戒」，是「已經有一枚了，再添一枚貴很多的，怎麼說服自己不會後悔」。她自己用的詞是「價格大躍進」與「超猶豫」，⛔ 不要替她翻譯成「其實是在說服自己」<br><strong>預算／時程：</strong>⛔ 均未提及具體金額，只說價差大。⛔ 不得推測預算帶、不得報價</div><div class="jessica-drawer" style="margin-top:8px">🔍 三、判讀</div><div class="jessica-text"><strong>類型：</strong>2 預算明確求解的變形（預算未明說，但取捨結構清楚）｜<strong>等級：</strong>B 問題意圖——有具體待解問題、正在比較，但不是婚嫁場景<br><strong>情境：</strong>送自己（非婚嫁場景）。這類情境的界線是尊重對方暫時不決定的選擇；本則是單純的購買猶豫，非情緒脆弱情境，可以給判斷。<strong>等級以 A／B／C／D 為準</strong>，⛔ 不另立第二套分類<br><strong>優先級：</strong>本日海巡第一順位。理由是⑤——留言最多、但她的問題最沒被回答，而且作者本人在觀測前 3 分鐘還在回覆，現在接話是接得上的</div><div class="jessica-drawer" style="margin-top:8px">💬 四、非推銷式留言草稿</div><div class="jessica-text">已經有一枚培育鑽了，再添一枚天然鑽，我會先想它們是不是同一種戴法——都想每天戴，還是一枚日常、一枚留給特別的日子。戴法分開了，兩枚就各自有位置。怕後悔的話，這個比克拉數好判斷。</div><div class="jessica-drawer" style="margin-top:8px">📝 五、Threads 延伸貼文草稿</div><div class="jessica-text">（本輪不起稿，先提問。理由：要談「同時有兩枚，怎麼分配戴法」需要 Jessica 本人的實際經驗，現有素材庫沒有可引用的真實案例，⛔ 不以通則代替、⛔ 不虛構客人案例。待確認的問題見策略室「延伸題材」一段。）</div><div class="jessica-drawer" style="margin-top:8px">🔀 六、跨平台延伸建議</div><div class="jessica-text"><strong>IG／Reels／限動：</strong>暫不製作，素材未確認<br><strong>LINE／官網：</strong>官網目前沒有承接「送自己」這條線的內容，全部集中在婚嫁。這是可補的缺口；⛔ 確認素材前不得上架</div><div class="jessica-drawer" style="margin-top:8px">🔧 七、漏斗更新</div><div class="jessica-text">⛔ 暫不進漏斗。她沒有詢問服務，留言區已有六家自薦，此時自薦只會被歸成同一類。本卡為觀點型互動。</div><div class="jessica-drawer" style="margin-top:8px">📌 八、追蹤動作</div><div class="jessica-text">卡片狀態：<strong>待互動（interaction_pending）</strong>。作者仍在回覆中，2–3 日內回看一次她最後怎麼決定。⛔ 後續取得新留言時更新本卡，不重複建立。</div></div>
+<a class="post-link" href="https://www.threads.com/@elk.18987503/post/DdNo8R8ErN8" target="_blank">🔗 查看原始貼文</a>
 </div>
 </div>
 <div class="post-card" data-level="B" data-keywords="舊金 金換金 耗損 金價 重量 克數 銀樓 改造" onclick="toggleCard(this, event)" data-comments-status="collected">
@@ -4590,49 +4641,77 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="cat-emoji">🧭</div>
 <div>
 <div class="cat-title">Jessica｜Threads 海巡參考</div>
-<div class="cat-subtitle">判斷順序 · 分級標準 · 留言語氣 · 送出前確認</div>
+<div class="cat-subtitle">判斷順序 · 兩個帳號分開追蹤 · A／B／C／D 分級 · 語感 · 回覆成效 · 留言建議 · 延伸題材</div>
 </div>
 <div class="cat-line"></div>
 </div>
 
-<div class="track-note" style="margin-bottom:18px"><strong style="font-size:1.05em">判斷順序（固定，由左到右）</strong><br><span style="font-size:1.15em;letter-spacing:.5px">自家帳號　→　A 級　→　B 級　→　C 級　→　D 級／敏感題材</span><br>⛔ 不得先做外部海巡再回頭看自家帳號。⛔ 只有<strong>實際已送出</strong>的留言才算完成，草稿不算。</div>
+<div class="section-title">1｜今日判斷順序</div>
+<div class="track-note" style="margin-bottom:14px"><span style="font-size:1.15em;letter-spacing:.5px">Jessica 自家帳號　→　Tru-Mi 官方帳號　→　A 級　→　B 級　→　C 級　→　D 級</span><br><strong>敏感題材獨立處理，不進 A／B／C／D 排名。</strong><br>⛔ 不得先做外部海巡再回頭看自家帳號。⛔ 只有<strong>實際已送出</strong>的留言才算完成，草稿不算。<br>⛔ 分析回應價值高於留言數：沒有留言也可以建卡；留言多不代表優先。</div>
+<div class="track-note" style="margin-bottom:22px"><strong>兩個帳號，用途不同，成效分開統計，⛔ 不得混用</strong><br>· <strong>Jessica 個人 Threads</strong>：<code>@trumi_jessica</code>　→　海巡、留言、對話累積<br>· <strong>Tru-Mi 官方 Threads</strong>：<a href="https://www.threads.com/@trumi_jewelryofficial" target="_blank">https://www.threads.com/@trumi_jewelryofficial</a>　→　品牌發布與官方互動<br>⚠️ 另有一個<strong>舊的品牌帳號（handle 結尾沒有 official）已停用</strong>，不得再使用；健檢會擋下它出現在儀錶板的任何位置。</div>
 
-<div class="section-title">0｜先看自家帳號　@trumi_jessica</div>
-<div class="track-note" style="margin-bottom:22px">每天第一件事，五項逐一看過：<br>① <strong>新增留言</strong>　② <strong>尚未回覆的留言</strong>　③ <strong>對方在 Jessica 回覆之後才進來的新追問</strong>（最容易漏，對話會斷在對方那一句）　④ <strong>需要延續的對話</strong>　⑤ <strong>已結束、不需再處理的對話</strong>（標掉，避免每天重看）<br>自家帳號還在進行中的對話處理完，才進外部海巡。<br>⚠️ 帳號別混用：Threads 操作是 <code>@trumi_jessica</code>，IG 導流是 <code>@trumi_jewelryofficial</code>，兩者用途不同、不可互相代換。另有一個<strong>舊的品牌 IG 帳號（handle 結尾沒有 official）已停用</strong>，不得再使用；健檢會擋下它出現在儀錶板的任何位置。</div>
-
-<div class="section-title">1｜A 級：立即處理</div>
-<div class="track-note" style="margin-bottom:18px"><strong>條件（四項都要成立）</strong><br>· 對方有明確問題或需求<br>· 貼文仍存在，且時間仍適合回應<br>· Jessica 有真實素材可以回答<br>· 留言區尚未被大量賣方洗版<br><strong>處理方式</strong><br>先讀完整原文（含圖片），再寫一則具體、溫和、不過度推銷的回覆。</div>
-
-<div class="section-title">2｜B 級：確認後回應</div>
-<div class="track-note" style="margin-bottom:18px"><strong>條件</strong><br>· 題目與婚戒、設計、佩戴或珠寶故事高度相關<br>· 有回應價值，但需要再確認貼文是否仍在、是否已有店家回覆<br>· 素材足夠，但時效性稍弱<br><strong>處理方式</strong><br>複查後再決定是否留言。⛔ 不直接沿用舊草稿。</div>
-
-<div class="section-title">3｜C 級：觀察與延伸</div>
-<div class="track-note" style="margin-bottom:18px"><strong>條件</strong><br>· 有生活故事、情緒或設計觀察價值<br>· 沒有明確提問<br>· 可作為語料、題材或未來貼文來源<br><strong>處理方式</strong><br>以觀察與延伸問題為主。⛔ 不強行留言、不推銷。</div>
-
-<div class="section-title">4｜D 級：暫不處理</div>
-<div class="track-note" style="margin-bottom:18px"><strong>條件（任一成立）</strong><br>· 原文資訊太少<br>· 只有賣方自薦或同業卡位<br>· 找不到 Jessica 的真實經驗可支撐<br>· 已重複收錄，或貼文已失效<br><strong>處理方式</strong><br>記錄跳過原因。⛔ 不建立留言草稿。</div>
-
-<div class="section-title">5｜敏感題材（獨立，放最後）</div>
-<div class="track-note" style="margin-bottom:22px">離婚、喪親、逝者思念、協尋、避雷點名等：<br>· <strong>預設跳過</strong><br>· 只有對方<strong>明確提問</strong>才回應<br>· ⛔ 不用勵志口號、不推銷、不邀私訊<br>· 爭議與避雷文不介入站隊，只留內部觀察</div>
-
-<div class="section-title">Jessica 回覆成效</div>
-<div class="track-note" style="margin-bottom:10px">⛔ <strong>只統計實際已送出的留言。</strong>草稿、未送出、無法確認的內容一律不計入。<br>⛔ 「已回應」必須有原 PO 的<strong>實際回覆、按讚或後續互動證據</strong>。看不到留言區、登入狀態不同、頁面未載入完整 → 標「<strong>無法確認</strong>」，<strong>不得當成無回應</strong>。<br>⛔ 自家貼文回覆與陌生人海巡<strong>分開統計</strong>；一般語料觀察與回覆成效<strong>分開統計</strong>。<br>⛔ 樣本數太少標「<strong>樣本不足</strong>」，不下定論。所有數字必須可回溯，⛔ 不用推估值補齊。</div>
+<div class="section-title">2｜Jessica 自家帳號待回應　<code>@trumi_jessica</code></div>
+<div class="track-note" style="margin-bottom:14px">每天第一件事，五項逐一看過：<br>① <strong>新增留言</strong>　② <strong>尚未回覆的留言</strong>　③ <strong>對方在 Jessica 回覆之後才進來的新追問</strong>（最容易漏，對話會斷在對方那一句）　④ <strong>需要延續的對話</strong>　⑤ <strong>已結束、不需再處理的對話</strong>（標掉，避免每天重看）<br>自家帳號還在進行中的對話處理完，才進外部海巡。</div>
 <table class="track-table" style="margin-bottom:22px">
 <thead>
-<tr><th>項目</th><th>自家貼文（OWN-POST）</th><th>陌生人海巡（SEA-PATROL）</th></tr>
+<tr><th>對方帳號</th><th>情況</th><th>等級</th><th>狀態</th></tr>
 </thead>
 <tbody>
-<tr><td>統計期間</td><td>2026-09-06 ～ 09-13</td><td>2026-09-06 ～ 09-13</td></tr>
-<tr><td>實際送出留言數</td><td>13（09-12 共 11、09-13 共 2）</td><td>1（09-07 回 @lucia_____liu）</td></tr>
-<tr><td>原 PO 回覆數</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">0（該則顯示 0 回覆）</td></tr>
-<tr><td>原 PO 按讚數</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">❤️6（未區分是否為原 PO）</td></tr>
-<tr><td>對方後續追問數</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">0</td></tr>
-<tr><td>對話延續數</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">0</td></tr>
-<tr><td>可確認無回應數</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">1</td></tr>
-<tr><td>無法確認數</td><td class="editable" contenteditable="true">13</td><td class="editable" contenteditable="true">0</td></tr>
-<tr><td>首次留言→送出時間差</td><td class="editable" contenteditable="true">待回填</td><td class="editable" contenteditable="true">待回填</td></tr>
+<tr><td>@sing_a_ig</td><td>母貼文下留言，尚未被回應</td><td>🔴 A</td><td class="editable" contenteditable="true">待 Jessica 回覆</td></tr>
+<tr><td>@ju_freya304</td><td>母貼文下留言，尚未被回應</td><td>🔴 A</td><td class="editable" contenteditable="true">待 Jessica 回覆</td></tr>
+<tr><td>@____queena___</td><td>已空著約 24 小時未被接住</td><td>🔴 A</td><td class="editable" contenteditable="true">待 Jessica 回覆（優先）</td></tr>
+<tr><td>@waijoan</td><td>樓中樓，本輪未渲染</td><td class="editable" contenteditable="true">待分級</td><td>尚未複查</td></tr>
+<tr><td>@sy520.66</td><td>樓中樓，本輪未渲染</td><td class="editable" contenteditable="true">待分級</td><td>尚未複查</td></tr>
+<tr><td>@lucio.y.c.wu</td><td>樓中樓，本輪未渲染</td><td class="editable" contenteditable="true">待分級</td><td>尚未複查</td></tr>
+<tr><td>@ketong_0621</td><td>Jessica 09-13 08:27 已回</td><td>—</td><td>✅ 已結束</td></tr>
+<tr><td>@ww7.9</td><td>Jessica 09-13 12:23 已回</td><td>—</td><td>✅ 已結束</td></tr>
+<tr><td>@enemy_front</td><td>Jessica 09-13 08:33 已回</td><td>—</td><td>✅ 已結束</td></tr>
 </tbody>
 </table>
+
+<div class="section-title">3｜Tru-Mi 官方 Threads 品牌互動</div>
+<div class="track-note" style="margin-bottom:22px"><a href="https://www.threads.com/@trumi_jewelryofficial" target="_blank">@trumi_jewelryofficial</a>　<strong>本輪複查（2026-09-13 21:05 TPE）</strong><br>· 粉絲數 <strong>3</strong>　· 貼文 <strong>1 則（舊文）</strong>　· 留言 <strong>0</strong>　· 本輪<strong>無新互動</strong><br>⛔ 官方帳號的成效<strong>不得與 Jessica 個人帳號合併計算</strong>。目前官方帳號尚未開始經營，所有成效欄位為 0 是<strong>實際觀測值</strong>，不是無法確認。<br>⚠️ 官方帳號目前沒有可承接的互動，海巡與對話累積<strong>全部發生在 Jessica 個人帳號</strong>。</div>
+
+<div class="section-title">4｜A 級優先海巡（立即處理）</div>
+<div class="track-note" style="margin-bottom:18px"><strong>條件</strong><br>· <strong>自家帳號的追問</strong>（最優先）<br>· 明確的婚戒需求，或具體的訂製問題<br>· 貼文仍存在，且時間仍適合回應<br>· Jessica 有真實素材可以回答<br>· 留言區尚未被大量賣方洗版<br><strong>處理方式</strong><br>先讀完整原文（含圖片），再寫一則具體、溫和、不過度推銷的回覆。</div>
+
+<div class="section-title">5｜B 級確認後海巡</div>
+<div class="track-note" style="margin-bottom:18px"><strong>條件</strong><br>· 題目與婚戒、設計、佩戴或珠寶故事高度相關<br>· 有回應價值，但需要再確認貼文是否仍在、是否已有店家回覆<br>· 素材足夠，但時效性稍弱<br><strong>處理方式</strong><br>複查後再決定是否留言。⛔ 不直接沿用舊草稿。</div>
+
+<div class="section-title">6｜C 級觀察與延伸</div>
+<div class="track-note" style="margin-bottom:18px"><strong>條件</strong><br>· 有生活故事、情緒或設計觀察價值<br>· 沒有明確提問<br>· 可作為語料、題材或未來貼文來源<br><strong>處理方式</strong><br>以觀察與延伸問題為主。⛔ 不強行留言、不推銷。</div>
+
+<div class="section-title">7｜D 級跳過</div>
+<div class="track-note" style="margin-bottom:18px"><strong>條件（任一成立）</strong><br>· 原文資訊太少<br>· 只有賣方自薦或同業卡位<br>· 找不到 Jessica 的真實經驗可支撐<br>· 已重複收錄，或貼文已失效<br><strong>處理方式</strong><br>記錄跳過原因。⛔ 不建立留言草稿。</div>
+
+<div class="section-title">8｜敏感題材處理原則（獨立，不納入 A／B／C／D 排名）</div>
+<div class="track-note" style="margin-bottom:22px">離婚、喪親、遺物、逝者思念、協尋、避雷點名等：<br>· <strong>預設跳過</strong><br>· 只有對方<strong>明確提問</strong>才回應<br>· ⛔ 不用勵志口號、不推銷、不邀私訊<br>· 爭議與避雷文不介入站隊，只留內部觀察</div>
+
+<div class="section-title">9｜Jessica 回覆成效</div>
+<div class="track-note" style="margin-bottom:10px">⛔ <strong>只統計實際已送出的留言。</strong>草稿、未送出、無法確認的內容一律不計入。<br>⛔ 「已回應」必須有原 PO 的<strong>實際回覆、按讚或後續互動證據</strong>。看不到留言區、登入狀態不同、頁面未載入完整 → 標「<strong>無法確認</strong>」，<strong>不得當成無回應</strong>。<br>⛔ 自家貼文回覆與陌生人海巡<strong>分開統計</strong>；一般語料觀察與回覆成效<strong>分開統計</strong>。<br>⛔ 樣本數太少標「<strong>樣本不足</strong>」，不下定論。所有數字必須可回溯，⛔ 不用推估值補齊。</div>
+<div class="track-note" style="margin-bottom:10px"><strong>A．Jessica 個人 Threads　<code>@trumi_jessica</code></strong>　統計期間 2026-09-06 ～ 09-13</div>
+<table class="track-table" style="margin-bottom:18px">
+<thead>
+<tr><th>原貼文</th><th>對方帳號</th><th>留言日期</th><th>等級</th><th>回覆模式</th><th>原PO回覆</th><th>原PO按讚</th><th>後續追問</th><th>對話延續</th><th>無回應</th><th>證據狀態</th></tr>
+</thead>
+<tbody>
+<tr><td><a href="https://www.threads.com/@trumi_jessica/post/DdLOvrxD8Vn" target="_blank">對戒一定要很像嗎</a></td><td>@herley_jewelry 等 7 位</td><td>2026-09-12</td><td>—</td><td>社群互動（自家貼文）</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td>已送出 11 則，原PO互動尚未逐則查核</td></tr>
+<tr><td><a href="https://www.threads.com/@trumi_jessica/post/DdLOvrxD8Vn" target="_blank">對戒一定要很像嗎</a></td><td>@ketong_0621</td><td>2026-09-13 08:27</td><td>—</td><td>社群互動（自家貼文）</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td>已送出，尚未查核</td></tr>
+<tr><td><a href="https://www.threads.com/@trumi_jessica/post/DdLOvrxD8Vn" target="_blank">對戒一定要很像嗎</a></td><td>@enemy_front</td><td>2026-09-13 08:33</td><td>—</td><td>社群互動（自家貼文）</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td>已送出，尚未查核</td></tr>
+<tr><td><a href="https://www.threads.com/@trumi_jessica/post/DdLOvrxD8Vn" target="_blank">對戒一定要很像嗎</a></td><td>@ww7.9</td><td>2026-09-13 12:23</td><td>—</td><td>社群互動（自家貼文）</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td class="editable" contenteditable="true">無法確認</td><td>已送出，尚未查核</td></tr>
+<tr><td><a href="https://www.threads.com/@lucia_____liu" target="_blank">（海巡貼文）</a></td><td>@lucia_____liu</td><td>2026-09-07</td><td class="editable" contenteditable="true">待補</td><td>海巡留言</td><td>0</td><td>❤️6（未區分是否為原PO）</td><td>0</td><td>否</td><td>是</td><td>已查核：顯示 0 回覆</td></tr>
+</tbody>
+</table>
+<div class="track-note" style="margin-bottom:10px"><strong>B．Tru-Mi 官方 Threads　<a href="https://www.threads.com/@trumi_jewelryofficial" target="_blank">@trumi_jewelryofficial</a></strong>　統計期間 2026-09-06 ～ 09-13</div>
+<table class="track-table" style="margin-bottom:18px">
+<thead>
+<tr><th>原貼文</th><th>對方帳號</th><th>留言日期</th><th>等級</th><th>回覆模式</th><th>原PO回覆</th><th>原PO按讚</th><th>後續追問</th><th>對話延續</th><th>無回應</th><th>證據狀態</th></tr>
+</thead>
+<tbody>
+<tr><td colspan="11">本期間<strong>無任何送出紀錄</strong>。官方帳號 3 粉、1 則舊貼文、0 留言、無新互動——此為 09-13 21:05 的實際觀測值，不是無法確認。⛔ 不得與個人帳號數據合併。</td></tr>
+</tbody>
+</table>
+<div class="track-note" style="margin-bottom:18px"><strong>彙總（只計實際送出）</strong><br>· Jessica 個人帳號：自家貼文 <strong>14 則</strong>（09-12 共 11、09-13 共 3）／海巡 <strong>1 則</strong>（09-07）<br>· 官方帳號：<strong>0 則</strong><br>· 可確認有回應：<strong>0</strong>　· 可確認無回應：<strong>1</strong>　· <strong>無法確認：14</strong><br>⛔ 那 14 則不得寫成 0 ——「沒查」與「查了沒有」是兩件事。</div>
 <table class="track-table" style="margin-bottom:12px">
 <thead>
 <tr><th>分級</th><th>送出數</th><th>回應率</th><th>證據狀態</th></tr>
@@ -4658,17 +4737,37 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </table>
 <div class="track-note" style="margin-bottom:22px">⚠️ <strong>目前整體為「樣本不足」，不得據此調整規則。</strong>自家貼文那 13 則的原 PO 互動尚未逐則查核，故全部列「無法確認」——⛔ 不得改寫成 0。<br>新增統計時每筆保留：<strong>來源貼文連結、留言日期、留言模式、分級、結果、證據狀態</strong>。<br>成效用來調整 A／B／C／D 的優先順序與留言寫法，<strong>⛔ 不作為單一成功標準</strong>——除了留言數，也要看原 PO 是否回覆、對話是否延續、是否產生有效需求。</div>
 
-<div class="section-title">Jessica 留言語氣與寫法</div>
+<div class="section-title">10｜海巡留言建議（僅產生草稿，⛔ 不自動送出）</div>
+<table class="track-table" style="margin-bottom:14px">
+<thead>
+<tr><th>原始貼文</th><th>值得回應的原因</th><th>等級</th><th>證據狀態</th><th>是否仍存在</th><th>Jessica 是否已回</th></tr>
+</thead>
+<tbody>
+<tr><td><a href="https://www.threads.com/@zh_o_hy910091/post/DdMLjPREvxa" target="_blank">@zh_o_hy910091</a></td><td>小資族婚戒求推薦，四個條件寫得很具體（舒適／日常／不突兀／好維護）。「好維護」這項少人先問，但最影響戴多久——Jessica 有真實語料可答。留言區至今仍空著，沒有被賣方灌。</td><td>🟠 B</td><td>09-13 20:59 第三次複查：仍「尚無回覆」</td><td>✅ 是</td><td>❌ 尚未</td></tr>
+<tr><td><a href="https://www.threads.com/@borrowingboy/post/DdNMr7MAfLf" target="_blank">@borrowingboy</a></td><td>婚戒弄丟多年，去年訂了一隻補給自己，等到現在還在等，講的全是體諒師傅。有具體可接的細節，不是求助。</td><td>🔵 C</td><td>09-13 09:03 開啟原文：留言區確實 0 則</td><td>✅ 是</td><td>❌ 尚未</td></tr>
+<tr><td><a href="https://www.threads.com/@dai.chien__/post/DdHMGryiRdJ" target="_blank">@dai.chien__</a></td><td>明確邀請店家自薦的客訂製需求（鼻紋戒指），但條件是「手作＋陪同」，非 Tru-Mi 主要方向。只回答她真正卡住的那件事，⛔ 不自薦。</td><td>🔴 A（意圖）</td><td>09-13 09:12：顯示 10 則留言但捲動 16 次未渲染 → <code>unavailable</code></td><td>✅ 是</td><td>❌ 尚未</td></tr>
+</tbody>
+</table>
+<div class="track-note" style="margin-bottom:22px">三則的完整留言草稿在「今日 Jessica 發文草稿推薦」區，每則只給一版。<br>⛔ 送出前必須重開原文確認貼文仍在、留言區現況與需求是否已改變。⛔ 本頁不代替 Jessica 送出任何留言。</div>
+
+<div class="section-title">11｜Jessica 語感與一般 Threads 語料規則</div>
+<div class="track-note" style="margin-bottom:14px"><strong>留言怎麼寫</strong><br>· 先亮設計師身分，再回答對方<strong>真正的問題</strong><br>· 至少加入<strong>一個只有珠寶設計師提得出來的具體觀察</strong><br>· 完整句子、正常標點，少用 emoji；長度由問題決定，答完就停<br>⛔ 空泛共鳴（「說得對」「好感動」「每一段愛情都值得⋯」）｜拿客戶故事開玩笑｜過度保證｜隨意報價｜貼 LINE｜對方沒有明確需求時推銷｜為曝光硬轉婚戒｜虛構經驗（「之前有一對客人也是這樣⋯」）<br>素材不足就寫「<strong>這題適合 Jessica 補一個自己的經驗再回</strong>」。<br><strong>身分邊界</strong>：Jessica 負責故事理解、設計與 3D 蠟模確認；鑄造、鑲鑽、電鍍由合作師傅完成。⛔ 不把合作製程寫成本人親手完成。</div>
 <div class="track-note" style="margin-bottom:22px"><strong>怎麼寫</strong><br>· 先亮設計師身分，再回答對方<strong>真正的問題</strong><br>· 至少加入<strong>一個只有珠寶設計師提得出來的具體觀察</strong><br>· 完整句子、正常標點，少用 emoji<br>· 長度由問題決定，答完就停，不必收成問句<br><strong>⛔ 不要</strong><br>· 空泛共鳴：「說得對」「好感動」「每一段愛情都值得⋯⋯」<br>· 拿客戶的故事開玩笑<br>· 過度保證、隨意報價、貼 LINE、在對方沒有明確需求時推銷<br>· 為了曝光硬把話題轉回婚戒<br>· 虛構經驗：「之前有一對客人也是這樣⋯⋯」——素材不足就寫「這題適合 Jessica 補一個自己的經驗再回」<br><strong>身分邊界（講製作時要說準）</strong><br>Jessica 負責<strong>故事理解、設計與 3D 蠟模確認</strong>；鑄造、鑲鑽、電鍍由合作師傅完成。⛔ 不把合作製程寫成本人親手完成。</div>
 
-<div class="section-title">語料來源與查重規則</div>
+<div class="section-title" style="font-size:.95em;opacity:.85">語料來源與查重規則</div>
 <div class="track-note" style="margin-bottom:22px"><strong>作者確認</strong><br>· 自家帳號已發布 <strong>≠</strong> Jessica 親自撰寫<br>· 未經本人確認一律標「<strong>帳號已發布，作者未確認</strong>」，只能當候選觀察<br>· ⛔ 不得列為 Jessica 慣用語，⛔ 不得升格為 GROUND TRUTH<br>· ⛔ 自家貼文的回覆語氣<strong>不得直接套用到陌生人海巡</strong>（情境不同）<br>· 一般 Threads 使用者的常用語與 Jessica 語感<strong>分開保存</strong><br>· ⛔ 不判定他人是否使用 AI 撰寫，⛔ 不產生 AI 機率分數<br><strong>查重</strong><br>先比對帳號與貼文是否已收錄，命中就跳過，⛔ 不重複處理。<br><strong>留言狀態</strong><br><code>collected</code> 已取得留言｜<code>none</code> 已實際開啟、確認 0 則｜<code>unavailable</code> 顯示有留言但讀不到｜<code>unconfirmed</code> 尚未確認<br>⛔ <strong>讀不到不等於 0</strong>。沒有留言也可以先建議、先建卡。</div>
 
-<div class="section-title">關鍵字品質觀察</div>
+<div class="section-title" style="font-size:.95em;opacity:.85">關鍵字品質觀察</div>
 <div class="track-note" style="margin-bottom:22px"><strong>目前用的字</strong>：婚戒／對戒／求婚戒／婚戒預算｜戒圍／佩戴舒適／日常保養｜寶寶出生／彌月紀念｜長輩珠寶／媽媽戒指／舊金飾｜重新開始（敏感）｜金工／蠟雕／手作<br><strong>已知會撈到雜訊的字</strong><br>· 「彌月」→ 幾乎都是油飯、禮盒、婆媳話題<br>· 「舊戒重製」→ 汽車鍍膜、手機殼回收<br>· 「婚戒」「對戒」用「最近」排序 → 混入戒斷／戒煙／遊戲戒指<br>⛔ 這是<strong>關鍵字選擇問題，不代表該客群層沒有需求</strong>。先改善用字，⛔ 不直接刪掉整個客群層。<br><strong>搜尋池現況</strong>：「婚戒」的相關搜尋有一半跟遺失、懸賞、找有關，源頭是 08-27 台中懸賞 10 萬那起事件。⛔「婚戒10萬」「10萬」是懸賞金額，不是預算帶。<br><strong>可補的缺口</strong>：「租求婚戒指」出現在「求婚戒指」的相關搜尋裡，對得上 Tru-Mi 既有的免費鑽戒租借，但官網目前沒有承接這個字。</div>
 
-<div class="section-title">送出前確認</div>
-<div class="track-note" style="margin-bottom:10px">① 開工前確認目前<strong>登入帳號是 @trumi_jessica</strong><br>② 每則留言：<strong>開啟原文 → 貼上 → 逐字核對 → 送出 → 確認送出成功</strong><br>③ 送出後再讀一遍：有沒有回到對方的問題？有沒有虛構細節？有沒有多餘推銷或制式尾句？讀起來像品牌簡介就刪掉與原帖無關的部分<br>④ 只有取得可辨識的送出證據，才登錄為已留言<br><br>⚠️ <strong>本頁只提供參考規則，不代表自動代替 Jessica 送出留言。</strong>所有對外留言一律由 Jessica 本人操作。</div>
+<div class="section-title" style="font-size:.95em;opacity:.85">送出前確認</div>
+<div class="track-note" style="margin-bottom:22px">① 開工前確認目前<strong>登入帳號是 @trumi_jessica</strong><br>② 每則留言：<strong>開啟原文 → 貼上 → 逐字核對 → 送出 → 確認送出成功</strong><br>③ 送出後再讀一遍：有沒有回到對方的問題？有沒有虛構細節？有沒有多餘推銷或制式尾句？<br>④ 只有取得可辨識的送出證據，才登錄為已留言<br>⚠️ <strong>本頁只提供參考規則，不代表自動代替 Jessica 送出留言。</strong></div>
+
+<div class="section-title">12｜今日待確認事項</div>
+<div class="track-note" style="margin-bottom:10px"><strong>需要 Jessica 本人處理</strong><br>· <strong>@____queena___</strong> 的留言已空著約 24 小時，是目前最該補的一則<br>· <strong>@sing_a_ig</strong>、<strong>@ju_freya304</strong> 母貼文下留言尚未被接住<br>· 海巡三則草稿（@zh_o_hy910091／@borrowingboy／@dai.chien__）備妥未送出<br><br><strong>需要回頭查核</strong><br>· <strong>@waijoan／@sy520.66／@lucio.y.c.wu</strong>：樓中樓本輪未渲染，尚未複查，⛔ 不得推論為已結束<br>· <strong>回覆成效那 14 則</strong>：原 PO 是否回覆、是否按讚尚未逐則查核，全部標「無法確認」，⛔ 不得填 0<br>· <strong>@dai.chien__</strong> 留言區 <code>unavailable</code>，下次優先重取那 10 則<br><br><strong>需要 Jessica 補素材</strong><br>· 低預算帶（一對 1-3 萬）目前沒有可引用的真實案例，遇到這個價帶只能寫「這題適合 Jessica 補一個自己的經驗再回」<br>· Tru-Mi 是否承作鼻紋戒指、是否提供陪同手作——未查核，⛔ 未確認前不得自薦<br><br><strong>可立即動手且不需內部確認</strong><br>· 官網目前沒有承接「租求婚戒指」這個字，但 Tru-Mi 本來就有免費鑽戒租借</div>
+
+<div class="section-title">13｜延伸貼文題材</div>
+<div class="track-note" style="margin-bottom:10px">⛔ <strong>先提問，不先起稿。</strong>每一則都要先問到 Jessica 本人的答案，才寫得下去；素材四格填不滿就是「今日暫緩發文」，⛔ 不用形容詞撐字數、⛔ 不換舊案例套用、⛔ 不虛構客人故事。<br><br><strong>① 戒指是誰選的，跟誰付的，可以是兩件事</strong><br>來源：對戒母貼文下 <strong>@waijoan</strong>「謝謝！我們各自挑，然後付對方的。」<br>值得談的原因：整串留言都在回答「要不要長一樣」，只有這一則把問題翻到另一個面向——款式各自挑，錢付給對方那一只。這是有畫面、又沒有人講過的角度。<br>要問 Jessica 的一個問題：<strong>妳接過的訂單裡，有沒有出現過「兩人各挑各的、但互相為對方付」這種安排？</strong>有真實案例才動筆。<br><br><strong>② 兩枚戒指怎麼分配戴法</strong><br>來源：<strong>@elk.18987503</strong>（已有一枚培育鑽，猶豫再添一枚天然鑽）<br>值得談的原因：她的問題不是「要不要買」，是「已經有一枚了，再添一枚怎麼說服自己」。留言 38 則沒有一則回到這句。<br>要問 Jessica 的一個問題：<strong>同時有兩枚戒指的客人，妳通常怎麼跟她討論戴法分配？</strong>⛔ 現有素材庫沒有可引用的真實案例，未取得前不以通則代替。<br><br><strong>③ 關鍵字語意被別的領域佔滿</strong><br>來源：本日「彌月」「舊戒重製」「對戒」三組搜尋，回傳幾乎零筆與珠寶有關。<br>值得談的原因：這是可觀測的平台現象，不需要 Jessica 補素材就能寫，但⛔ 屬內部觀察，不一定要對外發文。<br>要問 Jessica 的一個問題：<strong>這種「大家其實在找，但搜不到」的落差，值不值得做成一則貼文？</strong><br><br>完整的今日發文草稿與素材四格檢查，在「📚 素材與紀錄」頁籤。</div>
 </div>
 
 <!-- ══ 待辦回應（Jessica 每日海巡行動清單）══ -->
@@ -4715,9 +4814,106 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div style="margin-bottom:36px">
 <div class="section-title">✍️ 今日 Jessica 發文草稿推薦</div>
 <div class="draft-card">
-<div class="draft-badge">🟢 今日第一優先｜自家貼文下還有 4 則空著（10:30 TPE 複查後更新）</div>
-<div class="draft-meta">📅 2026年09月13日 · 今日寫入 <strong>2 張卡片</strong>（@borrowingboy 待互動／@dai.chien__ 待互動）· 觀測時間 <strong>09:00–09:15 ＋ 10:20–10:30 TPE（兩輪）</strong> · 全程登入視角（@tilandky，只讀不送出）· <strong>本日規則變更：留言不再是建卡前提</strong></div>
-<div class="draft-body">───── 🔄 本日第二輪複查（10:20–10:30 TPE，登入視角，只讀不送出）─────
+<div class="draft-badge">🟢 今日第一優先｜自家貼文下還有 3 則空著（21:05 TPE 第三輪複查後更新）</div>
+<div class="draft-meta">📅 2026年09月13日 · 今日寫入 <strong>3 張卡片</strong>（@borrowingboy 待互動／@dai.chien__ 待互動／@elk.18987503 待互動）· 觀測時間 <strong>09:00–09:15 ＋ 10:20–10:30 ＋ 20:45–21:05 TPE（三輪）</strong> · 全程登入視角（@tilandky，只讀不送出）· <strong>本日規則變更：留言不再是建卡前提</strong></div>
+<div class="draft-body">───── 🔄 本日第三輪複查（20:45–21:05 TPE，登入視角，只讀不送出）─────
+
+時間全部取自 <code>&lt;time datetime&gt;</code> 的 UTC 值換算 TPE。
+
+· 母貼文現況（09-13 20:53 TPE 觀測）：<strong>44 讚／41 回覆／12 轉發／1.7 萬次瀏覽</strong>（10:25 為 29／35／7／1.1 萬）。半天內又多了 15 讚、6 則回覆、5 次轉發。
+· ✅ <strong>第二輪的【待確認】已解除</strong>：@ww7.9 本輪在貼文中<strong>確實存在</strong>（09-12 16:25:34 UTC＝09-13 00:25 TPE），而且 <strong>Jessica 已於 09-13 12:23 TPE 回覆</strong>「遠看有點像，近看又各自有細節～ 好喜歡 😀」。10:30 那次「找不到」的原因仍無法確認（Threads 對非作者視角會提示「部分新增回覆無法顯示」，本輪同樣出現），⛔ 不倒推第二輪紀錄有誤，只更正結論：該留言存在且已回。
+· <strong>本日已實際送出 3 則</strong>（累計，有送出證據）：08:27 回 @ketong_0621、08:33 回 @enemy_front、<strong>12:23 回 @ww7.9</strong>。
+· ⚠️ <strong>本輪讀取限制</strong>：登入身分為 @tilandky，非作者本人。母貼文標示 41 則回覆，本輪展開全部 15 組「顯示回覆」後只取得 15 則頂層留言＋15 則 Jessica 回覆；<strong>樓中樓的更深層回覆本輪未渲染出來</strong>。因此第二輪列的 @waijoan／@sy520.66／@lucio.y.c.wu 三則<strong>本輪無法複查，狀態沿用 10:30 紀錄，標「先前候選，尚未複查」</strong>，⛔ 不得宣稱已回或未回。
+
+以下 3 則是本輪<strong>實際確認仍然空著</strong>的，依「值不值得現在回」排序，⛔ 不看讚數：
+
+───── ① @sing_a_ig（約 09-13 16:50 TPE，<strong>絕對時間本輪未取得，標【待確認】</strong>）─────
+
+原文（20:48 TPE 逐字取得，相對時間顯示「4小時」）：「我們對戒(也是婚戒)選金的～保值／但老公想戴粗獷一點的 我想戴細一點的／所以一開始就選兩個不一樣但看起來類似的戒指／後來我也在想對戒不就是要兩個長一樣才叫對戒嗎🤔／到某天又再逛金飾店剛好看到一對粗度跟款式我們都喜歡的💍／就直接再貼一點錢舊戒換新戒／這也算是選金的優點吧 想換款式就換🤣」
+
+【他在說什麼】整串裡唯一一個講「可以改變主意」的人。別人都在回答「一樣 vs 不一樣」，她的答案是<strong>不用一次決定</strong>——金可以貼差價換款式，所以先選不一樣、後來換成一樣都成立。
+【建議怎麼接】接她自己下的結論（「這也算是選金的優點吧」），這是她親手講出來的觀察，不用替她補充。⛔ 不要延伸成材質比較或保值討論。
+【Jessica 可以怎麼回】舊戒換新戒補個差價就好，等於不用一次決定欸～這點金真的很自由😀
+
+（明示：選金、兩人粗細偏好不同、先買類似款、後來換成同一對、舊戒換新戒補差價。未知：第一對戴了多久、換的時候補多少。⛔ 不要問，她沒有在求助。）
+
+───── ② @ju_freya304（09-13 13:07 TPE，2 讚，約 8 小時未回）─────
+
+原文：「我們選玫瑰金的，是合起來會成為一個完整的愛心～」
+
+【他在說什麼】她給的是第三種解法——兩只<strong>分開看各自一半，合起來才完整</strong>。這剛好回答了 Jessica 原貼文那句「如果兩枚長得完全不同，還有對戒的感覺嗎」。
+【建議怎麼接】社群互動型，短接住就好（§4.4.0，5–15 字）。⛔ 不要描述戒指外觀——本輪未取得圖片，⛔ 不得寫看過的細節。
+【Jessica 可以怎麼回】要兩只合起來才完整，這個好浪漫欸🥹
+
+───── ③ @____queena___（09-12 20:57 TPE，3 讚，<strong>已約 24 小時未回</strong>）─────
+
+原文：「卡一個也想知道」
+
+⚠️ 這則第二輪就列過，本輪確認<strong>仍然空著</strong>，等待時間從 13 小時拉到約 24 小時。她是整串裡唯一明確要答案、卻最容易被漏掉的一種（沒有講故事，所以不顯眼）。
+【Jessica 可以怎麼回】（沿用第二輪草稿，條件未變）留言看下來，各自挑的比我想的還多欸😆 我自己也還在想
+
+⛔ 以上三則<strong>都是 AI 建議、未經 Jessica 確認</strong>，不得登錄為已回覆、不得寫進 <code>jessica-voice-samples.md</code>。
+
+───── 🆕 本輪外部海巡：@elk.18987503（B 級・本日第一順位・已建卡）─────
+
+來源：https://www.threads.com/@elk.18987503/post/DdNo8R8ErN8
+發文 2026-09-13 11:53 TPE ｜ 本輪 21:02 TPE 觀測：31 讚／38 回覆，<strong>作者本人在觀測前 3 分鐘仍在回覆</strong>
+
+原文：「買給自己一枚鑽戒當禮物會不會很誇張啊⋯ 在思考會不會太超過了。想說不然買保值的黃金，但可能是我的偏好，看了好幾家覺得不喜歡金飾」
+作者兩次自補：「雖然很愛，就是怕後悔而已」「培育鑽有一枚了，但現在看中一枚天然鑽所以價格大躍進，超猶豫。但好喜歡」
+
+值得回的理由不是 38 則留言，是<strong>那 38 則沒有一則回到她最後補的那一句</strong>。留言區分成兩堆：一堆「喜歡就買」，一堆同業自薦報價（至少 6 個帳號）。她真正卡住的「已經有一枚培育鑽，再添一枚天然鑽」沒有人接。
+
+建議留言（一版，完整判讀見卡片）：
+已經有一枚培育鑽了，再添一枚天然鑽，我會先想它們是不是同一種戴法——都想每天戴，還是一枚日常、一枚留給特別的日子。戴法分開了，兩枚就各自有位置。怕後悔的話，這個比克拉數好判斷。
+
+⛔ 不談保值、增值或投資（不是我們該給的建議，她也已自行排除黃金）。⛔ 不自薦、不報價、不貼入口——留言區已有六家在做，再多一家只會被歸成同一類。
+
+───── 🔁 @zh_o_hy910091（B 級・本輪 20:59 TPE 第三次複查，條件未變）─────
+
+貼文仍在、1 讚、留言區仍顯示<strong>「尚無回覆」</strong>，發文至今約 31 小時。09-12 備妥的留言草稿條件沒有改變，仍然可用（見下方 09-12 區塊）。
+⚠️ 這則已連續兩天、三輪查看都是 0 留言。同期的 @kk029_、@karencici_156 留言區早被賣方自薦灌滿，這則到現在還沒有人回——<strong>先進場的機會還在，但已經放了一天多</strong>。
+
+───── 🔎 本輪關鍵字品質觀察（新增，供下次調整搜尋池）─────
+
+本輪跑了 5 組關鍵字，全部 <code>filter=recent</code>、登入視角：
+
+· <strong>婚戒</strong>｜大量粉絲圈用語（「婚戒core」「反婚戒」「小狗婚戒」），真實需求極少。
+· <strong>對戒</strong>｜回傳幾乎全是「戒指」賣場貼文（水晶戒、銀戒、蕾絲布藝戒），與對戒無關。
+· <strong>婚戒預算</strong>｜<strong>本輪表現最好</strong>，撈到 @zh_o_hy910091（前日候選再現）與一串婚禮預算討論。
+· <strong>婚戒改圍</strong>｜主題命中率低，但意外撈到本日最有價值的 @elk.18987503。
+· <strong>舊戒重製</strong>｜再次驗證舊記載：回傳汽車鍍膜、窗簾舊換新、霧眉改色，零相關。
+· <strong>彌月</strong>｜再次驗證舊記載：<strong>台灣 Threads 的「彌月」幾乎等於彌月蛋糕試吃</strong>，本輪前 10 則全是禮盒、試吃週數爭議、蛋糕推薦，沒有一則與珠寶有關。
+
+⛔ 這是<strong>關鍵字選擇問題，不代表新生層沒有需求</strong>。建議下次改用「寶寶出生禮」「媽媽手鍊」「紀念首飾」測試，⛔ 不刪掉整個客群層。
+
+───── 🗣️ 一般 Threads 語料（候選觀察，⛔ 不得寫成 Jessica 的慣用語）─────
+
+本輪三個<strong>個例</strong>（單篇＝個例，需多個不同帳號×不同貼文重複出現才列候選模式）：
+
+· 「卡一個也想知道」（@____queena___）——「卡一個」是等答案的省略句，功能是排隊，不是分享。
+· 「一點點點點相似」（@ww7.9）——用疊字把程度講到很小，語氣上在保留餘地。
+· 「意思意思」（@lineline890604_1989，同一則貼文內連用兩次）——表達「不求多、夠用就好」。⚠️ 同帳號反覆使用，<strong>不算多份獨立證據</strong>。
+
+⛔ 以上僅為平台語感觀察，用途是檢查草稿像不像真人講話；⛔ 不得升格為 Jessica 語感，⛔ 不判定任何人是否使用 AI 撰寫。
+
+───── 💡 本輪值得發展的一個方向（延伸題材）─────
+
+來源：@elk.18987503 那則「買給自己一枚鑽戒會不會很誇張」（09-13，38 則回覆）。
+
+值得談的原因：這一串把一個現象攤得很清楚——<strong>當一個人問「我可以買嗎」，網路會給她一堆「可以」，但沒有人幫她想「買了之後怎麼用」。</strong>38 則裡一堆鼓勵、六家報價，她自己補的那句「已經有一枚培育鑽，現在看中天然鑽」卡在那裡沒人接。這不是推論，是這串留言自己長出來的，⛔ 不需要引用任何案例。
+
+可延伸角度：不要再寫一篇「送自己珠寶很值得」的鼓勵文（那是留言區已經有的東西）。往下問一層——<strong>同時擁有兩枚以上戒指的人，最後是怎麼決定哪一枚每天戴的？</strong>
+
+⛔ 依規定先提問整理想法，收到起稿要求才寫完整貼文。要問 Jessica 的一個問題：
+
+<strong>「妳接過同時擁有兩枚以上戒指的客人嗎？她們最後是怎麼分配戴法的——照價格分（貴的收起來）、照場合分，還是照戴起來舒不舒服分？」</strong>
+
+（第二輪的延伸題材「對戒留下來的那個共同點」仍然有效、尚未收到回覆，見下方保留區。兩題可擇一。）
+
+───── 以下為第二輪（10:20–10:30 TPE）記載，保留備查 ─────
+
+───── 🔄 本日第二輪複查（10:20–10:30 TPE，登入視角，只讀不送出）─────
 
 上一輪（09:00–09:15）之後，Jessica 本人已實際送出 2 則回覆，母貼文也又長了一截。時間全部取自 <code>&lt;time datetime&gt;</code> 的 UTC 值換算 TPE，不用相對時間推估。
 
@@ -4925,11 +5121,11 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <td>2026-09-13</td>
 <td>Threads</td>
 <td>@trumi_jewelryofficial／@trumi_jessica</td>
-<td>@ketong_0621／@enemy_front</td>
+<td>@ketong_0621／@enemy_front／@ww7.9</td>
 <td>社群互動（回自己貼文下的留言者）</td>
-<td>🟢 實際送出 2 則</td>
+<td>🟢 實際送出 3 則</td>
 <td>2</td>
-<td><strong>⚠️ 本列已於 10:30 TPE 第二輪複查更新。</strong>09:00–09:15 第一輪查核時本日送出數確為 0；<strong>Jessica 於 08:27 與 08:33 TPE 之後、本輪之前實際送出 2 則</strong>（時間取自 <code>&lt;time datetime&gt;</code> 絕對值，非相對時間推估）：08:27 回 @ketong_0621「沒想到黃金戒指造型能這麼好看😍」、08:33 回 @enemy_front「這組一樣的對戒。簡約又很實戴欸💍」。兩則皆屬 OWN-POST REPLY，⛔ 帳號已發布不等於本人親寫，語感等級維持「帳號已發布，作者未確認」。<strong>海巡留言仍停在 09-07 回 @lucia_____liu 那則</strong>，缺口連續第六天未補。以下為第一輪原始記載，保留備查：<strong>本日第一輪查核實際送出 0 則</strong>，⛔ 本表只登錄有送出證據的留言，備妥未送出者不混入。@trumi_jessica 回覆分頁上<strong>最後一輪送出時間仍是 09-12 21:55 TPE</strong>，其後未再送出任何留言；<strong>海巡留言仍停在 09-07 回 @lucia_____liu 那則</strong>，缺口連續第六天沒有被補上。⚠️ 官方帳號 @trumi_jewelryofficial 本日未逐項複查粉絲數與回覆分頁，<strong>沿用前值並標「尚未更新」，⛔ 不填 0</strong>。<strong>本日最該補的動作是接住兩則已進來但還沒回的留言</strong>：@ketong_0621（09-12 22:12 TPE，「婚戒選黃金戒子，先生工作無法戴，我是會每天戴，單純愛保值🤣，都選自己喜歡的❤️」）與 @ww7.9（09-13 00:25 TPE，「我們也是選各自喜歡的只是形狀有一點點點點相似而已」）——兩則都晚於 Jessica 最後一輪回覆，屬<strong>社群互動型（OWN-POST REPLY）</strong>，留言草稿已備妥在今日草稿區。母貼文（09-12「對戒一定要長得很像嗎？」）本日觀測 <strong>29 讚／32 回覆／7 轉發</strong>，仍在滾動。<strong>今日新備妥可送出留言 4 則</strong>（@ketong_0621、@ww7.9 兩則社群互動；@borrowingboy、@dai.chien__ 兩則海巡），加上 09-12 已備妥且本日複查仍有效的 @zh_o_hy910091 一則，<strong>合計 5 則待人工送出，全部尚未送出</strong>。⛔ 登入身分為 @tilandky 個人帳號，不得以該身分代 Tru-Mi 送出，一律由 Jessica 本人操作。</td>
+<td><strong>⚠️ 本列已於 21:05 TPE 第三輪複查更新。</strong>第三輪新增事實：①<strong>本日送出數由 2 更正為 3</strong>——Jessica 另於 <strong>12:23 TPE 回 @ww7.9</strong>「遠看有點像，近看又各自有細節～ 好喜歡 😀」（絕對時間取自 <code>&lt;time datetime&gt;</code>）。②<strong>第二輪的【待確認】解除</strong>：@ww7.9 該留言確實存在且已被回覆，10:30 那次「找不到」的原因仍無法確認（本輪同樣出現 Threads 對非作者視角的「部分新增回覆無法顯示」提示），⛔ 不倒推第二輪紀錄有誤。③母貼文 20:53 TPE 觀測 <strong>44 讚／41 回覆／12 轉發／1.7 萬瀏覽</strong>。④<strong>仍空著 3 則</strong>：@sing_a_ig（約 16:50 TPE，絕對時間【待確認】）、@ju_freya304（13:07 TPE）、@____queena___（09-12 20:57 TPE，已約 24 小時）。⑤第二輪列的 @waijoan／@sy520.66／@lucio.y.c.wu 屬樓中樓，<strong>本輪未渲染出來、無法複查</strong>，狀態沿用 10:30 紀錄標「尚未複查」，⛔ 不得宣稱已回或未回。⑥<strong>海巡留言仍停在 09-07 回 @lucia_____liu 那則，缺口連續第七天未補。</strong>⑦官方帳號 @trumi_jewelryofficial 本輪已複查：粉絲數 3、僅一則 2026-07-16 貼文、2 讚、<strong>0 則留言、無新互動</strong>。⑧今日可送出留言累計 <strong>7 則全部尚未送出</strong>（社群互動 3：@sing_a_ig／@ju_freya304／@____queena___；海巡 4：@borrowingboy／@dai.chien__／@elk.18987503／@zh_o_hy910091）。以下為第二輪記載，保留備查：<strong>⚠️ 本列已於 10:30 TPE 第二輪複查更新。</strong>09:00–09:15 第一輪查核時本日送出數確為 0；<strong>Jessica 於 08:27 與 08:33 TPE 之後、本輪之前實際送出 2 則</strong>（時間取自 <code>&lt;time datetime&gt;</code> 絕對值，非相對時間推估）：08:27 回 @ketong_0621「沒想到黃金戒指造型能這麼好看😍」、08:33 回 @enemy_front「這組一樣的對戒。簡約又很實戴欸💍」。兩則皆屬 OWN-POST REPLY，⛔ 帳號已發布不等於本人親寫，語感等級維持「帳號已發布，作者未確認」。<strong>海巡留言仍停在 09-07 回 @lucia_____liu 那則</strong>，缺口連續第六天未補。以下為第一輪原始記載，保留備查：<strong>本日第一輪查核實際送出 0 則</strong>，⛔ 本表只登錄有送出證據的留言，備妥未送出者不混入。@trumi_jessica 回覆分頁上<strong>最後一輪送出時間仍是 09-12 21:55 TPE</strong>，其後未再送出任何留言；<strong>海巡留言仍停在 09-07 回 @lucia_____liu 那則</strong>，缺口連續第六天沒有被補上。⚠️ 官方帳號 @trumi_jewelryofficial 本日未逐項複查粉絲數與回覆分頁，<strong>沿用前值並標「尚未更新」，⛔ 不填 0</strong>。<strong>本日最該補的動作是接住兩則已進來但還沒回的留言</strong>：@ketong_0621（09-12 22:12 TPE，「婚戒選黃金戒子，先生工作無法戴，我是會每天戴，單純愛保值🤣，都選自己喜歡的❤️」）與 @ww7.9（09-13 00:25 TPE，「我們也是選各自喜歡的只是形狀有一點點點點相似而已」）——兩則都晚於 Jessica 最後一輪回覆，屬<strong>社群互動型（OWN-POST REPLY）</strong>，留言草稿已備妥在今日草稿區。母貼文（09-12「對戒一定要長得很像嗎？」）本日觀測 <strong>29 讚／32 回覆／7 轉發</strong>，仍在滾動。<strong>今日新備妥可送出留言 4 則</strong>（@ketong_0621、@ww7.9 兩則社群互動；@borrowingboy、@dai.chien__ 兩則海巡），加上 09-12 已備妥且本日複查仍有效的 @zh_o_hy910091 一則，<strong>合計 5 則待人工送出，全部尚未送出</strong>。⛔ 登入身分為 @tilandky 個人帳號，不得以該身分代 Tru-Mi 送出，一律由 Jessica 本人操作。</td>
 </tr>
 <tr>
 <td>2026-09-12</td>
@@ -5057,12 +5253,12 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <tr>
 <td>2026-09-13</td>
 <td>Threads</td>
-<td>接住自家貼文下還沒回的留言｜10:30 複查後剩 @____queena___／@waijoan／@sy520.66／@lucio.y.c.wu</td>
+<td>接住自家貼文下還沒回的留言｜21:05 第三輪複查後剩 @sing_a_ig／@ju_freya304／@____queena___（另 @waijoan／@sy520.66／@lucio.y.c.wu 屬樓中樓，本輪未能複查）</td>
 <td class="editable col-fill" contenteditable="true" data-metric="time">待回填</td>
 <td class="editable col-fill" contenteditable="true" data-metric="likes1hr">待回填</td>
 <td class="editable col-fill" contenteditable="true" data-metric="auth">待回填</td>
 <td class="editable col-fill" contenteditable="true" data-metric="reach">待回填</td>
-<td class="editable" contenteditable="true">本日主打不是新發文，是接住 09-12 母貼文下還沒回的留言。母貼文 10:25 TPE 觀測 29 讚／35 回覆／7 轉發／1.1 萬瀏覽（09:15 時為 29／32／7）。本日 Jessica 已實際送出 2 則（08:27 @ketong_0621、08:33 @enemy_front）；10:30 複查後仍空著 4 則。@ww7.9 本輪在該貼文找不到，標【待確認】</td>
+<td class="editable" contenteditable="true">本日主打不是新發文，是接住 09-12 母貼文下還沒回的留言。母貼文 20:53 TPE 觀測 44 讚／41 回覆／12 轉發／1.7 萬瀏覽（10:25 為 29／35／7／1.1 萬；09:15 為 29／32／7）。本日 Jessica 實際送出 3 則（08:27 @ketong_0621、08:33 @enemy_front、12:23 @ww7.9）。@ww7.9 的【待確認】已解除：留言確實存在且已回。21:05 第三輪複查後仍空著 3 則。另新增外部海巡 1 則已建卡（@elk.18987503）</td>
 </tr>
 <tr>
 <td>2026-09-12</td>
@@ -5957,11 +6153,67 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <script>
   function switchTab(id, el) {
     currentKw = null;
+    currentLevelCross = null;
     document.querySelectorAll('.kw-chip').forEach(k => k.classList.remove('active'));
+    document.querySelectorAll('.level-chip').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.category-panel').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('panel-' + id).classList.add('active');
+    if (el) el.classList.add('active');
+    const target = document.getElementById('panel-' + id);
+    if (target) target.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  /* ===== A／B／C／D 等級頁籤（2026-09-13 owner 裁定）=====
+     取代原本的四個舊分類頁籤。卡片實體仍留在原本的 panel 裡不動，
+     這裡只是把它們依 data-level 取出來，渲染進搜尋面板的 A／B／C／D 分區。
+     ⚫ D 頁籤同時涵蓋 RISK，⛔ 但不改任何卡片的 data-level。 */
+  var LEVEL_TAB_NAMES = {
+    A: '🔴 A 級｜立即處理',
+    B: '🟠 B 級｜確認後回覆',
+    C: '🔵 C 級｜觀察與延伸',
+    D: '⚪ D 級｜跳過（含 ⚫ 風險）'
+  };
+  function levelTabMembers(level){
+    var lvls = (level === 'D') ? ['D', 'RISK'] : [level];
+    var sel = lvls.map(function(L){
+      return '.category-panel:not(#panel-search):not(#panel-week) .post-card[data-level="' + L + '"]';
+    }).join(',');
+    return Array.prototype.slice.call(document.querySelectorAll(sel));
+  }
+  function openLevelTab(level, el){
+    currentKw = null;
+    currentLevelCross = level;
+    document.querySelectorAll('.kw-chip').forEach(function(k){ k.classList.remove('active'); });
+    document.querySelectorAll('.level-chip').forEach(function(c){ c.classList.remove('active'); });
+    var lb = document.querySelector('.level-filter-btn'); if(lb) lb.classList.add('active');
+    document.querySelectorAll('.post-card[data-level]').forEach(function(c){ c.style.display = ''; });
+
+    var cards = levelTabMembers(level);
+    cards.sort(function(a, b){
+      var da = a.getAttribute('data-post-date') || '';
+      var db = b.getAttribute('data-post-date') || '';
+      return db.localeCompare(da);
+    });
+    searchReset();
+    var weekCount = 0;
+    cards.forEach(function(card){
+      var diff = daysDiffFromToday(card.getAttribute('data-post-date'));
+      if(diff !== null && diff >= 0 && diff <= 6) weekCount++;
+      searchAdd(card);
+    });
+    searchFinish((LEVEL_TAB_NAMES[level] || level) + '（依貼文日期新到舊 · 本週新增 ' + weekCount + ' 則）', cards.length);
+
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    if(el && el.classList) el.classList.add('active');
+    else {
+      var tabs = document.querySelectorAll('.tab');
+      for(var i=0;i<tabs.length;i++){
+        if((tabs[i].getAttribute('onclick') || '').indexOf("openLevelTab('" + level + "'") > -1){ tabs[i].classList.add('active'); break; }
+      }
+    }
+    document.querySelectorAll('.category-panel').forEach(function(p){ p.classList.remove('active'); });
+    var ps = document.getElementById('panel-search'); if(ps) ps.classList.add('active');
     window.scrollTo(0, 0);
   }
   function toggleCard(card, evt) {
@@ -5977,7 +6229,11 @@ Harry Winston Ribbon疊戴Tiffany6爪
 
   function computeLevelCounts() {
     const counts = {A:0,B:0,C:0,D:0,RISK:0};
-    document.querySelectorAll('.post-card[data-level]').forEach(c => {
+    /* ⚠️ 2026-09-13 修正：原本用 '.post-card[data-level]' 全檔計數，
+       會把 #panel-search 與 #panel-week 裡的「複製卡」一起算進去，
+       導致頁籤上的數字比點進去實際看到的多。
+       這裡改用與 levelTabMembers() 完全相同的範圍，兩邊不可能再對不上。 */
+    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-week) .post-card[data-level]').forEach(c => {
       const lvl = c.getAttribute('data-level');
       if (counts.hasOwnProperty(lvl)) counts[lvl]++;
     });
@@ -5985,6 +6241,16 @@ Harry Winston Ribbon疊戴Tiffany6爪
       const el = document.getElementById('levelCount' + k);
       if (el) el.textContent = counts[k];
     });
+    /* 頁籤計數：D 頁籤同時涵蓋 RISK，所以顯示 D + RISK；
+       ⛔ 這只是顯示上的合併，counts.D 與 counts.RISK 本身沒有被改動。 */
+    const tabCounts = {A: counts.A, B: counts.B, C: counts.C, D: counts.D + counts.RISK};
+    Object.keys(tabCounts).forEach(k => {
+      const t = document.getElementById('tabCount' + k);
+      if (t) t.textContent = tabCounts[k];
+    });
+    /* D 分級 chip 也一併顯示合計，與頁籤一致 */
+    const dChip = document.getElementById('levelCountD');
+    if (dChip) dChip.textContent = tabCounts.D;
   }
   let currentLevelFilter = 'ALL';
   function filterLevel(level, el) {
@@ -6036,6 +6302,102 @@ Harry Winston Ribbon疊戴Tiffany6爪
 
   var currentLevelCross = null;
   var LEVEL_NAMES = {A:'🔴 A 高意圖', B:'🟠 B 問題意圖', C:'🔵 C 情緒共鳴', D:'⚪ D 低對頻', RISK:'⚫ 風險'};
+
+  /* ===== 搜尋頁面：A／B／C／D 分組 ＋ 海巡留言建議（2026-09-13 owner 裁定）=====
+     舊的六層（婚嫁／新生／傳承／重生／生活手作／蓋樓自介）已不再作為搜尋頁面的
+     導覽或分組方式；關鍵字本身仍保留在各卡的 data-keywords 供內部輪替比對。
+     ⛔ 這裡只改「怎麼分組顯示」，不改任何卡片的 data-level，不刪卡、不改總數。
+     ⚫ RISK 併入 D 區顯示（兩者同樣不產生留言草稿），但 data-level 維持 RISK。 */
+  var SEARCH_SECS = [
+    {k:'A', sec:'searchSecA', grid:'searchGridA', n:'searchNA'},
+    {k:'B', sec:'searchSecB', grid:'searchGridB', n:'searchNB'},
+    {k:'C', sec:'searchSecC', grid:'searchGridC', n:'searchNC'},
+    {k:'D', sec:'searchSecD', grid:'searchGridD', n:'searchND'}
+  ];
+  function searchBucket(level){ return (level === 'A' || level === 'B' || level === 'C') ? level : 'D'; }
+  function searchReset(){
+    SEARCH_SECS.forEach(function(s){
+      var g = document.getElementById(s.grid); if(g) g.innerHTML = '';
+      var sc = document.getElementById(s.sec); if(sc) sc.style.display = 'none';
+      var n = document.getElementById(s.n); if(n) n.textContent = '0';
+    });
+    var rl = document.getElementById('searchReplyList'); if(rl) rl.innerHTML = '';
+    var rs = document.getElementById('searchSecReply'); if(rs) rs.style.display = 'none';
+    var rn = document.getElementById('searchNReply'); if(rn) rn.textContent = '0';
+  }
+  function searchAdd(card){
+    var g = document.getElementById('searchGrid' + searchBucket(card.getAttribute('data-level')));
+    if(!g) return;
+    var clone = card.cloneNode(true);
+    clone.classList.remove('expanded');
+    var h = clone.querySelector('.expand-hint'); if(h) h.textContent = '▼ 點擊展開';
+    g.appendChild(clone);
+  }
+  /* 從一張卡裡取出「四、非推銷式留言草稿」那一段。取不到就回 null，⛔ 不編造。 */
+  function searchDraftOf(card){
+    try{
+      var ds = card.querySelectorAll('.jessica-drawer');
+      for(var i=0;i<ds.length;i++){
+        if((ds[i].textContent || '').indexOf('留言草稿') > -1){
+          var t = ds[i].nextElementSibling;
+          if(t && t.classList && t.classList.contains('jessica-text')){
+            var s = (t.textContent || '').trim();
+            if(s && s.indexOf('暫緩') === -1 && s.indexOf('不產生') === -1) return s;
+          }
+          return null;
+        }
+      }
+    }catch(e){}
+    return null;
+  }
+  function searchFinish(label, total){
+    var shown = 0;
+    SEARCH_SECS.forEach(function(s){
+      var g = document.getElementById(s.grid); if(!g) return;
+      var c = g.children.length;
+      shown += c;
+      var n = document.getElementById(s.n); if(n) n.textContent = c;
+      var sc = document.getElementById(s.sec); if(sc) sc.style.display = c ? '' : 'none';
+    });
+    /* 海巡留言建議：只收 A／B／C 區裡真的備妥草稿的卡 */
+    var rl = document.getElementById('searchReplyList');
+    var rn = 0;
+    if(rl){
+      ['A','B','C'].forEach(function(k){
+        var g = document.getElementById('searchGrid' + k); if(!g) return;
+        Array.prototype.slice.call(g.children).forEach(function(clone){
+          var draft = searchDraftOf(clone);
+          if(!draft) return;
+          var au = clone.querySelector('.post-author');
+          var lk = clone.querySelector('a.post-link') || clone.querySelector('.post-link a') || clone.querySelector('a[href*="threads."]');
+          var who = au ? (au.textContent || '').trim() : '（未標示帳號）';
+          var href = lk ? lk.getAttribute('href') : null;
+          var row = document.createElement('div');
+          row.className = 'track-note';
+          row.style.marginBottom = '10px';
+          var head = document.createElement('div');
+          head.innerHTML = '<strong>' + k + ' 級</strong>｜' + who;
+          if(href){
+            var a = document.createElement('a');
+            a.href = href; a.target = '_blank'; a.rel = 'noopener';
+            a.textContent = '　看原文 ↗';
+            head.appendChild(a);
+          }
+          var body = document.createElement('div');
+          body.style.marginTop = '4px';
+          body.textContent = draft;
+          row.appendChild(head); row.appendChild(body);
+          rl.appendChild(row);
+          rn++;
+        });
+      });
+    }
+    var rnEl = document.getElementById('searchNReply'); if(rnEl) rnEl.textContent = rn;
+    var rs = document.getElementById('searchSecReply'); if(rs) rs.style.display = rn ? '' : 'none';
+    var lb = document.getElementById('searchKwLabel'); if(lb) lb.textContent = label;
+    var ct = document.getElementById('searchCount'); if(ct) ct.textContent = (typeof total === 'number' ? total : shown);
+    var em = document.getElementById('searchEmpty'); if(em) em.style.display = shown ? 'none' : 'block';
+  }
   function showLevelCross(level, el){
     if(currentLevelCross === level){ clearLevelCross(); return; }
     currentLevelCross = level;
@@ -6051,20 +6413,14 @@ Harry Winston Ribbon疊戴Tiffany6爪
       var db = b.getAttribute('data-post-date') || '';
       return db.localeCompare(da);
     });
-    var grid = document.getElementById('searchGrid');
-    grid.innerHTML = '';
+    searchReset();
     var weekCount = 0;
     cards.forEach(function(card){
       var diff = daysDiffFromToday(card.getAttribute('data-post-date'));
       if(diff !== null && diff >= 0 && diff <= 6) weekCount++;
-      var clone = card.cloneNode(true);
-      clone.classList.remove('expanded');
-      var h = clone.querySelector('.expand-hint'); if(h) h.textContent = '▼ 點擊展開';
-      grid.appendChild(clone);
+      searchAdd(card);
     });
-    document.getElementById('searchKwLabel').textContent = (LEVEL_NAMES[level] || level) + '（依貼文日期新到舊排序 · 本週新增 ' + weekCount + ' 則）';
-    document.getElementById('searchCount').textContent = cards.length;
-    document.getElementById('searchEmpty').style.display = cards.length ? 'none' : 'block';
+    searchFinish((LEVEL_NAMES[level] || level) + '（依貼文日期新到舊排序 · 本週新增 ' + weekCount + ' 則）', cards.length);
     document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
     document.querySelectorAll('.category-panel').forEach(function(p){ p.classList.remove('active'); });
     document.getElementById('panel-search').classList.add('active');
@@ -6109,22 +6465,24 @@ Harry Winston Ribbon疊戴Tiffany6爪
     if(!weekCards.length){
       banner = '📅 近 7 天尚無新增貼文，以下為既有存量資料，僅供參考。';
     } else {
-      var topPanel = Object.keys(panelCounts).sort(function(a,b){ return panelCounts[b]-panelCounts[a]; })[0];
-      banner = '📅 近 7 天共新增 <b>' + weekCards.length + '</b> 則貼文：🔴A ' + counts.A + '｜🟠B ' + counts.B + '｜🔵C ' + counts.C + '｜⚪D ' + counts.D + '｜⚫風險 ' + counts.RISK;
-      if(topPanel){ banner += '　·　本週焦點：' + (PANEL_NAMES[topPanel] || topPanel) + '（' + panelCounts[topPanel] + ' 則）'; }
+      /* 2026-09-13：可見分組只用 A／B／C／D，⚫ 風險併入 D 顯示。
+         舊分類（panelCounts）仍在內部計算，⛔ 但不再顯示成「本週焦點」。 */
+      banner = '📅 近 7 天共新增 <b>' + weekCards.length + '</b> 則貼文：🔴A ' + counts.A + '｜🟠B ' + counts.B + '｜🔵C ' + counts.C + '｜⚪D ' + (counts.D + counts.RISK) + '（含 ⚫ 風險 ' + counts.RISK + '）';
       if(counts.A > 0){ banner += '　·　高意圖（A）貼文請優先追蹤留言與轉發'; }
     }
     document.getElementById('weekSummaryBanner').innerHTML = banner;
 
     var body = document.getElementById('weekRoomBody');
     body.innerHTML = '';
-    ['A','B','C','D','RISK'].forEach(function(lvl){
-      var items = weekCards.filter(function(w){ return w.level === lvl; });
+    ['A','B','C','D'].forEach(function(lvl){
+      var items = weekCards.filter(function(w){
+        return (lvl === 'D') ? (w.level === 'D' || w.level === 'RISK') : (w.level === lvl);
+      });
       var sec = document.createElement('div');
       sec.style.marginBottom = '30px';
       var head = document.createElement('div');
       head.className = 'section-title';
-      head.textContent = LEVEL_NAMES[lvl] + '（本週 ' + items.length + ' 則）';
+      head.textContent = (LEVEL_TAB_NAMES[lvl] || LEVEL_NAMES[lvl]) + '（本週 ' + items.length + ' 則）';
       sec.appendChild(head);
       if(!items.length){
         var empty = document.createElement('div');
@@ -6305,21 +6663,15 @@ Harry Winston Ribbon疊戴Tiffany6爪
     document.querySelectorAll('.post-card[data-level]').forEach(function(cc){ cc.style.display=''; });
     document.querySelectorAll('.level-chip').forEach(function(cc){ cc.classList.remove('active'); });
     var lb = document.querySelector('.level-filter-btn'); if(lb) lb.classList.add('active');
-    var grid = document.getElementById('searchGrid');
-    grid.innerHTML = '';
+    searchReset();
     var count = 0;
     document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-strategy) .post-card').forEach(function(card){
       if(cardMatchesKw(card, kwspec)){
-        var clone = card.cloneNode(true);
-        clone.classList.remove('expanded');
-        var h = clone.querySelector('.expand-hint'); if(h) h.textContent = '▼ 點擊展開';
-        grid.appendChild(clone);
+        searchAdd(card);
         count++;
       }
     });
-    document.getElementById('searchKwLabel').textContent = label;
-    document.getElementById('searchCount').textContent = count;
-    document.getElementById('searchEmpty').style.display = count ? 'none' : 'block';
+    searchFinish(label, count);
     document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
     document.querySelectorAll('.category-panel').forEach(function(p){ p.classList.remove('active'); });
     document.getElementById('panel-search').classList.add('active');
