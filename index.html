@@ -6173,6 +6173,16 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 </div>
 </div>
+<!-- 手機版表格修正（2026-09-13 實測發現）
+     390px 實測：首頁在切到任何等級頁籤之前會橫向溢出，document 寬度 833px。
+     原因是 .track-table 最寬 510px，超出視窗。
+     這裡只新增一條「≤768px 時讓表格自己可以左右捲動」的規則，
+     ⛔ 沒有修改 :root，也沒有改動任何既有的 CSS 規則。 -->
+<style>
+@media (max-width: 768px){
+  .track-table{ display:block; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+}
+</style>
 <script>
   function switchTab(id, el) {
     currentKw = null;
