@@ -393,7 +393,8 @@
 <div class="tab" onclick="openLevelTab('B', this)">🟠 B 級｜確認後回覆 <span class="count" id="tabCountB">0</span></div>
 <div class="tab" onclick="openLevelTab('C', this)">🔵 C 級｜觀察與延伸 <span class="count" id="tabCountC">0</span></div>
 <div class="tab" onclick="openLevelTab('D', this)">⚪ D 級｜跳過 <span class="count" id="tabCountD">0</span></div>
-<div class="tab" onclick="switchTab('strategy', this)">📚 素材與紀錄</div>
+<!-- 「📚 素材與紀錄」入口已於 2026-09-13 移除：今日草稿、留言行銷紀錄、效益追蹤
+     已整段搬進第一個頁籤的第 14 區折疊區塊，⛔ 全檔只有一份，沒有第二個入口。 -->
 </div>
 <details class="ia2-shelf">
 <summary>🔬 分級與關鍵字篩選（需要時才展開）</summary>
@@ -472,13 +473,16 @@
 <div id="searchReplyList"></div>
 </div>
 </div>
-<!-- ══ 溝通與翻車焦慮 ══ -->
+<!-- ══ 內部資料容器 1（無導覽入口）══
+     2026-09-13：舊分類頁籤已移除，本面板只作為卡片的實體存放處。
+     ⛔ 標題已改為中性字樣，不得再顯示舊分類名稱；
+     ⛔ 也不得重新掛回導覽列。卡片的可見入口一律走 A／B／C／D。 -->
 <div class="category-panel" id="panel-comms">
 <div class="cat-header">
-<div class="cat-emoji">🚨</div>
+<div class="cat-emoji">🗄️</div>
 <div>
-<div class="cat-title">溝通與翻車焦慮</div>
-<div class="cat-subtitle">服務冷暴力 · 設計師不聽話 · 實品落差恐懼</div>
+<div class="cat-title">內部資料容器 1</div>
+<div class="cat-subtitle">卡片實體存放處 · 無導覽入口 · 請由 A／B／C／D 等級頁籤瀏覽</div>
 </div>
 <div class="cat-line"></div>
 </div>
@@ -1076,13 +1080,13 @@
 </div>
 </div>
 </div>
-<!-- ══ 傳承與情感重塑 ══ -->
+<!-- ══ 內部資料容器 2（無導覽入口）══ -->
 <div class="category-panel" id="panel-heritage">
 <div class="cat-header">
-<div class="cat-emoji">💛</div>
+<div class="cat-emoji">🗄️</div>
 <div>
-<div class="cat-title">傳承與情感重塑</div>
-<div class="cat-subtitle">舊金改造 · 補買遺憾 · 長輩遺物重生</div>
+<div class="cat-title">內部資料容器 2</div>
+<div class="cat-subtitle">卡片實體存放處 · 無導覽入口 · 請由 A／B／C／D 等級頁籤瀏覽</div>
 </div>
 <div class="cat-line"></div>
 </div>
@@ -2009,13 +2013,13 @@
 </div>
 </div>
 </div>
-<!-- ══ 預算與審美拉扯 ══ -->
+<!-- ══ 內部資料容器 3（無導覽入口）══ -->
 <div class="category-panel" id="panel-budget">
 <div class="cat-header">
-<div class="cat-emoji">💸</div>
+<div class="cat-emoji">🗄️</div>
 <div>
-<div class="cat-title">預算與審美拉扯</div>
-<div class="cat-subtitle">長輩介入 · 品牌廣告費迷霧 · 男女審美衝突</div>
+<div class="cat-title">內部資料容器 3</div>
+<div class="cat-subtitle">卡片實體存放處 · 無導覽入口 · 請由 A／B／C／D 等級頁籤瀏覽</div>
 </div>
 <div class="cat-line"></div>
 </div>
@@ -3555,13 +3559,13 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 </div>
 </div>
-<!-- ══ 日常佩戴與體感 ══ -->
+<!-- ══ 內部資料容器 4（無導覽入口）══ -->
 <div class="category-panel" id="panel-daily">
 <div class="cat-header">
-<div class="cat-emoji">🌿</div>
+<div class="cat-emoji">🗄️</div>
 <div>
-<div class="cat-title">日常佩戴與體感</div>
-<div class="cat-subtitle">懷孕改圍 · 職業限制 · 戒圍鬆了 · 放盒子多年</div>
+<div class="cat-title">內部資料容器 4</div>
+<div class="cat-subtitle">卡片實體存放處 · 無導覽入口 · 請由 A／B／C／D 等級頁籤瀏覽</div>
 </div>
 <div class="cat-line"></div>
 </div>
@@ -4635,7 +4639,40 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 </div>
 </div>
-<!-- ══ Jessica｜Threads 海巡參考（第一頁籤．只放海巡會用到的規則）══ -->
+<!-- ══ 待辦回應（Jessica 每日海巡行動清單）══
+     2026-09-13：本面板與「本週戰情室」原本排在 panel-patrol 之後，
+     為了讓原品牌策略室的內容能直接併進 panel-patrol，改排到它前面。
+     ⛔ 只調整 DOM 順序，面板 id、內容與 JS 掛載點都沒有變。 -->
+<div class="category-panel" id="panel-todo">
+<div class="cat-header">
+<div class="cat-emoji">🎯</div>
+<div>
+<div class="cat-title">待辦回應</div>
+<div class="cat-subtitle">瀏覽完新貼文後，先看這裡 · 依 A→B→C 排序，每則都附建議留言，回應完打勾即可從清單移除</div>
+</div>
+<div class="cat-line"></div>
+</div>
+<div id="todoSummaryBanner" class="week-summary-banner">計算中…</div>
+<div id="todoPendingBody"></div>
+<div id="todoDoneSection" style="margin-top:34px;display:none">
+<div class="section-title">✅ 已回應（<span id="todoDoneCount">0</span>）</div>
+<div id="todoDoneBody"></div>
+</div>
+</div>
+<!-- ══ 本週戰情室 ══ -->
+<div class="category-panel" id="panel-week">
+<div class="cat-header">
+<div class="cat-emoji">📅</div>
+<div>
+<div class="cat-title">本週戰情室</div>
+<div class="cat-subtitle">近 7 天新增貼文 · 依 A／B／C／D 即時彙整（⚫ 風險併入 D），最新貼文排在最前面</div>
+</div>
+<div class="cat-line"></div>
+</div>
+<div id="weekSummaryBanner" class="week-summary-banner">計算中…</div>
+<div id="weekRoomBody"></div>
+</div>
+<!-- ══ Jessica｜Threads 海巡參考（第一頁籤．海巡規則＋今日草稿與紀錄）══ -->
 <div class="category-panel active" id="panel-patrol">
 <div class="cat-header">
 <div class="cat-emoji">🧭</div>
@@ -4669,8 +4706,24 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </tbody>
 </table>
 
-<div class="section-title">3｜Tru-Mi 官方 Threads 品牌互動</div>
-<div class="track-note" style="margin-bottom:22px"><a href="https://www.threads.com/@trumi_jewelryofficial" target="_blank">@trumi_jewelryofficial</a>　<strong>本輪複查（2026-09-13 21:05 TPE）</strong><br>· 粉絲數 <strong>3</strong>　· 貼文 <strong>1 則（舊文）</strong>　· 留言 <strong>0</strong>　· 本輪<strong>無新互動</strong><br>⛔ 官方帳號的成效<strong>不得與 Jessica 個人帳號合併計算</strong>。目前官方帳號尚未開始經營，所有成效欄位為 0 是<strong>實際觀測值</strong>，不是無法確認。<br>⚠️ 官方帳號目前沒有可承接的互動，海巡與對話累積<strong>全部發生在 Jessica 個人帳號</strong>。</div>
+<div class="section-title">3｜Tru-Mi 官方 Threads 品牌互動　<code>@trumi_jewelryofficial</code></div>
+<div class="track-note" style="margin-bottom:14px"><strong>兩個帳號都要看、都要統計，順序是先個人後官方，⛔ 不得只看其中一個。</strong>官方帳號用<strong>與第 2 區完全相同的五項</strong>逐一確認，欄位不因為目前數字小就簡化——現在把格子留好，開始經營之後才不用回頭補。<br><a href="https://www.threads.com/@trumi_jewelryofficial" target="_blank">開啟官方帳號 ↗</a>　本輪複查時間 <strong>2026-09-13 21:05 TPE</strong>（登入視角）</div>
+<table class="track-table" style="margin-bottom:14px">
+<thead>
+<tr><th>檢查項目</th><th>本輪結果</th><th>證據狀態</th></tr>
+</thead>
+<tbody>
+<tr><td>① 新增留言</td><td class="editable" contenteditable="true">0</td><td>實際開啟回覆分頁，顯示「尚無回覆」——這個 0 是<strong>實測值</strong></td></tr>
+<tr><td>② 尚未回覆的留言</td><td class="editable" contenteditable="true">0</td><td>同上，實測值</td></tr>
+<tr><td>③ 我方回覆之後才進來的追問</td><td class="editable" contenteditable="true">0</td><td>同上，實測值</td></tr>
+<tr><td>④ 需要延續的對話</td><td class="editable" contenteditable="true">0</td><td>同上，實測值</td></tr>
+<tr><td>⑤ 本輪實際送出的回覆</td><td class="editable" contenteditable="true">0</td><td>⛔ 草稿不算；本輪無草稿也無送出</td></tr>
+<tr><td>對方後續互動</td><td class="editable" contenteditable="true">無法確認</td><td>沒有已送出的留言可追蹤，⛔ 不填 0</td></tr>
+<tr><td>粉絲數</td><td class="editable" contenteditable="true">3</td><td>Threads 實測值。⛔ IG 的 585 粉是另一個平台的數字，不納入本表</td></tr>
+<tr><td>貼文數</td><td class="editable" contenteditable="true">1（舊文）</td><td>實測值</td></tr>
+</tbody>
+</table>
+<div class="track-note" style="margin-bottom:22px">⛔ <strong>兩個帳號分開列示、分開計算，不得合併、不得互相代換。</strong>若某份報告確實需要合計，必須<strong>先去重</strong>（同一則對話可能同時出現在兩邊）並在數字旁明確標示「合計（已去重）」，⛔ 不得直接把兩欄相加。<br>⚠️ 這裡的 0 與第 9 區官方帳號的 0，都是<strong>實際開啟頁面看到的</strong>，與「無法確認」不同——⛔ 不得因為習慣填 0 就把沒查到的東西也寫成 0。<br>目前官方帳號尚未開始經營，海巡與對話累積<strong>全部發生在 Jessica 個人帳號</strong>；這是現況描述，不是可以略過官方帳號的理由。</div>
 
 <div class="section-title">4｜A 級優先海巡（立即處理）</div>
 <div class="track-note" style="margin-bottom:18px"><strong>條件</strong><br>· <strong>自家帳號的追問</strong>（最優先）<br>· 明確的婚戒需求，或具體的訂製問題<br>· 貼文仍存在，且時間仍適合回應<br>· Jessica 有真實素材可以回答<br>· 留言區尚未被大量賣方洗版<br><strong>處理方式</strong><br>先讀完整原文（含圖片），再寫一則具體、溫和、不過度推銷的回覆。</div>
@@ -4767,49 +4820,16 @@ Harry Winston Ribbon疊戴Tiffany6爪
 <div class="track-note" style="margin-bottom:10px"><strong>需要 Jessica 本人處理</strong><br>· <strong>@____queena___</strong> 的留言已空著約 24 小時，是目前最該補的一則<br>· <strong>@sing_a_ig</strong>、<strong>@ju_freya304</strong> 母貼文下留言尚未被接住<br>· 海巡三則草稿（@zh_o_hy910091／@borrowingboy／@dai.chien__）備妥未送出<br><br><strong>需要回頭查核</strong><br>· <strong>@waijoan／@sy520.66／@lucio.y.c.wu</strong>：樓中樓本輪未渲染，尚未複查，⛔ 不得推論為已結束<br>· <strong>回覆成效那 14 則</strong>：原 PO 是否回覆、是否按讚尚未逐則查核，全部標「無法確認」，⛔ 不得填 0<br>· <strong>@dai.chien__</strong> 留言區 <code>unavailable</code>，下次優先重取那 10 則<br><br><strong>需要 Jessica 補素材</strong><br>· 低預算帶（一對 1-3 萬）目前沒有可引用的真實案例，遇到這個價帶只能寫「這題適合 Jessica 補一個自己的經驗再回」<br>· Tru-Mi 是否承作鼻紋戒指、是否提供陪同手作——未查核，⛔ 未確認前不得自薦<br><br><strong>可立即動手且不需內部確認</strong><br>· 官網目前沒有承接「租求婚戒指」這個字，但 Tru-Mi 本來就有免費鑽戒租借</div>
 
 <div class="section-title">13｜延伸貼文題材</div>
-<div class="track-note" style="margin-bottom:10px">⛔ <strong>先提問，不先起稿。</strong>每一則都要先問到 Jessica 本人的答案，才寫得下去；素材四格填不滿就是「今日暫緩發文」，⛔ 不用形容詞撐字數、⛔ 不換舊案例套用、⛔ 不虛構客人故事。<br><br><strong>① 戒指是誰選的，跟誰付的，可以是兩件事</strong><br>來源：對戒母貼文下 <strong>@waijoan</strong>「謝謝！我們各自挑，然後付對方的。」<br>值得談的原因：整串留言都在回答「要不要長一樣」，只有這一則把問題翻到另一個面向——款式各自挑，錢付給對方那一只。這是有畫面、又沒有人講過的角度。<br>要問 Jessica 的一個問題：<strong>妳接過的訂單裡，有沒有出現過「兩人各挑各的、但互相為對方付」這種安排？</strong>有真實案例才動筆。<br><br><strong>② 兩枚戒指怎麼分配戴法</strong><br>來源：<strong>@elk.18987503</strong>（已有一枚培育鑽，猶豫再添一枚天然鑽）<br>值得談的原因：她的問題不是「要不要買」，是「已經有一枚了，再添一枚怎麼說服自己」。留言 38 則沒有一則回到這句。<br>要問 Jessica 的一個問題：<strong>同時有兩枚戒指的客人，妳通常怎麼跟她討論戴法分配？</strong>⛔ 現有素材庫沒有可引用的真實案例，未取得前不以通則代替。<br><br><strong>③ 關鍵字語意被別的領域佔滿</strong><br>來源：本日「彌月」「舊戒重製」「對戒」三組搜尋，回傳幾乎零筆與珠寶有關。<br>值得談的原因：這是可觀測的平台現象，不需要 Jessica 補素材就能寫，但⛔ 屬內部觀察，不一定要對外發文。<br>要問 Jessica 的一個問題：<strong>這種「大家其實在找，但搜不到」的落差，值不值得做成一則貼文？</strong><br><br>完整的今日發文草稿與素材四格檢查，在「📚 素材與紀錄」頁籤。</div>
-</div>
+<div class="track-note" style="margin-bottom:10px">⛔ <strong>先提問，不先起稿。</strong>每一則都要先問到 Jessica 本人的答案，才寫得下去；素材四格填不滿就是「今日暫緩發文」，⛔ 不用形容詞撐字數、⛔ 不換舊案例套用、⛔ 不虛構客人故事。<br><br><strong>① 戒指是誰選的，跟誰付的，可以是兩件事</strong><br>來源：對戒母貼文下 <strong>@waijoan</strong>「謝謝！我們各自挑，然後付對方的。」<br>值得談的原因：整串留言都在回答「要不要長一樣」，只有這一則把問題翻到另一個面向——款式各自挑，錢付給對方那一只。這是有畫面、又沒有人講過的角度。<br>要問 Jessica 的一個問題：<strong>妳接過的訂單裡，有沒有出現過「兩人各挑各的、但互相為對方付」這種安排？</strong>有真實案例才動筆。<br><br><strong>② 兩枚戒指怎麼分配戴法</strong><br>來源：<strong>@elk.18987503</strong>（已有一枚培育鑽，猶豫再添一枚天然鑽）<br>值得談的原因：她的問題不是「要不要買」，是「已經有一枚了，再添一枚怎麼說服自己」。留言 38 則沒有一則回到這句。<br>要問 Jessica 的一個問題：<strong>同時有兩枚戒指的客人，妳通常怎麼跟她討論戴法分配？</strong>⛔ 現有素材庫沒有可引用的真實案例，未取得前不以通則代替。<br><br><strong>③ 關鍵字語意被別的領域佔滿</strong><br>來源：本日「彌月」「舊戒重製」「對戒」三組搜尋，回傳幾乎零筆與珠寶有關。<br>值得談的原因：這是可觀測的平台現象，不需要 Jessica 補素材就能寫，但⛔ 屬內部觀察，不一定要對外發文。<br>要問 Jessica 的一個問題：<strong>這種「大家其實在找，但搜不到」的落差，值不值得做成一則貼文？</strong><br><br>完整的今日發文草稿與素材四格檢查，在下方第 14 區「今日草稿與紀錄」。</div>
 
-<!-- ══ 待辦回應（Jessica 每日海巡行動清單）══ -->
-<div class="category-panel" id="panel-todo">
-<div class="cat-header">
-<div class="cat-emoji">🎯</div>
-<div>
-<div class="cat-title">待辦回應</div>
-<div class="cat-subtitle">瀏覽完新貼文後，先看這裡 · 依 A→B→C 排序，每則都附建議留言，回應完打勾即可從清單移除</div>
-</div>
-<div class="cat-line"></div>
-</div>
-<div id="todoSummaryBanner" class="week-summary-banner">計算中…</div>
-<div id="todoPendingBody"></div>
-<div id="todoDoneSection" style="margin-top:34px;display:none">
-<div class="section-title">✅ 已回應（<span id="todoDoneCount">0</span>）</div>
-<div id="todoDoneBody"></div>
-</div>
-</div>
-<!-- ══ 本週戰情室 ══ -->
-<div class="category-panel" id="panel-week">
-<div class="cat-header">
-<div class="cat-emoji">📅</div>
-<div>
-<div class="cat-title">本週戰情室</div>
-<div class="cat-subtitle">近 7 天新增貼文 · 依 A／B／C／D／風險 即時彙整，最新貼文排在最前面</div>
-</div>
-<div class="cat-line"></div>
-</div>
-<div id="weekSummaryBanner" class="week-summary-banner">計算中…</div>
-<div id="weekRoomBody"></div>
-</div>
-<!-- ══ 品牌策略室 ══ -->
-<div class="category-panel" id="panel-strategy">
-<div class="cat-header">
-<div class="cat-emoji">🚀</div>
-<div>
-<div class="cat-title">品牌策略室</div>
-<div class="cat-subtitle">爆款解析 · 受眾痛點地圖 · Tru-Mi Threads 內容策略</div>
-</div>
-<div class="cat-line"></div>
-</div>
+<!-- ══ 以下原為獨立的「品牌策略室」分頁，2026-09-13 依 owner 裁定併入本頁籤 ══
+     ⛔ 導覽列上的「素材與紀錄」入口已移除，資料是「搬移」不是「複製」——
+        今日草稿、留言行銷紀錄、效益追蹤全檔只有這一份，⛔ 沒有第二份。
+     為了避免頁面太長，改用折疊區塊；點標題才展開。 -->
+
+<details style="margin-top:26px">
+<summary class="section-title" style="cursor:pointer">14｜今日草稿與紀錄（點此展開）</summary>
+<div class="track-note" style="margin:10px 0 18px">今日發文草稿、留言行銷紀錄、產出效益追蹤都在這一段。<strong>效益追蹤與留言紀錄的欄位仍可直接點擊編輯</strong>，本機儲存的內容不受這次搬移影響。</div>
 <!-- 今日 Jessica 發文草稿 -->
 <div style="margin-bottom:36px">
 <div class="section-title">✍️ 今日 Jessica 發文草稿推薦</div>
@@ -5625,31 +5645,16 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </table>
 <div class="track-legend">💡 使用方式：發文後 1 小時回來，把「1hr讚數」填上實際數字；「權威互動」記錄有無婚戒／婚禮同溫層的權威帳號按讚或留言；隔日填「最終觸及」。填好後上方「本週 Tru-Mi 產出成效」摘要條會自動加總（重新整理頁面即更新）。資料以瀏覽器本機儲存，不會上傳。</div>
 </div>
-<!-- 4大戰略抽屜分類 -->
-<div class="section-title" style="margin-top:8px">📂 四大戰略抽屜分類</div>
-<div class="drawer-grid">
-<div class="drawer-card">
-<div class="drawer-card-title">① 溝通與翻車焦慮</div>
-<span class="drawer-tag">@yjyg169</span><span class="drawer-tag">@juju__junjun</span><span class="drawer-tag">@annieliiee</span><span class="drawer-tag">@chuyun_0213</span><span class="drawer-tag">@lucio.y.c.wu</span><span class="drawer-tag">@chweygummy</span>
-<div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;line-height:1.6">害怕實品有落差 · 專櫃冷暴力 · 設計師不聽話<br/>Tru-Mi 接招：同一師傅全程跟進 + 1:1蠟模先讓手說話</div>
+<!-- 「四大戰略抽屜分類」整塊已於 2026-09-13 依 owner 裁定移除，⛔ 不得復原、不留內部對照頁。
+     原因：它是舊分類唯一還在畫面上的入口，留著就會讓人以為那還是一套有效的分類。
+     卡片與帳號資料都沒有跟著消失——每一張卡仍在原本的資料容器裡，
+     可見入口一律走 A／B／C／D 四個等級頁籤。 -->
 </div>
-<div class="drawer-card">
-<div class="drawer-card-title">② 日常佩戴與體感</div>
-<span class="drawer-tag">@eye065hook_kr</span><span class="drawer-tag">@s___i___x____</span><span class="drawer-tag">@hrz_0909_</span><span class="drawer-tag">@anita_0972</span><span class="drawer-tag">@_lin917</span><span class="drawer-tag">@juju__junjun</span><span class="drawer-tag">@uni.corn7402</span><span class="drawer-tag">@linghan2643</span><span class="drawer-tag">@may_wu12</span><span class="drawer-tag">@ericatw520</span><span class="drawer-tag">@beckybec___y</span>
-<div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;line-height:1.6">勾衣服 · 職業不能戴 · 懷孕改圍 · 放盒子發霉<br/>Tru-Mi 接招：內弧圓角 · 厚度 1.8mm 底線 · 免費改圍</div>
-</div>
-<div class="drawer-card">
-<div class="drawer-card-title">③ 預算與審美拉扯</div>
-<span class="drawer-tag">@h.e.a.r.t_voice</span><span class="drawer-tag">@fangrenp</span><span class="drawer-tag">@nbkdyg84615</span><span class="drawer-tag">@deer.6652385</span><span class="drawer-tag">@c_f_c_1_1</span><span class="drawer-tag">@ashllleyy_xx</span><span class="drawer-tag">@chuyun_0213</span><span class="drawer-tag">@star621823</span><span class="drawer-tag">@nonametw000</span><span class="drawer-tag">@hh8560221</span><span class="drawer-tag">@abbeyhuang2.0</span><span class="drawer-tag">@glamorousme1021</span>
-<div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;line-height:1.6">長輩介入 · 男女審美衝突 · 品牌廣告費迷霧<br/>Tru-Mi 接招：沒有公版 · 成色誠實告知 · 決定權在戴的那手</div>
-</div>
-<div class="drawer-card">
-<div class="drawer-card-title">④ 傳承與情感重塑</div>
-<span class="drawer-tag">@omo0425</span><span class="drawer-tag">@syyau00.0</span><span class="drawer-tag">@ccddandme</span>
-<div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;line-height:1.6">舊金改造 · 補買沒有的遺憾 · 長輩遺物重生<br/>Tru-Mi 接招：舊金不流失 · 蠟模讓情感被認真對待</div>
-</div>
-</div>
-</div>
+</details>
+
+<details style="margin-top:8px">
+<summary class="section-title" style="cursor:pointer">15｜策略參考資料（點此展開）</summary>
+<div class="track-note" style="margin:10px 0 18px">爆款原因解析、受眾痛點地圖、主題與互動方向、貼文範本庫、視覺調性、突圍策略、工作流、峰終定律。<strong>這一段是長期參考資料，不是每日要看的東西</strong>，所以預設收起來。⛔ 內容沒有被刪除，也沒有被複製成第二份。</div>
 <!-- 爆款原因解析 -->
 <div style="margin-bottom:36px">
 <div class="section-title">🔥 爆款原因解析 — 這些貼文為什麼會紅？</div>
@@ -6147,6 +6152,7 @@ Harry Winston Ribbon疊戴Tiffany6爪
 </div>
 </div>
 </div>
+</details>
 </div>
 </div>
 </div>
@@ -6439,10 +6445,12 @@ Harry Winston Ribbon疊戴Tiffany6爪
     window.scrollTo(0, 0);
   }
 
-  var PANEL_NAMES = {comms:'🚨 溝通與翻車焦慮', daily:'🌿 日常佩戴與體感', budget:'💸 預算與審美拉扯', heritage:'💛 傳承與情感重塑'};
+  /* PANEL_NAMES（舊分類的顯示名稱對照表）已於 2026-09-13 移除。
+     它原本只被戰情室的「本週焦點」用到，而那一行已改成不顯示舊分類；
+     留著會讓舊名稱有機會再回到畫面上。⛔ 不得復原。 */
   function renderWeekRoom(){
     var weekCards = [];
-    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-week):not(#panel-strategy) .post-card[data-level]').forEach(function(card){
+    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-week):not(#panel-patrol) .post-card[data-level]').forEach(function(card){
       var dateStr = card.getAttribute('data-post-date');
       var diff = daysDiffFromToday(dateStr);
       if(diff !== null && diff >= 0 && diff <= 6){
@@ -6586,7 +6594,7 @@ Harry Winston Ribbon疊戴Tiffany6爪
   function renderTodoQueue(){
     var doneMap = readTodoDoneMap();
     var candidates = [];
-    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-week):not(#panel-todo):not(#panel-strategy) .post-card[data-level]').forEach(function(card){
+    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-week):not(#panel-todo):not(#panel-patrol) .post-card[data-level]').forEach(function(card){
       var lvl = card.getAttribute('data-level');
       if(lvl !== 'A' && lvl !== 'B' && lvl !== 'C') return; // D／風險 不需主動回應
       var linkEl = card.querySelector('.post-link');
@@ -6665,7 +6673,7 @@ Harry Winston Ribbon疊戴Tiffany6爪
     var lb = document.querySelector('.level-filter-btn'); if(lb) lb.classList.add('active');
     searchReset();
     var count = 0;
-    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-strategy) .post-card').forEach(function(card){
+    document.querySelectorAll('.category-panel:not(#panel-search):not(#panel-patrol) .post-card').forEach(function(card){
       if(cardMatchesKw(card, kwspec)){
         searchAdd(card);
         count++;
@@ -6763,7 +6771,7 @@ Harry Winston Ribbon疊戴Tiffany6爪
 
   function allCards(){
     return Array.prototype.slice.call(document.querySelectorAll(
-      '.category-panel:not(#panel-search):not(#panel-week):not(#panel-todo):not(#panel-strategy) .post-card[data-level]'));
+      '.category-panel:not(#panel-search):not(#panel-week):not(#panel-todo):not(#panel-patrol) .post-card[data-level]'));
   }
   function today(){
     var d = new Date(), p = function(n){ return (n<10?'0':'')+n; };
